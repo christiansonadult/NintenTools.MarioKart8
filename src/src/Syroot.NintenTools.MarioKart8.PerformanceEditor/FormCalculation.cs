@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -33,7 +34,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         internal float Value
         {
-            get { return float.Parse(_tbValue.Text); }
+            get { return Single.Parse(_tbValue.Text); }
             set { _tbValue.Text = value.ToString(); }
         }
 
@@ -47,9 +48,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         /// <returns>The value the user entered or <c>null</c> if he canceled.</returns>
         internal static float? Show(string caption, bool allowFloat)
         {
-            FormCalculation form = new FormCalculation();
-            form.Text = caption;
-            form.AllowFloat = allowFloat;
+            FormCalculation form = new FormCalculation()
+            {
+                Text = caption,
+                AllowFloat = allowFloat
+            };
 
             // Set the last default value.
             if (form.AllowFloat)
@@ -74,9 +77,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
 
-            bool valid = char.IsControl(e.KeyChar)
-                || char.IsDigit(e.KeyChar)
-                || (AllowFloat && char.IsPunctuation(e.KeyChar))
+            bool valid = Char.IsControl(e.KeyChar)
+                || Char.IsDigit(e.KeyChar)
+                || (AllowFloat && Char.IsPunctuation(e.KeyChar))
                 || (!AllowFloat && e.KeyChar.ToString() == numberFormat.NegativeSign);
             e.Handled = !valid;
         }
@@ -85,13 +88,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             if (AllowFloat)
             {
-                float result;
-                e.Cancel = !float.TryParse(_tbValue.Text, out result);
+                e.Cancel = !Single.TryParse(_tbValue.Text, out float result);
             }
             else
             {
-                int result;
-                e.Cancel = !int.TryParse(_tbValue.Text, out result);
+                e.Cancel = !Int32.TryParse(_tbValue.Text, out int result);
             }
         }
     }

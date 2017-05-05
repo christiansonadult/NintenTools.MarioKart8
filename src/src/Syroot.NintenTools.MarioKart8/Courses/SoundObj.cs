@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Syroot.NintenTools.Byaml.Serialization;
 
@@ -49,8 +49,7 @@ namespace Syroot.NintenTools.MarioKart8.Courses
         {
             TopView = (string)dictionary["TopView"] == "true";
 
-            object single;
-            if (dictionary.TryGetValue("Single", out single)) Single = (string)single == "true";
+            if (dictionary.TryGetValue("Single", out object single)) Single = (string)single == "true";
         }
 
         /// <summary>

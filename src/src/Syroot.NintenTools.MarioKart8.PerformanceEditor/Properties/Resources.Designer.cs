@@ -143,6 +143,16 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Driver_BowserJr {
+            get {
+                object obj = ResourceManager.GetObject("Driver_BowserJr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Driver_CatPeach {
             get {
                 object obj = ResourceManager.GetObject("Driver_CatPeach", resourceCulture);
@@ -173,6 +183,16 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Driver_DryBones {
+            get {
+                object obj = ResourceManager.GetObject("Driver_DryBones", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Driver_DryBowser {
             get {
                 object obj = ResourceManager.GetObject("Driver_DryBowser", resourceCulture);
@@ -193,9 +213,39 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Driver_InklingFemale {
+            get {
+                object obj = ResourceManager.GetObject("Driver_InklingFemale", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Driver_InklingMale {
+            get {
+                object obj = ResourceManager.GetObject("Driver_InklingMale", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Driver_Isabelle {
             get {
                 object obj = ResourceManager.GetObject("Driver_Isabelle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Driver_KingBoo {
+            get {
+                object obj = ResourceManager.GetObject("Driver_KingBoo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Syroot.IO;
@@ -47,8 +47,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         public static GroupBase Instantiate(this SectionType sectionType, BinaryDataReader reader, SectionHeader header,
             int sectionLength)
         {
-            Type groupType;
-            if (_knownTypes.TryGetValue(sectionType, out groupType))
+            if (_knownTypes.TryGetValue(sectionType, out Type groupType))
             {
                 GroupBase group = (GroupBase)Activator.CreateInstance(groupType);
                 group.LoadElements(reader, header, sectionLength);

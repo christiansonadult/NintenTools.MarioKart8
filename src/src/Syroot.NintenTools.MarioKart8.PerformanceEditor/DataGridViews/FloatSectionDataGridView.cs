@@ -1,4 +1,6 @@
-﻿namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+using System;
+
+namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
     /// Represents a <see cref="SectionDataGridView"/> which only allows the input of float values.
@@ -26,9 +28,9 @@
         /// <returns><c>true</c> to allow the character, otherwise <c>false</c>.</returns>
         protected override bool ValidateCharacterInput(char character)
         {
-            return char.IsControl(character)
-                || char.IsDigit(character)
-                || char.IsPunctuation(character);
+            return Char.IsControl(character)
+                || Char.IsDigit(character)
+                || Char.IsPunctuation(character);
         }
 
         /// <summary>
@@ -38,8 +40,7 @@
         /// <returns><c>true</c> to allow the text, otherwise <c>false</c>.</returns>
         protected override bool ValidateTextValue(string text)
         {
-            float f;
-            return float.TryParse(text, out f);
+            return Single.TryParse(text, out float f);
         }
     }
 }

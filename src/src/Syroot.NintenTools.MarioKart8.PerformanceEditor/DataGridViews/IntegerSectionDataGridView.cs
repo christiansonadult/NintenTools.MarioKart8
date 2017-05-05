@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+using System;
+using System.Globalization;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
@@ -18,8 +19,8 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
 
-            return char.IsControl(character)
-                || char.IsDigit(character)
+            return Char.IsControl(character)
+                || Char.IsDigit(character)
                 || character.ToString() == numberFormat.NegativeSign;
         }
 
@@ -30,8 +31,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         /// <returns><c>true</c> to allow the text, otherwise <c>false</c>.</returns>
         protected override bool ValidateTextValue(string text)
         {
-            int i;
-            return int.TryParse(text, out i);
+            return Int32.TryParse(text, out int i);
         }
     }
 }

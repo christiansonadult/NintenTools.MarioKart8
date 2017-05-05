@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -31,17 +31,14 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             foreach (Control control in parent.Controls)
             {
-                if (control is ContainerControl)
+                switch (control)
                 {
-                    UpdateDataGrids(control);
-                }
-                else
-                {
-                    SectionDataGridView sectionDataGridView = control as SectionDataGridView;
-                    if (sectionDataGridView != null)
-                    {
+                    case ContainerControl containerControl:
+                        UpdateDataGrids(control);
+                        break;
+                    case SectionDataGridView sectionDataGridView:
                         sectionDataGridView.PerformanceData = _controller.PerformanceData;
-                    }
+                        break;
                 }
             }
         }

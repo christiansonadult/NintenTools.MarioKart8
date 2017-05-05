@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -335,8 +335,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         protected override void OnEditingControlShowing(DataGridViewEditingControlShowingEventArgs e)
         {
             e.Control.KeyPress -= EditingControlTextBox_KeyPress;
-            TextBox textBox = e.Control as TextBox;
-            if (textBox != null)
+            if (e.Control is TextBox textBox)
             {
                 textBox.KeyPress += EditingControlTextBox_KeyPress;
             }

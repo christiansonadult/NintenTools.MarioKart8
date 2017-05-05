@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using Syroot.NintenTools.Byaml.Serialization;
 
@@ -288,8 +288,7 @@ namespace Syroot.NintenTools.MarioKart8.Courses
             ObjParams = new List<int>();
             for (int i = 1; i <= 8; i++)
             {
-                object objParam;
-                if (dictionary.TryGetValue("OBJPrm" + i.ToString(), out objParam))
+                if (dictionary.TryGetValue("OBJPrm" + i.ToString(), out object objParam))
                 {
                     ObjParams.Add((int)objParam);
                 }

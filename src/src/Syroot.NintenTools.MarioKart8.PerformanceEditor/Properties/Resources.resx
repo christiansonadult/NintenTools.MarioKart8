@@ -463,4 +463,19 @@
   <data name="Equals_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Equals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Driver_BowserJr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Driver_BowserJr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Driver_DryBones" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Driver_DryBones.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Driver_InklingFemale" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Driver_InklingFemale.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Driver_InklingMale" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Driver_InklingMale.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Driver_KingBoo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Driver_KingBoo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

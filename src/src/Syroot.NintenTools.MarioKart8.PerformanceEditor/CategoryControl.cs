@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -222,8 +222,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         /// <returns>The title for the control or <c>null</c> if it has not set a title yet.</returns>
         public string GetTitle(Control control)
         {
-            string title;
-            if (_controlTitles.TryGetValue(control, out title))
+            if (_controlTitles.TryGetValue(control, out string title))
             {
                 return title;
             }
