@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8", "src\Syroot.NintenTools.MarioKart8\Syroot.NintenTools.MarioKart8.csproj", "{C1F7FEB1-D5F7-42EE-827F-22458FC7BC4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8", "Syroot.NintenTools.MarioKart8\Syroot.NintenTools.MarioKart8.csproj", "{C1F7FEB1-D5F7-42EE-827F-22458FC7BC4E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.ObjDump", "src\Syroot.NintenTools.MarioKart8.ObjDump\Syroot.NintenTools.MarioKart8.ObjDump.csproj", "{E1921C04-3F9B-402A-9194-A9C235A4CCBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.ObjDump", "Syroot.NintenTools.MarioKart8.ObjDump\Syroot.NintenTools.MarioKart8.ObjDump.csproj", "{E1921C04-3F9B-402A-9194-A9C235A4CCBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.NoLakitu", "src\Syroot.NintenTools.MarioKart8.NoLakitu\Syroot.NintenTools.MarioKart8.NoLakitu.csproj", "{487595E4-1A7B-4D0E-BFAF-7508DC6CA34F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.NoLakitu", "Syroot.NintenTools.MarioKart8.NoLakitu\Syroot.NintenTools.MarioKart8.NoLakitu.csproj", "{487595E4-1A7B-4D0E-BFAF-7508DC6CA34F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.Adjust200", "src\Syroot.NintenTools.MarioKart8.Adjust200\Syroot.NintenTools.MarioKart8.Adjust200.csproj", "{C30EF0C4-105E-492B-A414-84E84D46E621}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.Adjust200", "Syroot.NintenTools.MarioKart8.Adjust200\Syroot.NintenTools.MarioKart8.Adjust200.csproj", "{C30EF0C4-105E-492B-A414-84E84D46E621}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.BinDumper", "src\Syroot.NintenTools.MarioKart8.BinDumper\Syroot.NintenTools.MarioKart8.BinDumper.csproj", "{D6E69695-BF77-4DFE-B269-1B6F2F0EB687}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.BinDumper", "Syroot.NintenTools.MarioKart8.BinDumper\Syroot.NintenTools.MarioKart8.BinDumper.csproj", "{D6E69695-BF77-4DFE-B269-1B6F2F0EB687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syroot.NintenTools.MarioKart8.PerformanceEditor", "src\Syroot.NintenTools.MarioKart8.PerformanceEditor\Syroot.NintenTools.MarioKart8.PerformanceEditor.csproj", "{488CA917-96CD-4A76-98EB-AC799A6BD263}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syroot.NintenTools.MarioKart8.PerformanceEditor", "Syroot.NintenTools.MarioKart8.PerformanceEditor\Syroot.NintenTools.MarioKart8.PerformanceEditor.csproj", "{488CA917-96CD-4A76-98EB-AC799A6BD263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
