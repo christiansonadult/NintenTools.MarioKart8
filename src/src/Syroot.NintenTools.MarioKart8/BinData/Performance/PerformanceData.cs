@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using Syroot.IO;
 
 namespace Syroot.NintenTools.MarioKart8.BinData.Performance
 {
@@ -14,11 +15,12 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         /// Initializes a new instance of the <see cref="PerformanceData"/> class from the file with the given name.
         /// </summary>
         /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
-        public PerformanceData(string fileName)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public PerformanceData(string fileName, ByteOrder byteOrder)
         {
             using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                Load(stream);
+                Load(stream, byteOrder);
             }
         }
 
@@ -26,9 +28,10 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         /// Initializes a new instance of the <see cref="PerformanceData"/> class from the given stream.
         /// </summary>
         /// <param name="stream">The stream from which the instance will be loaded.</param>
-        public PerformanceData(Stream stream)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public PerformanceData(Stream stream, ByteOrder byteOrder)
         {
-            Load(stream);
+            Load(stream, byteOrder);
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -124,11 +127,12 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         /// Saves the data into the file with the given name.
         /// </summary>
         /// <param name="fileName">The name of the file in which the data will be stored.</param>
-        public void Save(string fileName)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public void Save(string fileName, ByteOrder byteOrder)
         {
             using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                Save(stream);
+                Save(stream, byteOrder);
             }
         }
 
@@ -136,7 +140,8 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         /// Saves the data into the the given stream.
         /// </summary>
         /// <param name="stream">The stream in which the data will be stored.</param>
-        public void Save(Stream stream)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public void Save(Stream stream, ByteOrder byteOrder)
         {
             BinFile binFile = new BinFile("PERF", 84, 1000);
             binFile.Sections.Add(CreateSection("PRWG", WeightStats));
@@ -156,14 +161,14 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
             binFile.Sections.Add(CreateSection("PTDV", DriverPoints.ToPointSetArray()));
             binFile.Sections.Add(CreateSection("PTTR", TirePoints.ToPointSetArray()));
             binFile.Sections.Add(CreateSection("PTWG", GliderPoints.ToPointSetArray()));
-            binFile.Save(stream);
+            binFile.Save(stream, byteOrder);
         }
 
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
-        private void Load(Stream stream)
+        private void Load(Stream stream, ByteOrder byteOrder)
         {
-            BinFile binFile = new BinFile(stream);
+            BinFile binFile = new BinFile(stream, byteOrder);
             WeightStats = ((ByteArraysGroup)binFile.Sections["PRWG"].Groups[0]).ToStructArray<WeightStat>();
             AccelerationStats = ((ByteArraysGroup)binFile.Sections["PRAC"].Groups[0]).ToStructArray<AccelerationStat>();
             OuterslipStats = ((ByteArraysGroup)binFile.Sections["PRON"].Groups[0]).ToStructArray<OuterslipStat>();

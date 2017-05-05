@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Syroot.IO;
@@ -36,11 +36,12 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         /// Initializes a new instance of the <see cref="BinFile"/> class from the file with the given name.
         /// </summary>
         /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
-        public BinFile(string fileName)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public BinFile(string fileName, ByteOrder byteOrder)
         {
             using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                Load(stream);
+                Load(stream, byteOrder);
             }
         }
 
@@ -48,9 +49,10 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         /// Initializes a new instance of the <see cref="BinFile"/> class from the given stream.
         /// </summary>
         /// <param name="stream">The stream from which the instance will be loaded.</param>
-        public BinFile(Stream stream)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public BinFile(Stream stream, ByteOrder byteOrder)
         {
-            Load(stream);
+            Load(stream, byteOrder);
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -81,11 +83,12 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         /// Saves the data into the file with the given name.
         /// </summary>
         /// <param name="fileName">The name of the file in which the data will be stored.</param>
-        public void Save(string fileName)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public void Save(string fileName, ByteOrder byteOrder)
         {
             using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                Save(stream);
+                Save(stream, byteOrder);
             }
         }
 
@@ -93,11 +96,12 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         /// Saves the data into the the given stream.
         /// </summary>
         /// <param name="stream">The stream in which the data will be stored.</param>
-        public void Save(Stream stream)
+        /// <param name="byteOrder">The byte order in which data will be read.</param>
+        public void Save(Stream stream, ByteOrder byteOrder)
         {
             using (BinaryDataWriter writer = new BinaryDataWriter(stream, Encoding.ASCII, true))
             {
-                writer.ByteOrder = ByteOrder.BigEndian;
+                writer.ByteOrder = byteOrder;
 
                 // Write the file header.
                 writer.Write(Identifier, BinaryStringFormat.NoPrefixOrTermination);
@@ -141,11 +145,11 @@ namespace Syroot.NintenTools.MarioKart8.BinData
 
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
-        private void Load(Stream stream)
+        private void Load(Stream stream, ByteOrder byteOrder)
         {
             using (BinaryDataReader reader = new BinaryDataReader(stream, Encoding.ASCII, true))
             {
-                reader.ByteOrder = ByteOrder.BigEndian;
+                reader.ByteOrder = byteOrder;
 
                 // Read the file header providing information about the section count and offsets.
                 Identifier = reader.ReadString(4);

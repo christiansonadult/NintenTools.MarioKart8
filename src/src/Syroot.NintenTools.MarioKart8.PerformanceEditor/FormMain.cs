@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Syroot.IO;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
@@ -55,8 +56,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         private void FormMain_DragDrop(object sender, DragEventArgs e)
         {
+            // TODO: Detect endianness of file. Default to BigEndian for now.
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            _controller.OpenFile(file);
+            _controller.OpenFile(file, ByteOrder.BigEndian);
         }
 
         private void _controller_FileChanged(object sender, EventArgs e)
@@ -92,10 +94,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             {
                 openFileDialog.Title = "Open File";
                 openFileDialog.FileName = _controller.FileName;
-                openFileDialog.Filter = "All BIN Files|*.bin|All Files|*.*";
+                openFileDialog.Filter = "Mario Kart 8 BIN Files|*.bin|Mario Kart 8 Deluxe BIN Files|*.bin";
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    _controller.OpenFile(openFileDialog.FileName);
+                    _controller.OpenFile(openFileDialog.FileName,
+                        openFileDialog.FilterIndex == 1 ? ByteOrder.BigEndian : ByteOrder.LittleEndian);
                 }
             }
         }
@@ -111,10 +114,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             {
                 saveFileDialog.Title = "Save File";
                 saveFileDialog.FileName = _controller.FileName;
-                saveFileDialog.Filter = "All BIN Files|*.bin|All Files|*.*";
+                saveFileDialog.Filter = "Mario Kart 8 BIN Files|*.bin|Mario Kart 8 Deluxe BIN Files|*.bin";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    _controller.SaveFile(saveFileDialog.FileName);
+                    _controller.SaveFile(saveFileDialog.FileName,
+                        saveFileDialog.FilterIndex == 1 ? ByteOrder.BigEndian : ByteOrder.LittleEndian);
                 }
             }
         }

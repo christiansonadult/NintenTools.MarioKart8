@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Syroot.IO;
 using Syroot.NintenTools.MarioKart8.BinData.Performance;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -14,31 +15,32 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
-        internal string FileName
-        {
-            get;
-            private set;
-        }
+        internal string FileName { get; private set; }
 
-        internal PerformanceData PerformanceData
-        {
-            get;
-            private set;
-        }
+        internal ByteOrder FileByteOrder { get; private set; }
+
+        internal PerformanceData PerformanceData { get; private set; }
 
         // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
 
-        internal void OpenFile(string fileName)
+        internal void OpenFile(string fileName, ByteOrder byteOrder)
         {
             FileName = fileName;
-            PerformanceData = new PerformanceData(fileName);
+            FileByteOrder = byteOrder;
+            PerformanceData = new PerformanceData(fileName, FileByteOrder);
             FileChanged?.Invoke(this, EventArgs.Empty);
         }
 
         internal void SaveFile(string fileName)
         {
-            PerformanceData.Save(fileName);
-            OpenFile(fileName);
+            PerformanceData.Save(fileName, FileByteOrder);
+            OpenFile(fileName, FileByteOrder);
+        }
+
+        internal void SaveFile(string fileName, ByteOrder byteOrder)
+        {
+            PerformanceData.Save(fileName, byteOrder);
+            OpenFile(fileName, byteOrder);
         }
     }
 }

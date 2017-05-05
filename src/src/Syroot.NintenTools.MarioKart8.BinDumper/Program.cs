@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
+using Syroot.IO;
 using Syroot.NintenTools.MarioKart8.BinData;
 
 namespace Syroot.NintenTools.MarioKart8.BinDumper
@@ -34,8 +35,8 @@ namespace Syroot.NintenTools.MarioKart8.BinDumper
                 csvPath = Path.ChangeExtension(binPath, "csv");
             }
 
-            // Load the BIN file.
-            BinFile binFile = new BinFile(binPath);
+            // Load the BIN file (default to BigEndian for MK8 for now).
+            BinFile binFile = new BinFile(binPath, ByteOrder.BigEndian);
 
             // Dump the BIN file to CSV.
             using (FileStream stream = new FileStream(csvPath, FileMode.Create, FileAccess.Write, FileShare.None))
