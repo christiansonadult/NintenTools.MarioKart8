@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor

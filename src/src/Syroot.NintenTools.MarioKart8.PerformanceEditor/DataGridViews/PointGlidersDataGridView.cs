@@ -1,4 +1,4 @@
-﻿using Syroot.NintenTools.MarioKart8.BinData.Performance;
+using Syroot.NintenTools.MarioKart8.BinData.Performance;
 using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -31,7 +31,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             };
         }
 
-        protected override PointSetCollection GetSectionToDisplay()
+        protected override PointSet[] GetSectionToDisplay()
         {
             return PerformanceData.GliderPoints;
         }

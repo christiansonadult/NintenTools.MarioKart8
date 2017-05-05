@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Syroot.IO;
+using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.BinData
 {
     /// <summary>
     /// Represents the known <see cref="Section"/> types.
     /// </summary>
-    public enum SectionType
+    public enum SectionType : int
     {
         /// <summary>
         /// A section containing <see cref="ByteArraysGroup"/> instances.

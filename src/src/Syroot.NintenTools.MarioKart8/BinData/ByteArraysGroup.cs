@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Syroot.IO;
+using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.BinData
 {
@@ -40,7 +40,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData
             Elements = new List<byte[]>(instances.Length);
             foreach (T instance in instances)
             {
-                Elements.Add(MarshalEndian.StructToBytes<T>(instance, ByteOrder.BigEndian));
+                Elements.Add(MarshalEndian.StructToBytes(instance, ByteOrder.BigEndian));
             }
         }
 

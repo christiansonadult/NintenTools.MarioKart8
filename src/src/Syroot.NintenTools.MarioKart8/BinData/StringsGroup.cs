@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Syroot.IO;
+using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.BinData
 {

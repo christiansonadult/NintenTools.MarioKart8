@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Syroot.IO;
+using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8
 {

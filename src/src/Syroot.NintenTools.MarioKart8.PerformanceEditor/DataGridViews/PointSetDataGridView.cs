@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -14,7 +14,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     {
         // ---- MEMBERS ------------------------------------------------------------------------------------------------
 
-        private PointSetCollection _data;
+        private PointSet[] _data;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             return null;
         }
 
-        protected virtual PointSetCollection GetSectionToDisplay()
+        protected virtual PointSet[] GetSectionToDisplay()
         {
             return null;
         }

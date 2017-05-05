@@ -1,5 +1,5 @@
 using System;
-using Syroot.IO;
+using Syroot.BinaryData;
 using Syroot.NintenTools.MarioKart8.BinData.Performance;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor

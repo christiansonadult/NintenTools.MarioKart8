@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Syroot.IO;
+using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.BinData
 {
@@ -175,8 +175,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData
                     {
                         dataEnd = (int)reader.Length;
                     }
-                    SectionHeader header = new SectionHeader(reader);
-                    Sections.Add(new Section(reader, header, dataEnd - dataStart));
+                    Sections.Add(new Section(reader, reader.ReadObject<SectionHeader>(), dataEnd - dataStart));
                 }
             }
         }

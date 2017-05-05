@@ -1,6 +1,5 @@
-using System;
 using System.IO;
-using Syroot.IO;
+using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.BinData.Performance
 {
@@ -102,24 +101,24 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         public HandlingAirStat[] HandlingAirStats { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="KartPoints"/>.
+        /// Gets or sets the <see cref="PointSet"/> array for karts.
         /// </summary>
-        public KartPoints KartPoints { get; set; }
+        public PointSet[] KartPoints { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="DriverPoints"/>.
+        /// Gets or sets the <see cref="PointSet"/> array for drivers.
         /// </summary>
-        public DriverPoints DriverPoints { get; set; }
+        public PointSet[] DriverPoints { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="TirePoints"/>.
+        /// Gets or sets the <see cref="PointSet"/> array for tires.
         /// </summary>
-        public TirePoints TirePoints { get; set; }
+        public PointSet[] TirePoints { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="GliderPoints"/>.
+        /// Gets or sets the <see cref="PointSet"/> array for gliders.
         /// </summary>
-        public GliderPoints GliderPoints { get; set; }
+        public PointSet[] GliderPoints { get; set; }
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
 
@@ -157,10 +156,10 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
             binFile.Sections.Add(CreateSection("PRTW", HandlingWaterStats));
             binFile.Sections.Add(CreateSection("PRTA", HandlingAntigravityStats));
             binFile.Sections.Add(CreateSection("PRTG", HandlingAirStats));
-            binFile.Sections.Add(CreateSection("PTBD", KartPoints.ToPointSetArray()));
-            binFile.Sections.Add(CreateSection("PTDV", DriverPoints.ToPointSetArray()));
-            binFile.Sections.Add(CreateSection("PTTR", TirePoints.ToPointSetArray()));
-            binFile.Sections.Add(CreateSection("PTWG", GliderPoints.ToPointSetArray()));
+            binFile.Sections.Add(CreateSection("PTBD", KartPoints));
+            binFile.Sections.Add(CreateSection("PTDV", DriverPoints));
+            binFile.Sections.Add(CreateSection("PTTR", TirePoints));
+            binFile.Sections.Add(CreateSection("PTWG", GliderPoints));
             binFile.Save(stream, byteOrder);
         }
 
@@ -182,10 +181,10 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
             HandlingWaterStats = ((ByteArraysGroup)binFile.Sections["PRTW"].Groups[0]).ToStructArray<HandlingStat>();
             HandlingAntigravityStats = ((ByteArraysGroup)binFile.Sections["PRTA"].Groups[0]).ToStructArray<HandlingStat>();
             HandlingAirStats = ((ByteArraysGroup)binFile.Sections["PRTG"].Groups[0]).ToStructArray<HandlingAirStat>();
-            KartPoints = new KartPoints((ByteArraysGroup)binFile.Sections["PTBD"].Groups[0]);
-            DriverPoints = new DriverPoints((ByteArraysGroup)binFile.Sections["PTDV"].Groups[0]);
-            TirePoints = new TirePoints((ByteArraysGroup)binFile.Sections["PTTR"].Groups[0]);
-            GliderPoints = new GliderPoints((ByteArraysGroup)binFile.Sections["PTWG"].Groups[0]);
+            KartPoints = ((ByteArraysGroup)binFile.Sections["PTBD"].Groups[0]).ToStructArray<PointSet>();
+            DriverPoints = ((ByteArraysGroup)binFile.Sections["PTDV"].Groups[0]).ToStructArray<PointSet>();
+            TirePoints = ((ByteArraysGroup)binFile.Sections["PTTR"].Groups[0]).ToStructArray<PointSet>();
+            GliderPoints = ((ByteArraysGroup)binFile.Sections["PTWG"].Groups[0]).ToStructArray<PointSet>();
         }
 
         private Section CreateSection<T>(string name, T[] instances)

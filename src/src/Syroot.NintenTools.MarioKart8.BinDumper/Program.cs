@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using Syroot.IO;
+using Syroot.BinaryData;
 using Syroot.NintenTools.MarioKart8.BinData;
 
 namespace Syroot.NintenTools.MarioKart8.BinDumper
