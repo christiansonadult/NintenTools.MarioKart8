@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>Syroot.NintenTools.MarioKart8.ObjDump</AssemblyName>
+		<OutputType>Exe</OutputType>
+
+		<PackageId>Syroot.NintenTools.MarioKart8.ObjDump</PackageId>
+
+		<TargetFrameworks>net451;netcoreapp1.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Syroot.NintenTools.MarioKart8\Syroot.NintenTools.MarioKart8.csproj" />
+	</ItemGroup>
+
+</Project>

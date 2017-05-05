@@ -98,12 +98,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Syroot.Dumb3D\Syroot.Dumb3D.csproj">
-      <Project>{62644A3D-86B1-43DE-A29D-604EDACCDC19}</Project>
-      <Name>Syroot.Dumb3D</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

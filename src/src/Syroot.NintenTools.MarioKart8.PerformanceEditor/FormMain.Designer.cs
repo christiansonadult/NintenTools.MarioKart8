@@ -1,4 +1,4 @@
-﻿namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     partial class FormMain
     {
@@ -3984,7 +3984,7 @@
             // 
             // _cmsGridSet
             // 
-            this._cmsGridSet.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Equals;
+            this._cmsGridSet.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Equals_;
             this._cmsGridSet.Name = "_cmsGridSet";
             this._cmsGridSet.Size = new System.Drawing.Size(152, 22);
             this._cmsGridSet.Text = "Set...";

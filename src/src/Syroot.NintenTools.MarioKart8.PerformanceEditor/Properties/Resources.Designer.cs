@@ -453,9 +453,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Equals {
+        internal static System.Drawing.Bitmap Equals_ {
             get {
-                object obj = ResourceManager.GetObject("Equals", resourceCulture);
+                object obj = ResourceManager.GetObject("Equals_", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Description>.NET library and tools to load and modify Mario Kart 8 file formats.</Description>
+		<Copyright>(c) Syroot, licensed under MIT</Copyright>
+		<AssemblyName>Syroot.NintenTools.MarioKart8</AssemblyName>
+		<AssemblyTitle>NintenTools.MarioKart8</AssemblyTitle>
+		<Authors>Syroot</Authors>
+		<VersionPrefix>0.3.0-alpha6</VersionPrefix>
+
+		<PackageId>Syroot.NintenTools.MarioKart8</PackageId>
+		<PackageTags>mk8;mario kart 8;nintendo</PackageTags>
+		<PackageReleaseNotes>Relicensed under MIT, update tooling.</PackageReleaseNotes>
+		<PackageIconUrl>https://raw.githubusercontent.com/Syroot/NintenTools.MarioKart8/master/res/Logo.png</PackageIconUrl>
+		<PackageProjectUrl>https://github.com/Syroot/NintenTools.MarioKart8</PackageProjectUrl>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/Syroot/NintenTools.MarioKart8/master/LICENSE</PackageLicenseUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Syroot/NintenTools.MarioKart8</RepositoryUrl>
+
+		<TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Syroot.IO.BinaryData" Version="1.1.0" />
+		<PackageReference Include="Syroot.NintenTools.Byaml" Version="2.*" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net451'">
+		<Reference Include="System" />
+		<Reference Include="Microsoft.CSharp" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<DebugType>portable</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugType>none</DebugType>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+</Project>
