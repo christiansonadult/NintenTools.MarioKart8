@@ -40,55 +40,55 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         public SectionDataGridView()
         {
             // General
-            base.BackgroundColor = Color.White;
-            base.BorderStyle = BorderStyle.None;
+            BackgroundColor = Color.White;
+            BorderStyle = BorderStyle.None;
             DoubleBuffered = true;
-            base.GridColor = Color.FromArgb(255, 255, 255);
-            base.Margin = Padding.Empty;
-            base.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            GridColor = Color.FromArgb(255, 255, 255);
+            Margin = Padding.Empty;
+            SelectionMode = DataGridViewSelectionMode.CellSelect;
 
             // Columns
-            base.AllowUserToResizeColumns = false;
-            base.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            base.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            base.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle()
+            AllowUserToResizeColumns = false;
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle()
             {
                 Alignment = DataGridViewContentAlignment.MiddleCenter,
                 BackColor = Color.FromArgb(236, 236, 236),
                 ForeColor = Color.FromArgb(64, 64, 64)
             };
-            base.ColumnHeadersHeight = 30;
-            base.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            base.EnableHeadersVisualStyles = false;
+            ColumnHeadersHeight = 30;
+            ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            EnableHeadersVisualStyles = false;
 
             // Rows
-            base.AllowUserToAddRows = false;
-            base.AllowUserToDeleteRows = false;
-            base.AllowUserToResizeRows = false;
-            base.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle()
+            AllowUserToAddRows = false;
+            AllowUserToDeleteRows = false;
+            AllowUserToResizeRows = false;
+            AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle()
             {
                 BackColor = Color.FromArgb(250, 250, 250),
                 SelectionBackColor = Color.FromArgb(184, 207, 255),
                 SelectionForeColor = ForeColor
             };
-            base.RowTemplate.Height = 30;
-            base.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            base.RowHeadersDefaultCellStyle = new DataGridViewCellStyle()
+            RowTemplate.Height = 30;
+            RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            RowHeadersDefaultCellStyle = new DataGridViewCellStyle()
             {
                 Alignment = DataGridViewContentAlignment.MiddleCenter,
                 BackColor = Color.FromArgb(236, 236, 236),
                 ForeColor = Color.FromArgb(64, 64, 64)
             };
-            base.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            base.RowsDefaultCellStyle = new DataGridViewCellStyle()
+            RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            RowsDefaultCellStyle = new DataGridViewCellStyle()
             {
                 BackColor = Color.FromArgb(255, 255, 255)
             };
-            base.ShowEditingIcon = false;
+            ShowEditingIcon = false;
 
             // Cells
-            base.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            base.DefaultCellStyle = new DataGridViewCellStyle()
+            CellBorderStyle = DataGridViewCellBorderStyle.None;
+            DefaultCellStyle = new DataGridViewCellStyle()
             {
                 Alignment = DataGridViewContentAlignment.MiddleRight,
                 BackColor = Color.FromArgb(255, 255, 255),
@@ -100,206 +100,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
-
-        #region New Default Values
-
-        // General
-
-        /// <summary>
-        /// Gets or sets the background color of the data grid view.
-        /// </summary>
-        [DefaultValue(typeof(Color), "0xFFFFFF")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Color BackgroundColor
-        {
-            get { return base.BackgroundColor; }
-        }
-
-        /// <summary>
-        /// Gets or sets the border style for the data grid view.
-        /// </summary>
-        [DefaultValue(BorderStyle.None)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new BorderStyle BorderStyle
-        {
-            get { return base.BorderStyle; }
-        }
-
-        /// <summary>
-        /// Gets or sets the color of the grid lines separating the cells of the System.Windows.Forms.DataGridView.
-        /// </summary>
-        [DefaultValue(typeof(Color), "0xFFFFFF")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Color GridColor
-        {
-            get { return base.GridColor; }
-        }
-
-        /// <summary>
-        /// Gets or sets the space between controls.
-        /// </summary>
-        [DefaultValue(typeof(Padding), "0,0,0,0")]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new Padding Margin
-        {
-            get { return base.Margin; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating how the cells of the System.Windows.Forms.DataGridView can be selected.
-        /// </summary>
-        [DefaultValue(DataGridViewSelectionMode.CellSelect)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewSelectionMode SelectionMode
-        {
-            get { return base.SelectionMode; }
-        }
-
-        // Columns
-
-        /// <summary>
-        /// Gets a collection that contains all the columns in the control.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewColumnCollection Columns
-        {
-            get { return base.Columns; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether users can resize columns.
-        /// </summary>
-        [DefaultValue(DataGridViewSelectionMode.CellSelect)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new bool AllowUserToResizeColumns
-        {
-            get { return base.AllowUserToResizeColumns; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating how column widths are determined.
-        /// </summary>
-        [DefaultValue(DataGridViewAutoSizeColumnsMode.Fill)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewAutoSizeColumnsMode AutoSizeColumnsMode
-        {
-            get { return base.AutoSizeColumnsMode; }
-        }
-
-        [DefaultValue(DataGridViewHeaderBorderStyle.None)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewHeaderBorderStyle ColumnHeadersBorderStyle
-        {
-            get { return base.ColumnHeadersBorderStyle; }
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewCellStyle ColumnHeadersDefaultCellStyle
-        {
-            get { return base.ColumnHeadersDefaultCellStyle; }
-        }
-
-        [DefaultValue(DataGridViewColumnHeadersHeightSizeMode.DisableResizing)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewColumnHeadersHeightSizeMode ColumnHeadersHeightSizeMode
-        {
-            get { return base.ColumnHeadersHeightSizeMode; }
-        }
-
-        [DefaultValue(30)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new int ColumnHeadersHeight
-        {
-            get { return base.ColumnHeadersHeight; }
-            protected set { base.ColumnHeadersHeight = value; }
-        }
-
-        [DefaultValue(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new bool EnableHeadersVisualStyles
-        {
-            get { return base.EnableHeadersVisualStyles; }
-        }
-
-        // Rows
-
-        [DefaultValue(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new bool AllowUserToAddRows
-        {
-            get { return base.AllowUserToAddRows; }
-        }
-
-        [DefaultValue(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new bool AllowUserToDeleteRows
-        {
-            get { return base.AllowUserToDeleteRows; }
-        }
-
-        [DefaultValue(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new bool AllowUserToResizeRows
-        {
-            get { return base.AllowUserToResizeRows; }
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewCellStyle AlternatingRowsDefaultCellStyle
-        {
-            get { return base.AlternatingRowsDefaultCellStyle; }
-        }
-
-        [DefaultValue(DataGridViewHeaderBorderStyle.None)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewHeaderBorderStyle RowHeadersBorderStyle
-        {
-            get { return base.RowHeadersBorderStyle; }
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewCellStyle RowHeadersDefaultCellStyle
-        {
-            get { return base.RowHeadersDefaultCellStyle; }
-        }
-
-        [DefaultValue(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewRowHeadersWidthSizeMode RowHeadersWidthSizeMode
-        {
-            get { return base.RowHeadersWidthSizeMode; }
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewCellStyle RowsDefaultCellStyle
-        {
-            get { return base.RowsDefaultCellStyle; }
-        }
-
-        [DefaultValue(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new bool ShowEditingIcon
-        {
-            get { return base.ShowEditingIcon; }
-        }
-
-        // Cells
-
-        [DefaultValue(DataGridViewCellBorderStyle.None)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewCellBorderStyle CellBorderStyle
-        {
-            get { return base.CellBorderStyle; }
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new DataGridViewCellStyle DefaultCellStyle
-        {
-            get { return base.DefaultCellStyle; }
-        }
-
-        #endregion
-
+        
         /// <summary>
         /// Gets or sets the <see cref="DwordArrayGroup"/> to display and make editable.
         /// </summary>
