@@ -9,6 +9,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     internal class ImageDataGridViewRowHeaderCell : DataGridViewRowHeaderCell
     {
+        // ---- CONSTANTS ----------------------------------------------------------------------------------------------
+
+        private const int _width = 110;
+
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
         private string _text;
@@ -40,7 +44,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             // Fix width of headers for now, as it looks best when switching between tables.
             //preferredSize.Width = cellStyle.Padding.Horizontal
             //    + Math.Max(textSize.Width, imageSize.Width / 2);
-            preferredSize.Width = 110;
+            preferredSize.Width = _width;
             preferredSize.Height = (imageSize.Height / 2) + cellStyle.Padding.Vertical
                 + cellStyle.Padding.Top + textSize.Height;
             

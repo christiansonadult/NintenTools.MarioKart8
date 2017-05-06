@@ -13,16 +13,27 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         
         protected override IEnumerable<TextImagePair> GetRowHeaders()
         {
-            // Valid point ranks and one for the fallback value.
-            for (int i = 0; i < DataGroup.Count; i++)
+            if (Program.IsMarioKart8Deluxe)
             {
-                if (i == DataGroup.Count - 1)
+                // Valid point ranks.
+                for (int i = 0; i < DataGroup.Count; i++)
                 {
-                    yield return new TextImagePair("Fallback");
+                    yield return new TextImagePair($"{i} Point{(i == 1 ? null : "s")}");
                 }
-                else
+            }
+            else
+            {
+                // Valid point ranks and one for the fallback value.
+                for (int i = 0; i < DataGroup.Count; i++)
                 {
-                    yield return new TextImagePair($"{i + 1} Point{(i == 0 ? null : "s")}");
+                    if (i == DataGroup.Count - 1)
+                    {
+                        yield return new TextImagePair("Fallback");
+                    }
+                    else
+                    {
+                        yield return new TextImagePair($"{i + 1} Point{(i == 0 ? null : "s")}");
+                    }
                 }
             }
         }

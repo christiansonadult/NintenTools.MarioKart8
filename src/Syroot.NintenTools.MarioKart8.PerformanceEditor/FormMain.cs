@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Windows.Forms;
 using Syroot.NintenTools.MarioKart8.BinData;
 using Syroot.NintenTools.MarioKart8.BinData.Performance;
@@ -10,10 +11,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public partial class FormMain : Form
     {
-        // ---- FIELDS -------------------------------------------------------------------------------------------------
-
-        private MainController _controller;
-
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -22,16 +19,31 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         public FormMain()
         {
             InitializeComponent();
+            Program.FileChanged += Program_FileChanged;
+        }
 
-            _controller = new MainController();
-            _controller.FileChanged += _controller_FileChanged;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormMain"/> class with the given command line
+        /// <paramref name="args"/>.
+        /// </summary>
+        /// <param name="args">The command line arguments.</param>
+        public FormMain(string[] args) : this()
+        {
+            if (args.Length == 1 && File.Exists(args[0]))
+            {
+                string argFile = args[0];
+                if (File.Exists(argFile))
+                {
+                    Program.OpenFile(argFile);
+                }
+            }
         }
 
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
-        private void UpdateDataGrids(Control parent)
+        private void UpdateDataGrids()
         {
-            BinFile performance = _controller.PerformanceData;
+            BinFile performance = Program.File;
             _dgvPointsDrivers.DataGroup = (DwordArrayGroup)performance[(int)Section.DriverPoints][0];
             _dgvPointsKarts.DataGroup = (DwordArrayGroup)performance[(int)Section.KartPoints][0];
             _dgvPointsTires.DataGroup = (DwordArrayGroup)performance[(int)Section.TirePoints][0];
@@ -65,34 +77,31 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         private void FormMain_DragDrop(object sender, DragEventArgs e)
         {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            _controller.OpenFile(file);
+            Program.OpenFile(file);
         }
 
-        private void _controller_FileChanged(object sender, EventArgs e)
+        private void Program_FileChanged(object sender, EventArgs e)
         {
-            if (_controller.PerformanceData == null)
+            bool fileOpen = Program.File != null;
+            if (fileOpen)
             {
-                Text = Application.ProductName;
-                _ccPoints.Enabled = false;
-                _ccPhysics.Enabled = false;
-                _ccSpeed.Enabled = false;
-                _ccHandling.Enabled = false;
-                _ccMain.SelectedControl = _tlpFile;
-                _btSave.Visible = false;
-                _btSaveAs.Visible = false;
+                string fileName = Program.FileName;
+                Text = $"{Path.GetFileName(fileName)} ({Path.GetDirectoryName(fileName)}) - {Application.ProductName}";
+                _ccMain.SelectedControl = _ccPoints;
             }
             else
             {
-                Text = $"{_controller.FileName} - {Application.ProductName}";
-                _ccPoints.Enabled = true;
-                _ccPhysics.Enabled = true;
-                _ccSpeed.Enabled = true;
-                _ccHandling.Enabled = true;
-                _ccMain.SelectedControl = _ccPoints;
-                _btSave.Visible = true;
-                _btSaveAs.Visible = true;
+                Text = Application.ProductName;
+                _ccMain.SelectedControl = _tlpFile;
             }
-            UpdateDataGrids(this);
+            _ccPoints.Enabled = fileOpen;
+            _ccPhysics.Enabled = fileOpen;
+            _ccSpeed.Enabled = fileOpen;
+            _ccHandling.Enabled = fileOpen;
+            _btSave.Visible = fileOpen;
+            _btSaveAs.Visible = fileOpen;
+
+            UpdateDataGrids();
         }
 
         private void _btOpen_Click(object sender, EventArgs e)
@@ -100,18 +109,18 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Title = "Open File";
-                openFileDialog.FileName = _controller.FileName;
+                openFileDialog.FileName = Program.FileName;
                 openFileDialog.Filter = "Mario Kart 8 (Deluxe) BIN Files|*.bin|All Files|*.*";
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    _controller.OpenFile(openFileDialog.FileName);
+                    Program.OpenFile(openFileDialog.FileName);
                 }
             }
         }
 
         private void _btSave_Click(object sender, EventArgs e)
         {
-            _controller.SaveFile(_controller.FileName);
+            Program.SaveFile(Program.FileName, false);
         }
 
         private void _btSaveAs_Click(object sender, EventArgs e)
@@ -119,11 +128,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Title = "Save File";
-                saveFileDialog.FileName = _controller.FileName;
+                saveFileDialog.FileName = Program.FileName;
                 saveFileDialog.Filter = "Mario Kart 8 (Deluxe) BIN Files|*.bin|All Files|*.*";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    _controller.SaveFile(saveFileDialog.FileName);
+                    Program.SaveFile(saveFileDialog.FileName, true);
                 }
             }
         }

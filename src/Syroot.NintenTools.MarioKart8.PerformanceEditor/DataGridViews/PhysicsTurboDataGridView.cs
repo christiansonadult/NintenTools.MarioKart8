@@ -13,6 +13,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             yield return new TextImagePair("Mini-Turbo");
             yield return new TextImagePair("Super-Turbo");
+            if (Program.IsMarioKart8Deluxe)
+            {
+                yield return new TextImagePair("Ultra-Turbo");
+            }
         }
     }
 }

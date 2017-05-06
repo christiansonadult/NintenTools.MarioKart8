@@ -783,9 +783,29 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Kart_Inkstriker {
+            get {
+                object obj = ResourceManager.GetObject("Kart_Inkstriker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Kart_JetBike {
             get {
                 object obj = ResourceManager.GetObject("Kart_JetBike", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Kart_KoopaClown {
+            get {
+                object obj = ResourceManager.GetObject("Kart_KoopaClown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -866,6 +886,16 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         internal static System.Drawing.Bitmap Kart_Sneeker {
             get {
                 object obj = ResourceManager.GetObject("Kart_Sneeker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Kart_SplatBuggy {
+            get {
+                object obj = ResourceManager.GetObject("Kart_SplatBuggy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

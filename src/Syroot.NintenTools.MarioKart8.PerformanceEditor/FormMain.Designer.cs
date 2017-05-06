@@ -101,26 +101,26 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._cmsGridMultiply,
             this._cmsGridDivide});
             this._cmsGrid.Name = "_cmsGrid";
-            this._cmsGrid.Size = new System.Drawing.Size(153, 142);
+            this._cmsGrid.Size = new System.Drawing.Size(128, 120);
             // 
             // _cmsGridSet
             // 
             this._cmsGridSet.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Equal;
             this._cmsGridSet.Name = "_cmsGridSet";
-            this._cmsGridSet.Size = new System.Drawing.Size(152, 22);
+            this._cmsGridSet.Size = new System.Drawing.Size(127, 22);
             this._cmsGridSet.Text = "Set...";
             this._cmsGridSet.Click += new System.EventHandler(this._cmsGridSet_Click);
             // 
             // _cmsGridSeparator1
             // 
             this._cmsGridSeparator1.Name = "_cmsGridSeparator1";
-            this._cmsGridSeparator1.Size = new System.Drawing.Size(149, 6);
+            this._cmsGridSeparator1.Size = new System.Drawing.Size(124, 6);
             // 
             // _cmsGridAdd
             // 
             this._cmsGridAdd.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Add;
             this._cmsGridAdd.Name = "_cmsGridAdd";
-            this._cmsGridAdd.Size = new System.Drawing.Size(152, 22);
+            this._cmsGridAdd.Size = new System.Drawing.Size(127, 22);
             this._cmsGridAdd.Text = "Add...";
             this._cmsGridAdd.Click += new System.EventHandler(this._cmsGridAdd_Click);
             // 
@@ -128,7 +128,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             // 
             this._cmsGridSubtract.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Subtract;
             this._cmsGridSubtract.Name = "_cmsGridSubtract";
-            this._cmsGridSubtract.Size = new System.Drawing.Size(152, 22);
+            this._cmsGridSubtract.Size = new System.Drawing.Size(127, 22);
             this._cmsGridSubtract.Text = "Subtract...";
             this._cmsGridSubtract.Click += new System.EventHandler(this._cmsGridSubtract_Click);
             // 
@@ -136,7 +136,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             // 
             this._cmsGridMultiply.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Multiply;
             this._cmsGridMultiply.Name = "_cmsGridMultiply";
-            this._cmsGridMultiply.Size = new System.Drawing.Size(152, 22);
+            this._cmsGridMultiply.Size = new System.Drawing.Size(127, 22);
             this._cmsGridMultiply.Text = "Multiply...";
             this._cmsGridMultiply.Click += new System.EventHandler(this._cmsGridMultiply_Click);
             // 
@@ -144,7 +144,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             // 
             this._cmsGridDivide.Image = global::Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties.Resources.Divide;
             this._cmsGridDivide.Name = "_cmsGridDivide";
-            this._cmsGridDivide.Size = new System.Drawing.Size(152, 22);
+            this._cmsGridDivide.Size = new System.Drawing.Size(127, 22);
             this._cmsGridDivide.Text = "Divide...";
             this._cmsGridDivide.Click += new System.EventHandler(this._cmsGridDivide_Click);
             // 
@@ -166,7 +166,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._ccMain.Margin = new System.Windows.Forms.Padding(0);
             this._ccMain.Name = "_ccMain";
             this._ccMain.SelectedControl = this._tlpFile;
-            this._ccMain.Size = new System.Drawing.Size(884, 561);
+            this._ccMain.Size = new System.Drawing.Size(934, 561);
             this._ccMain.TabIndex = 2;
             // 
             // _ccHandling
@@ -341,11 +341,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._dgvPhysicsOffroadBrake.TabIndex = 3;
             this._ccPhysics.SetTitle(this._dgvPhysicsOffroadBrake, "Off-Road Brake");
             // 
-            // _dgvPhysicsOnroadSlip
+            // _dgvPhysicsOnroad
             // 
             this._dgvPhysicsOnroad.ContextMenuStrip = this._cmsGrid;
             this._dgvPhysicsOnroad.Location = new System.Drawing.Point(0, 180);
-            this._dgvPhysicsOnroad.Name = "_dgvPhysicsOnroadSlip";
+            this._dgvPhysicsOnroad.Name = "_dgvPhysicsOnroad";
             this._dgvPhysicsOnroad.RowTemplate.Height = 30;
             this._dgvPhysicsOnroad.Size = new System.Drawing.Size(200, 75);
             this._dgvPhysicsOnroad.TabIndex = 2;
@@ -515,12 +515,12 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 561);
+            this.ClientSize = new System.Drawing.Size(934, 561);
             this.Controls.Add(this._ccMain);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MinimumSize = new System.Drawing.Size(300, 200);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mario Kart 8 Performance Editor";

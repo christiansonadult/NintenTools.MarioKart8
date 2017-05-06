@@ -22,6 +22,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     public abstract class SectionDataGridView<T> : SectionDataGridView
          where T : struct, IComparable, IConvertible
     {
+        // ---- CONSTANTS ----------------------------------------------------------------------------------------------
+
+        private const int _minimumColumnWidth = 85;
+
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
         private DwordArrayGroup _dataGroup;
@@ -480,7 +484,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 foreach (DataGridViewColumn column in Columns)
                 {
                     int columnWidth = (int)Math.Ceiling(width / ((float)Columns.Count - currentColumn));
-                    column.Width = Math.Max(80, columnWidth);
+                    column.Width = Math.Max(_minimumColumnWidth, columnWidth);
                     width -= columnWidth;
                     currentColumn++;
                 }
