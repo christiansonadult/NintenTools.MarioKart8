@@ -9,7 +9,7 @@ using Syroot.BinaryData;
 namespace Syroot.NintenTools.MarioKart8.BinData
 {
     /// <summary>
-    /// Represents the untyped contents of a *.bin file. Such files consist of several <see cref="Section"/>
+    /// Represents the untyped contents of a *.bin file. Such files consist of several <see cref="SectionBase"/>
     /// instances which consist of a set number of groups (sometimes just 1). Those in turn contain several elements,
     /// all of same structure per section.
     /// </summary>
@@ -22,8 +22,8 @@ namespace Syroot.NintenTools.MarioKart8.BinData
     public class BinFile : IList<SectionBase>
     {
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
-
-        internal const int _sectionHeaderSize = 12;
+        
+        private const int _sectionHeaderSize = 12;
 
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
@@ -62,6 +62,9 @@ namespace Syroot.NintenTools.MarioKart8.BinData
             get { return _list.Count; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the BIN file is read-only.
+        /// </summary>
         public bool IsReadOnly
         {
             get { return false; }
@@ -101,10 +104,10 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Section"/> with the given <paramref name="name"/>.
+        /// Gets or sets the <see cref="SectionBase"/> with the given <paramref name="name"/>.
         /// </summary>
-        /// <param name="name">The name of the <see cref="Section"/> to get or set.</param>
-        /// <returns>The <see cref="Section"/> with the given name.</returns>
+        /// <param name="name">The name of the <see cref="SectionBase"/> to get or set.</param>
+        /// <returns>The <see cref="SectionBase"/> with the given name.</returns>
         public SectionBase this[string name]
         {
             get
@@ -129,41 +132,71 @@ namespace Syroot.NintenTools.MarioKart8.BinData
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Adds a <see cref="SectionBase"/> to the BIN file.
+        /// </summary>
+        /// <param name="item">The <see cref="SectionBase"/> to add to the BIN file.</param>
         public void Add(SectionBase item)
         {
             _list.Add(item);
         }
 
+        /// <summary>
+        /// Removes all <see cref="SectionBase"/> instances from the BIN file.
+        /// </summary>
         public void Clear()
         {
             _list.Clear();
         }
 
+        /// <summary>
+        /// Determines whether the BIN file contains a specific <see cref="SectionBase"/>.
+        /// </summary>
+        /// <param name="item">The <see cref="SectionBase"/> to locate in the BIN file.</param>
+        /// <returns><c>true</c> if <see cref="SectionBase"/> is found in the BIN file; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(SectionBase item)
         {
             return _list.Contains(item);
         }
 
         /// <summary>
-        /// Gets a value indicating whether a <see cref="Section"/> with the given <paramref name="name"/> exists.
+        /// Determines whether the BIN file contains a specific <see cref="SectionBase"/> with the given
+        /// <paramref name="name"/>.
         /// </summary>
-        /// <param name="name">The name of the <see cref="Section"/> to check for existence.</param>
-        /// <returns><c>true</c> if the <see cref="Section"/> exists, otherwise <c>false</c>.</returns>
+        /// <param name="name">The name of the <see cref="SectionBase"/> to check for existence.</param>
+        /// <returns><c>true</c> if <see cref="SectionBase"/> is found in the BIN file; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(string name)
         {
             return GetSectionByName(name) != null;
         }
 
+        /// <summary>
+        /// Copies the elements of the BIN file to an <see cref="Array"/>, starting at a particular <see cref="Array"/>
+        /// index.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements copied
+        /// from the BIN file. The <see cref="Array"/> must have zero-based indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
         public void CopyTo(SectionBase[] array, int arrayIndex)
         {
             _list.CopyTo(array, arrayIndex);
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the <see cref="SectionBase"/> instances of the BIN file.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<SectionBase> GetEnumerator()
         {
             return _list.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the <see cref="SectionBase"/> instances of the BIN file.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _list.GetEnumerator();
@@ -179,16 +212,32 @@ namespace Syroot.NintenTools.MarioKart8.BinData
             return _list.IndexOf(item);
         }
 
+        /// <summary>
+        /// Inserts a <see cref="SectionBase"/> to the BIN file at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
+        /// <param name="item">The <see cref="SectionBase"/> to insert into the BIN file.</param>
         public void Insert(int index, SectionBase item)
         {
             _list.Insert(index, item);
         }
 
+        /// <summary>
+        /// Removes the first occurrence of a specific <see cref="SectionBase"/> from the BIN file.
+        /// </summary>
+        /// <param name="item">The <see cref="SectionBase"/> to remove from the BIN file.</param>
+        /// <returns><c>true</c> if <paramref name="item"/> was successfully removed from the BIN file; otherwise,
+        /// <c>false</c>. This method also returns <c>false</c> if <paramref name="item"/> is not found in the original
+        /// BIN file.</returns>
         public bool Remove(SectionBase item)
         {
             return _list.Remove(item);
         }
 
+        /// <summary>
+        /// Removes the <see cref="SectionBase"/> at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the <see cref="SectionBase"/> to remove.</param>
         public void RemoveAt(int index)
         {
             _list.RemoveAt(index);

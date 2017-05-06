@@ -27,7 +27,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             new TextImagePair("Gold Glider", Resources.Glider_GoldGlider),
             new TextImagePair("Hylian Kite", Resources.Glider_HylianKite),
             new TextImagePair("Paper Glider", Resources.Glider_PaperGlider),
-    };
+        };
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 

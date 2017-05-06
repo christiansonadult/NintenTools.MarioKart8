@@ -1,5 +1,10 @@
+#pragma warning disable 1591 // Single elements do not require to be documented.
+
 namespace Syroot.NintenTools.MarioKart8.BinData.Performance
 {
+    /// <summary>
+    /// Represents the available sections in a Performance.bin file.
+    /// </summary>
     public enum Section
     {
         WeightStats, AccelerationStats, OnroadStats, OffroadStats, TurboStats,
@@ -8,11 +13,17 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         KartPoints, DriverPoints, TirePoints, GliderPoints
     }
 
+    /// <summary>
+    /// Represents the weight stats stored at the resulting group element indices.
+    /// </summary>
     public enum WeightStat
     {
         Bumped, Bumping, Unknown
     }
 
+    /// <summary>
+    /// Represents the offroad stats stored at the resulting group element indices.
+    /// </summary>
     public enum OffroadStat
     {
         BrakeDirtLight, BrakeDirtMedium, BrakeDirtHeavy,
@@ -22,32 +33,50 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         SlipSandLight, SlipSandMedium, SlipSandHeavy,
         SlipIceLight, SlipIceMedium, SlipIceHeavy
     }
-
+    
+    /// <summary>
+    /// Represents the turbo stats stored at the resulting group element indices.
+    /// </summary>
     public enum TurboStat
     {
         MiniTurboFrames, SuperTurboFrames
     }
 
+    /// <summary>
+    /// Represents the speed stats stored at the resulting group element indices.
+    /// </summary>
     public enum SpeedStat
     {
         Speed, MaxSpeed
     }
-
+    
+    /// <summary>
+    /// Represents the speed air stats stored at the resulting group element indices.
+    /// </summary>
     public enum SpeedAirStat
     {
         Speed
     }
 
+    /// <summary>
+    /// Represents the handling stats stored at the resulting group element indices.
+    /// </summary>
     public enum HandlingStat
     {
         Normal, Drift, AutoDrift
     }
 
+    /// <summary>
+    /// Represents the handling air stats stored at the resulting group element indices.
+    /// </summary>
     public enum HandlingAirStat
     {
         Roll, Move
     }
 
+    /// <summary>
+    /// Represents the point set attributes at the resulting group element indices.
+    /// </summary>
     public enum PointSetAttrib
     {
         Weight, Acceleration, OnroadTraction, OffroadTraction, MiniTurbo,
@@ -55,6 +84,9 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         HandlingGround, HandlingWater, HandlingAntigravity, HandlingAir
     }
 
+    /// <summary>
+    /// Represents the kart point sets stored at the resulting group indices of Mario Kart 8.
+    /// </summary>
     public enum KartPointSetMK8
     {
         StandardKart,
@@ -98,6 +130,9 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         BoneRattler
     }
 
+    /// <summary>
+    /// Represents the kart point sets stored at the resulting group indices of Mario Kart 8 Deluxe.
+    /// </summary>
     public enum KartPointSetMK8D
     {
         StandardKart,
@@ -142,6 +177,9 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         BoneRattler
     }
 
+    /// <summary>
+    /// Represents the driver point sets stored at the resulting group indices of Mario Kart 8.
+    /// </summary>
     public enum DriverPointSetMK8
     {
         Mario,
@@ -183,6 +221,9 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         VillagerFemale
     }
 
+    /// <summary>
+    /// Represents the driver point point sets stored at the resulting group indices of Mario Kart 8 Deluxe.
+    /// </summary>
     public enum DriverPointSetMK8D
     {
         Mario,
@@ -228,7 +269,10 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         InklingFemale,
         InklingMale
     }
-    
+
+    /// <summary>
+    /// Represents the tire point sets stored at the resulting group indices.
+    /// </summary>
     public enum TirePointSet
     {
         Standard,
@@ -254,6 +298,9 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         LeafTires
     }
 
+    /// <summary>
+    /// Represents the glider point sets stored at the resulting group indices.
+    /// </summary>
     public enum GliderPointSet
     {
         SuperGlider,
@@ -272,3 +319,5 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Performance
         PaperGlider
     }
 }
+
+#pragma warning restore 1591
