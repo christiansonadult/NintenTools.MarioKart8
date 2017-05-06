@@ -40,14 +40,14 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._cmsGridMultiply = new System.Windows.Forms.ToolStripMenuItem();
             this._cmsGridDivide = new System.Windows.Forms.ToolStripMenuItem();
             this._ccMain = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
-            this._ccHandling = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
-            this._ccSpeed = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
-            this._ccPhysics = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
-            this._ccPoints = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
             this._tlpFile = new System.Windows.Forms.TableLayoutPanel();
             this._btSaveAs = new System.Windows.Forms.Button();
             this._btSave = new System.Windows.Forms.Button();
             this._btOpen = new System.Windows.Forms.Button();
+            this._ccPoints = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
+            this._ccSpeed = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
+            this._ccHandling = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
+            this._ccPhysics = new Syroot.NintenTools.MarioKart8.EditorUI.CategoryControl();
             this._cmsGrid.SuspendLayout();
             this._ccMain.SuspendLayout();
             this._tlpFile.SuspendLayout();
@@ -115,9 +115,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._ccMain.BackColor = System.Drawing.Color.White;
             this._ccMain.Controls.Add(this._tlpFile);
             this._ccMain.Controls.Add(this._ccPoints);
+            this._ccMain.Controls.Add(this._ccPhysics);
             this._ccMain.Controls.Add(this._ccSpeed);
             this._ccMain.Controls.Add(this._ccHandling);
-            this._ccMain.Controls.Add(this._ccPhysics);
             this._ccMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this._ccMain.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this._ccMain.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -130,70 +130,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._ccMain.SelectedControl = this._tlpFile;
             this._ccMain.Size = new System.Drawing.Size(934, 561);
             this._ccMain.TabIndex = 2;
-            // 
-            // _ccHandling
-            // 
-            this._ccHandling.Enabled = false;
-            this._ccHandling.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this._ccHandling.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccHandling.HeaderForeColor = System.Drawing.Color.White;
-            this._ccHandling.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccHandling.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
-            this._ccHandling.Location = new System.Drawing.Point(584, 30);
-            this._ccHandling.Margin = new System.Windows.Forms.Padding(0);
-            this._ccHandling.Name = "_ccHandling";
-            this._ccHandling.SelectedControl = null;
-            this._ccHandling.Size = new System.Drawing.Size(200, 531);
-            this._ccHandling.TabIndex = 7;
-            this._ccMain.SetTitle(this._ccHandling, "Handling");
-            // 
-            // _ccSpeed
-            // 
-            this._ccSpeed.Enabled = false;
-            this._ccSpeed.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this._ccSpeed.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccSpeed.HeaderForeColor = System.Drawing.Color.White;
-            this._ccSpeed.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccSpeed.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
-            this._ccSpeed.Location = new System.Drawing.Point(384, 30);
-            this._ccSpeed.Margin = new System.Windows.Forms.Padding(0);
-            this._ccSpeed.Name = "_ccSpeed";
-            this._ccSpeed.SelectedControl = null;
-            this._ccSpeed.Size = new System.Drawing.Size(200, 531);
-            this._ccSpeed.TabIndex = 4;
-            this._ccMain.SetTitle(this._ccSpeed, "Speed");
-            // 
-            // _ccPhysics
-            // 
-            this._ccPhysics.Enabled = false;
-            this._ccPhysics.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this._ccPhysics.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccPhysics.HeaderForeColor = System.Drawing.Color.White;
-            this._ccPhysics.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccPhysics.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
-            this._ccPhysics.Location = new System.Drawing.Point(184, 30);
-            this._ccPhysics.Margin = new System.Windows.Forms.Padding(0);
-            this._ccPhysics.Name = "_ccPhysics";
-            this._ccPhysics.SelectedControl = null;
-            this._ccPhysics.Size = new System.Drawing.Size(200, 531);
-            this._ccPhysics.TabIndex = 3;
-            this._ccMain.SetTitle(this._ccPhysics, "Physics");
-            // 
-            // _ccPoints
-            // 
-            this._ccPoints.Enabled = false;
-            this._ccPoints.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this._ccPoints.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccPoints.HeaderForeColor = System.Drawing.Color.White;
-            this._ccPoints.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this._ccPoints.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
-            this._ccPoints.Location = new System.Drawing.Point(784, 30);
-            this._ccPoints.Margin = new System.Windows.Forms.Padding(0);
-            this._ccPoints.Name = "_ccPoints";
-            this._ccPoints.SelectedControl = null;
-            this._ccPoints.Size = new System.Drawing.Size(200, 531);
-            this._ccPoints.TabIndex = 8;
-            this._ccMain.SetTitle(this._ccPoints, "Points");
             // 
             // _tlpFile
             // 
@@ -270,6 +206,70 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             this._btOpen.Text = "Open";
             this._btOpen.UseVisualStyleBackColor = false;
             this._btOpen.Click += new System.EventHandler(this._btOpen_Click);
+            // 
+            // _ccPoints
+            // 
+            this._ccPoints.Enabled = false;
+            this._ccPoints.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this._ccPoints.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccPoints.HeaderForeColor = System.Drawing.Color.White;
+            this._ccPoints.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccPoints.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
+            this._ccPoints.Location = new System.Drawing.Point(784, 30);
+            this._ccPoints.Margin = new System.Windows.Forms.Padding(0);
+            this._ccPoints.Name = "_ccPoints";
+            this._ccPoints.SelectedControl = null;
+            this._ccPoints.Size = new System.Drawing.Size(200, 531);
+            this._ccPoints.TabIndex = 8;
+            this._ccMain.SetTitle(this._ccPoints, "Points");
+            // 
+            // _ccSpeed
+            // 
+            this._ccSpeed.Enabled = false;
+            this._ccSpeed.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this._ccSpeed.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccSpeed.HeaderForeColor = System.Drawing.Color.White;
+            this._ccSpeed.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccSpeed.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
+            this._ccSpeed.Location = new System.Drawing.Point(384, 30);
+            this._ccSpeed.Margin = new System.Windows.Forms.Padding(0);
+            this._ccSpeed.Name = "_ccSpeed";
+            this._ccSpeed.SelectedControl = null;
+            this._ccSpeed.Size = new System.Drawing.Size(200, 531);
+            this._ccSpeed.TabIndex = 4;
+            this._ccMain.SetTitle(this._ccSpeed, "Speed");
+            // 
+            // _ccHandling
+            // 
+            this._ccHandling.Enabled = false;
+            this._ccHandling.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this._ccHandling.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccHandling.HeaderForeColor = System.Drawing.Color.White;
+            this._ccHandling.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccHandling.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
+            this._ccHandling.Location = new System.Drawing.Point(584, 30);
+            this._ccHandling.Margin = new System.Windows.Forms.Padding(0);
+            this._ccHandling.Name = "_ccHandling";
+            this._ccHandling.SelectedControl = null;
+            this._ccHandling.Size = new System.Drawing.Size(200, 531);
+            this._ccHandling.TabIndex = 7;
+            this._ccMain.SetTitle(this._ccHandling, "Handling");
+            // 
+            // _ccPhysics
+            // 
+            this._ccPhysics.Enabled = false;
+            this._ccPhysics.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this._ccPhysics.HeaderDisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccPhysics.HeaderForeColor = System.Drawing.Color.White;
+            this._ccPhysics.HeaderHoveredBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._ccPhysics.HeaderSelectedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(85)))), ((int)(((byte)(255)))));
+            this._ccPhysics.Location = new System.Drawing.Point(184, 30);
+            this._ccPhysics.Margin = new System.Windows.Forms.Padding(0);
+            this._ccPhysics.Name = "_ccPhysics";
+            this._ccPhysics.SelectedControl = null;
+            this._ccPhysics.Size = new System.Drawing.Size(200, 531);
+            this._ccPhysics.TabIndex = 3;
+            this._ccMain.SetTitle(this._ccPhysics, "Physics");
             // 
             // FormMain
             // 

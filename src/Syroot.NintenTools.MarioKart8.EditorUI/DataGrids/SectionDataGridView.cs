@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Syroot.NintenTools.MarioKart8.BinData;
@@ -8,11 +7,15 @@ using Syroot.NintenTools.MarioKart8.BinData;
 namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
-    /// Represents the non-generic base of <see cref="SectionDataGridView{T}"/>, which is required for the Windows
-    /// Forms Designer.
+    /// Represents the non-generic base of <see cref="SectionDataGridView{T}"/>.
     /// </summary>
     public abstract class SectionDataGridView : DataGridView
     {
+        // ---- PROPERTIES ---------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Gets or sets the <see cref="DwordArrayGroup"/> to display and make editable.
+        /// </summary>
         public abstract DwordArrayGroup DataGroup { get; set; }
     }
 

@@ -18,20 +18,23 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         private SectionDataGridView _dgvPointsKarts;
         private SectionDataGridView _dgvPointsTires;
         private SectionDataGridView _dgvPointsGliders;
-        private SectionDataGridView _dgvSpeedGround;
-        private SectionDataGridView _dgvSpeedWater;
-        private SectionDataGridView _dgvSpeedAntigravity;
-        private SectionDataGridView _dgvSpeedGliding;
-        private SectionDataGridView _dgvHandlingGround;
-        private SectionDataGridView _dgvHandlingWater;
-        private SectionDataGridView _dgvHandlingAntigravity;
-        private SectionDataGridView _dgvHandlingGliding;
+
         private SectionDataGridView _dgvPhysicsWeight;
         private SectionDataGridView _dgvPhysicsAcceleration;
         private SectionDataGridView _dgvPhysicsOnroad;
         private SectionDataGridView _dgvPhysicsOffroadBrake;
         private SectionDataGridView _dgvPhysicsOffroadSlip;
         private SectionDataGridView _dgvPhysicsTurbo;
+
+        private SectionDataGridView _dgvSpeedGround;
+        private SectionDataGridView _dgvSpeedWater;
+        private SectionDataGridView _dgvSpeedAntigravity;
+        private SectionDataGridView _dgvSpeedGliding;
+
+        private SectionDataGridView _dgvHandlingGround;
+        private SectionDataGridView _dgvHandlingWater;
+        private SectionDataGridView _dgvHandlingAntigravity;
+        private SectionDataGridView _dgvHandlingGliding;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
@@ -85,6 +88,13 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             _dgvPointsTires = CreateDataGrid<PointTiresDataGridView>(_ccPoints, "Tires");
             _dgvPointsGliders = CreateDataGrid<PointGlidersDataGridView>(_ccPoints, "Gliders");
 
+            _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccPhysics, "Weight");
+            _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccPhysics, "Acceleration");
+            _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccPhysics, "On-Road Slip");
+            _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccPhysics, "Off-Road Brake");
+            _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccPhysics, "Off-Road Slip");
+            _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccPhysics, "Turbo");
+
             _dgvSpeedGround = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Ground");
             _dgvSpeedWater = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Water");
             _dgvSpeedAntigravity = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Anti-Gravity");
@@ -94,13 +104,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             _dgvHandlingWater = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Water");
             _dgvHandlingAntigravity = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Anti-Gravity");
             _dgvHandlingGliding = CreateDataGrid<HandlingAirDataGridView>(_ccHandling, "Gliding");
-
-            _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccPhysics, "Weight");
-            _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccPhysics, "Acceleration");
-            _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccPhysics, "On-Road Slip");
-            _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccPhysics, "Off-Road Brake");
-            _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccPhysics, "Off-Road Slip");
-            _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccPhysics, "Turbo");
         }
 
         private SectionDataGridView CreateDataGrid<T>(CategoryControl parent, string title)
@@ -115,20 +118,24 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         private void UpdateDataGrids()
         {
             BinFile performance = Program.File;
+
             _dgvPointsDrivers.DataGroup = (DwordArrayGroup)performance[(int)Section.DriverPoints][0];
             _dgvPointsKarts.DataGroup = (DwordArrayGroup)performance[(int)Section.KartPoints][0];
             _dgvPointsTires.DataGroup = (DwordArrayGroup)performance[(int)Section.TirePoints][0];
             _dgvPointsGliders.DataGroup = (DwordArrayGroup)performance[(int)Section.GliderPoints][0];
+
             _dgvPhysicsWeight.DataGroup = (DwordArrayGroup)performance[(int)Section.WeightStats][0];
             _dgvPhysicsAcceleration.DataGroup = (DwordArrayGroup)performance[(int)Section.AccelerationStats][0];
             _dgvPhysicsOnroad.DataGroup = (DwordArrayGroup)performance[(int)Section.OnroadStats][0];
             _dgvPhysicsOffroadBrake.DataGroup = (DwordArrayGroup)performance[(int)Section.OffroadStats][0];
             _dgvPhysicsOffroadSlip.DataGroup = (DwordArrayGroup)performance[(int)Section.OffroadStats][0];
             _dgvPhysicsTurbo.DataGroup = (DwordArrayGroup)performance[(int)Section.TurboStats][0];
+
             _dgvSpeedGround.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedGroundStats][0];
             _dgvSpeedWater.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedWaterStats][0];
             _dgvSpeedAntigravity.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedAntigravityStats][0];
             _dgvSpeedGliding.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedAirStats][0];
+
             _dgvHandlingGround.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingGroundStats][0];
             _dgvHandlingWater.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingWaterStats][0];
             _dgvHandlingAntigravity.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingAntigravityStats][0];
