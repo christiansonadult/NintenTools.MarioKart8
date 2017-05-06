@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Layout;
 
-namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
     /// Represents tab-like control with an array of entries at the top and changing content depending on the selected
@@ -35,6 +35,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CategoryControl"/> class.
+        /// </summary>
         public CategoryControl()
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer
@@ -313,7 +316,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         protected override void OnMouseClick(MouseEventArgs e)
         {
             // Must be inside the header.
-            if (e.Location.Y >= 0 && e.Location.Y < HeaderHeight
+            if (e.Location.Y >= 0 && e.Location.Y < HeaderHeight && e.Button == MouseButtons.Left
                 && HoveredControl?.Enabled == true)
             {
                 SelectedControl = HoveredControl;
@@ -328,7 +331,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
             float buttonWidth = Width / (float)Controls.Count;
             float currentX = 0;
-            for (int i = Controls.Count - 1; i >= 0; i--)
+            for (int i = 0; i < Controls.Count; i++)
             {
                 Control control = Controls[i];
                 Rectangle buttonRect = new Rectangle(
@@ -390,7 +393,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             {
                 return null;
             }
-            return Controls[Controls.Count - 1 - index];
+            return Controls[index];
         }
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------

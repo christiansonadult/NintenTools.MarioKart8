@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {

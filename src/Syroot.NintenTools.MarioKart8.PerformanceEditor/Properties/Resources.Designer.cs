@@ -63,26 +63,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Add {
-            get {
-                object obj = ResourceManager.GetObject("Add", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Divide {
-            get {
-                object obj = ResourceManager.GetObject("Divide", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Driver_BabyDaisy {
             get {
                 object obj = ResourceManager.GetObject("Driver_BabyDaisy", resourceCulture);
@@ -496,16 +476,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         internal static System.Drawing.Bitmap Driver_Yoshi {
             get {
                 object obj = ResourceManager.GetObject("Driver_Yoshi", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Equal {
-            get {
-                object obj = ResourceManager.GetObject("Equal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1063,9 +1033,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Multiply {
+        internal static System.Drawing.Bitmap Menu_Add {
             get {
-                object obj = ResourceManager.GetObject("Multiply", resourceCulture);
+                object obj = ResourceManager.GetObject("Menu_Add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1073,9 +1043,39 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Subtract {
+        internal static System.Drawing.Bitmap Menu_Divide {
             get {
-                object obj = ResourceManager.GetObject("Subtract", resourceCulture);
+                object obj = ResourceManager.GetObject("Menu_Divide", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Menu_Multiply {
+            get {
+                object obj = ResourceManager.GetObject("Menu_Multiply", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Menu_Set {
+            get {
+                object obj = ResourceManager.GetObject("Menu_Set", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Menu_Subtract {
+            get {
+                object obj = ResourceManager.GetObject("Menu_Subtract", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

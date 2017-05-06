@@ -1,4 +1,4 @@
-﻿namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     partial class FormCalculation
     {

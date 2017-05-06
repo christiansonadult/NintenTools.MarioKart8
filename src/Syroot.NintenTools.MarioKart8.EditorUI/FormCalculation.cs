@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
     /// Represents a small input dialog to enter a calculation number.
@@ -26,19 +26,25 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
-        internal bool AllowFloat
+        /// <summary>
+        /// Gets or sets a value indicating whether floating point values can be entered.
+        /// </summary>
+        public bool AllowFloat
         {
             get;
             set;
         }
 
-        internal float Value
+        /// <summary>
+        /// Gets or sets the value entered.
+        /// </summary>
+        public float Value
         {
             get { return Single.Parse(_tbValue.Text); }
             set { _tbValue.Text = value.ToString(); }
         }
 
-        // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
+        // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
 
         /// <summary>
         /// Shows the input dialog with the given title and value settings.
@@ -46,7 +52,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         /// <param name="caption">The text in the title bar of the input box.</param>
         /// <param name="allowFloat"><c>true</c> to allow floating point numbers.</param>
         /// <returns>The value the user entered or <c>null</c> if he canceled.</returns>
-        internal static float? Show(string caption, bool allowFloat)
+        public static float? Show(string caption, bool allowFloat)
         {
             FormCalculation form = new FormCalculation()
             {
@@ -72,6 +78,8 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             }
             return null;
         }
+
+        // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 
         private void _tbValue_KeyPress(object sender, KeyPressEventArgs e)
         {

@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
     /// Represents a <see cref="DataGridViewRowHeaderCell"/> which can display an image together with text.

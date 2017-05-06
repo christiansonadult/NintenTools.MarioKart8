@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using Syroot.NintenTools.MarioKart8.BinData;
 using Syroot.NintenTools.MarioKart8.BinData.Performance;
+using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
@@ -11,6 +12,27 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public partial class FormMain : Form
     {
+        // ---- FIELDS -------------------------------------------------------------------------------------------------
+
+        private SectionDataGridView _dgvPointsDrivers;
+        private SectionDataGridView _dgvPointsKarts;
+        private SectionDataGridView _dgvPointsTires;
+        private SectionDataGridView _dgvPointsGliders;
+        private SectionDataGridView _dgvSpeedGround;
+        private SectionDataGridView _dgvSpeedWater;
+        private SectionDataGridView _dgvSpeedAntigravity;
+        private SectionDataGridView _dgvSpeedGliding;
+        private SectionDataGridView _dgvHandlingGround;
+        private SectionDataGridView _dgvHandlingWater;
+        private SectionDataGridView _dgvHandlingAntigravity;
+        private SectionDataGridView _dgvHandlingGliding;
+        private SectionDataGridView _dgvPhysicsWeight;
+        private SectionDataGridView _dgvPhysicsAcceleration;
+        private SectionDataGridView _dgvPhysicsOnroad;
+        private SectionDataGridView _dgvPhysicsOffroadBrake;
+        private SectionDataGridView _dgvPhysicsOffroadSlip;
+        private SectionDataGridView _dgvPhysicsTurbo;
+
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -39,7 +61,56 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             }
         }
 
+        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Raised when the handle of the control was created.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/>.</param>
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            if (!DesignMode)
+            {
+                CreateDataGrids();
+            }
+        }
+
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
+
+        private void CreateDataGrids()
+        {
+            _dgvPointsDrivers = CreateDataGrid<PointDriversDataGridView>(_ccPoints, "Drivers");
+            _dgvPointsKarts = CreateDataGrid<PointKartsDataGridView>(_ccPoints, "Karts");
+            _dgvPointsTires = CreateDataGrid<PointTiresDataGridView>(_ccPoints, "Tires");
+            _dgvPointsGliders = CreateDataGrid<PointGlidersDataGridView>(_ccPoints, "Gliders");
+
+            _dgvSpeedGround = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Ground");
+            _dgvSpeedWater = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Water");
+            _dgvSpeedAntigravity = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Anti-Gravity");
+            _dgvSpeedGliding = CreateDataGrid<SpeedAirDataGridView>(_ccSpeed, "Gliding");
+
+            _dgvHandlingGround = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Ground");
+            _dgvHandlingWater = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Water");
+            _dgvHandlingAntigravity = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Anti-Gravity");
+            _dgvHandlingGliding = CreateDataGrid<HandlingAirDataGridView>(_ccHandling, "Gliding");
+
+            _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccPhysics, "Weight");
+            _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccPhysics, "Acceleration");
+            _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccPhysics, "On-Road Slip");
+            _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccPhysics, "Off-Road Brake");
+            _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccPhysics, "Off-Road Slip");
+            _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccPhysics, "Turbo");
+        }
+
+        private SectionDataGridView CreateDataGrid<T>(CategoryControl parent, string title)
+            where T : SectionDataGridView
+        {
+            SectionDataGridView dataGrid = Activator.CreateInstance<T>();
+            parent.Controls.Add(dataGrid);
+            parent.SetTitle(dataGrid, title);
+            return dataGrid;
+        }
 
         private void UpdateDataGrids()
         {
@@ -66,20 +137,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 
-        private void FormMain_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
-        }
-
-        private void FormMain_DragDrop(object sender, DragEventArgs e)
-        {
-            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            Program.OpenFile(file);
-        }
-
         private void Program_FileChanged(object sender, EventArgs e)
         {
             bool fileOpen = Program.File != null;
@@ -102,6 +159,20 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             _btSaveAs.Visible = fileOpen;
 
             UpdateDataGrids();
+        }
+
+        private void FormMain_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        private void FormMain_DragDrop(object sender, DragEventArgs e)
+        {
+            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            Program.OpenFile(file);
         }
 
         private void _btOpen_Click(object sender, EventArgs e)

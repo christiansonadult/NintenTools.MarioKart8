@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Syroot.NintenTools.MarioKart8.BinData;
 
-namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
     /// Represents the non-generic base of <see cref="SectionDataGridView{T}"/>, which is required for the Windows
@@ -13,6 +13,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public abstract class SectionDataGridView : DataGridView
     {
+        public abstract DwordArrayGroup DataGroup { get; set; }
     }
 
     /// <summary>
@@ -104,6 +105,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // General
 
+        /// <summary>
+        /// Gets or sets the background color of the data grid view.
+        /// </summary>
         [DefaultValue(typeof(Color), "0xFFFFFF")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Color BackgroundColor
@@ -111,6 +115,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             get { return base.BackgroundColor; }
         }
 
+        /// <summary>
+        /// Gets or sets the border style for the data grid view.
+        /// </summary>
         [DefaultValue(BorderStyle.None)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new BorderStyle BorderStyle
@@ -118,6 +125,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             get { return base.BorderStyle; }
         }
 
+        /// <summary>
+        /// Gets or sets the color of the grid lines separating the cells of the System.Windows.Forms.DataGridView.
+        /// </summary>
         [DefaultValue(typeof(Color), "0xFFFFFF")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Color GridColor
@@ -125,6 +135,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             get { return base.GridColor; }
         }
 
+        /// <summary>
+        /// Gets or sets the space between controls.
+        /// </summary>
         [DefaultValue(typeof(Padding), "0,0,0,0")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Margin
@@ -132,6 +145,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             get { return base.Margin; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating how the cells of the System.Windows.Forms.DataGridView can be selected.
+        /// </summary>
         [DefaultValue(DataGridViewSelectionMode.CellSelect)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new DataGridViewSelectionMode SelectionMode
@@ -141,12 +157,18 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // Columns
 
+        /// <summary>
+        /// Gets a collection that contains all the columns in the control.
+        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new DataGridViewColumnCollection Columns
         {
             get { return base.Columns; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether users can resize columns.
+        /// </summary>
         [DefaultValue(DataGridViewSelectionMode.CellSelect)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool AllowUserToResizeColumns
@@ -154,6 +176,9 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             get { return base.AllowUserToResizeColumns; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating how column widths are determined.
+        /// </summary>
         [DefaultValue(DataGridViewAutoSizeColumnsMode.Fill)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new DataGridViewAutoSizeColumnsMode AutoSizeColumnsMode
@@ -275,8 +300,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         #endregion
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DwordArrayGroup DataGroup
+        /// <summary>
+        /// Gets or sets the <see cref="DwordArrayGroup"/> to display and make editable.
+        /// </summary>
+        public override DwordArrayGroup DataGroup
         {
             get
             {
@@ -503,20 +530,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         private void VerticalScrollBar_VisibleChanged(object sender, EventArgs e)
         {
             AutoSizeColumns();
-        }
-
-        // ---- CLASSES ------------------------------------------------------------------------------------------------
-
-        protected class TextImagePair
-        {
-            internal TextImagePair(string text, Image image = null)
-            {
-                Text = text;
-                Image = image;
-            }
-
-            internal string Text { get; }
-            internal Image Image { get; }
         }
     }
 }

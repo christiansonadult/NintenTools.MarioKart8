@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {

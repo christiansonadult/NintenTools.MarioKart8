@@ -1,7 +1,7 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Windows.Forms;
 
-namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
+namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
     /// Represents Visual Studio 2015-like colors for the <see cref="ToolStripProfessionalRenderer"/>.

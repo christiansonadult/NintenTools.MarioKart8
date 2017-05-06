@@ -41,13 +41,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CategoryControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DataGridViews\HandlingAirDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\ImageDataGridViewRowHeaderCell.cs" />
     <Compile Include="DataGridViews\PointGlidersDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -102,20 +98,11 @@
     <Compile Include="DataGridViews\IntegerSectionDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\SectionDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormCalculation.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormCalculation.Designer.cs">
-      <DependentUpon>FormCalculation.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -124,13 +111,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="VisualStudioColorTable.cs" />
-    <Compile Include="VisualStudioRenderer.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormCalculation.resx">
-      <DependentUpon>FormCalculation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -152,10 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Logo.ico" />
-    <None Include="Resources\Kart_SplatBuggy.png" />
-    <None Include="Resources\Kart_KoopaClown.png" />
-    <None Include="Resources\Kart_Inkstriker.png" />
-    <None Include="Properties\Resources\Equals.png" />
+    <None Include="Properties\Resources\Kart_SplatBuggy.png" />
+    <None Include="Properties\Resources\Kart_KoopaClown.png" />
+    <None Include="Properties\Resources\Kart_Inkstriker.png" />
+    <None Include="Properties\Resources\Menu_Set.png" />
     <None Include="Properties\Resources\Driver_InklingMale.png" />
     <None Include="Properties\Resources\Driver_KingBoo.png" />
     <None Include="Properties\Resources\Driver_BowserJr.png" />
@@ -271,12 +253,16 @@
     <None Include="Properties\Resources\Tire_Button.png" />
     <None Include="Properties\Resources\Tire_BlueStandard.png" />
     <None Include="Properties\Resources\Tire_AzureRoller.png" />
-    <None Include="Properties\Resources\Multiply.png" />
-    <None Include="Properties\Resources\Add.png" />
-    <None Include="Properties\Resources\Subtract.png" />
-    <None Include="Properties\Resources\Divide.png" />
+    <None Include="Properties\Resources\Menu_Multiply.png" />
+    <None Include="Properties\Resources\Menu_Add.png" />
+    <None Include="Properties\Resources\Menu_Subtract.png" />
+    <None Include="Properties\Resources\Menu_Divide.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Syroot.NintenTools.MarioKart8.EditorUI\Syroot.NintenTools.MarioKart8.EditorUI.csproj">
+      <Project>{a703b975-948e-427d-88ff-f52c545401af}</Project>
+      <Name>Syroot.NintenTools.MarioKart8.EditorUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Syroot.NintenTools.MarioKart8\Syroot.NintenTools.MarioKart8.csproj">
       <Project>{c1f7feb1-d5f7-42ee-827f-22458fc7bc4e}</Project>
       <Name>Syroot.NintenTools.MarioKart8</Name>

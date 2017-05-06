@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Syroot.NintenTools.MarioKart8.BinData;
+using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {

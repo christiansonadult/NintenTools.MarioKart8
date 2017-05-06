@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Syroot.BinaryData;
 using Syroot.NintenTools.MarioKart8.BinData;
+using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {

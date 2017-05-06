@@ -271,9 +271,6 @@
   <data name="Driver_Lakitu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Driver_Lakitu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Divide" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Divide.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Kart_CityTripper" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Kart_CityTripper.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -291,9 +288,6 @@
   </data>
   <data name="Kart_GoldStandard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Kart_GoldStandard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Driver_MetalMario" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Driver_MetalMario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -318,9 +312,6 @@
   </data>
   <data name="Kart_YoshiBike" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Kart_YoshiBike.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Multiply" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Multiply.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Tire_Standard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Tire_Standard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -351,9 +342,6 @@
   </data>
   <data name="Kart_StandardAtv" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Kart_StandardAtv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Subtract" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Subtract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Driver_Isabelle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Driver_Isabelle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -460,9 +448,6 @@
   <data name="Driver_Waluigi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Driver_Waluigi.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Equal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Equals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Driver_BowserJr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Driver_BowserJr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -479,12 +464,27 @@
     <value>Resources\Driver_KingBoo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Kart_Inkstriker" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Kart_Inkstriker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>Resources\Kart_Inkstriker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Kart_KoopaClown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Kart_KoopaClown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>Resources\Kart_KoopaClown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Kart_SplatBuggy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Kart_SplatBuggy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>Resources\Kart_SplatBuggy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Menu_Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu_Divide" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Menu_Divide.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu_Multiply" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Menu_Multiply.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu_Set" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Menu_Set.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu_Subtract" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Menu_Subtract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

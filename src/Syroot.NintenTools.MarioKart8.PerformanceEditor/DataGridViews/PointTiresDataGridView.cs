@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Syroot.NintenTools.MarioKart8.EditorUI;
 using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
