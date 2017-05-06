@@ -41,61 +41,61 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataGridViews\HandlingAirDataGridView.cs">
+    <Compile Include="DataGrids\HandlingAirDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointGlidersDataGridView.cs">
+    <Compile Include="DataGrids\PointGlidersDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointTiresDataGridView.cs">
+    <Compile Include="DataGrids\PointTiresDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointKartsDataGridView.cs">
+    <Compile Include="DataGrids\PointKartsDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointDriversDataGridView.cs">
+    <Compile Include="DataGrids\PointDriversDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\SpeedAirDataGridView.cs">
+    <Compile Include="DataGrids\SpeedAirDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\HandlingDataGridView.cs">
+    <Compile Include="DataGrids\HandlingDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointSetDataGridView.cs">
+    <Compile Include="DataGrids\PointSetDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\SpeedDataGridView.cs">
+    <Compile Include="DataGrids\SpeedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointRankIntegerDataGridView.cs">
+    <Compile Include="DataGrids\PointRankIntegerDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PhysicsTurboDataGridView.cs">
+    <Compile Include="DataGrids\PhysicsTurboDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PhysicsOffroadSlipDataGridView.cs">
+    <Compile Include="DataGrids\PhysicsOffroadSlipDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PhysicsOffroadBrakeDataGridView.cs">
+    <Compile Include="DataGrids\PhysicsOffroadBrakeDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PhysicsOnroadDataGridView.cs">
+    <Compile Include="DataGrids\PhysicsOnroadDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PhysicsAccelerationDataGridView.cs">
+    <Compile Include="DataGrids\PhysicsAccelerationDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PhysicsWeightDataGridView.cs">
+    <Compile Include="DataGrids\PhysicsWeightDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\PointRankFloatDataGridView.cs">
+    <Compile Include="DataGrids\PointRankFloatDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\FloatSectionDataGridView.cs">
+    <Compile Include="DataGrids\FloatSectionDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViews\IntegerSectionDataGridView.cs">
+    <Compile Include="DataGrids\IntegerSectionDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormMain.cs">

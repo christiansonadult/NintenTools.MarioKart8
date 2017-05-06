@@ -39,6 +39,12 @@
     <Compile Include="CategoryControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataGrids\FloatSectionDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataGrids\IntegerSectionDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataGrids\TextImagePair.cs" />
     <Compile Include="FormCalculation.cs">
       <SubType>Form</SubType>
