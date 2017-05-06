@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -8,49 +9,56 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class PointKartsDataGridView : PointSetDataGridView
     {
+        // ---- CONSTANTS ----------------------------------------------------------------------------------------------
+
+        private static readonly List<TextImagePair> _textImagePairs = new List<TextImagePair>()
+        {
+            new TextImagePair("Standard Kart", Resources.Kart_StandardKart),
+            new TextImagePair("Pipe Frame", Resources.Kart_PipeFrame),
+            new TextImagePair("Mach 8", Resources.Kart_Mach8),
+            new TextImagePair("Steel Driver", Resources.Kart_SteelDriver),
+            new TextImagePair("Cat Cruiser", Resources.Kart_CatCruiser),
+            new TextImagePair("Circuit Special", Resources.Kart_CircuitSpecial),
+            new TextImagePair("Tri-Speeder", Resources.Kart_TriSpeeder),
+            new TextImagePair("Badwagon", Resources.Kart_Badwagon),
+            new TextImagePair("Prancer", Resources.Kart_Prancer),
+            new TextImagePair("Biddybuggy", Resources.Kart_Biddybuggy),
+            new TextImagePair("Landship", Resources.Kart_Landship),
+            new TextImagePair("Sneeker", Resources.Kart_Sneeker),
+            new TextImagePair("Sports Coupe", Resources.Kart_SportsCoupe),
+            new TextImagePair("Gold Standard", Resources.Kart_GoldStandard),
+            new TextImagePair("Standard Bike", Resources.Kart_StandardBike),
+            new TextImagePair("Comet", Resources.Kart_Comet),
+            new TextImagePair("Sport Bike", Resources.Kart_SportBike),
+            new TextImagePair("The Duke", Resources.Kart_TheDuke),
+            new TextImagePair("Flame Rider", Resources.Kart_FlameRider),
+            new TextImagePair("Varmint", Resources.Kart_Varmint),
+            new TextImagePair("Mr. Scooty", Resources.Kart_MrScooty),
+            new TextImagePair("Jet Bike", Resources.Kart_JetBike),
+            new TextImagePair("Yoshi Bike", Resources.Kart_YoshiBike),
+            new TextImagePair("Standard ATV", Resources.Kart_StandardAtv),
+            new TextImagePair("Wild Wiggler", Resources.Kart_WildWiggler),
+            new TextImagePair("Teddy Buggy", Resources.Kart_TeddyBuggy),
+            new TextImagePair("GLA", Resources.Kart_Gla),
+            new TextImagePair("W 25 Silver Arrow", Resources.Kart_W25SilverArrow),
+            new TextImagePair("300 SL Roadster", Resources.Kart_300SlRoadster),
+            new TextImagePair("Blue Falcon", Resources.Kart_BlueFalcon),
+            new TextImagePair("Tanooki Kart", Resources.Kart_TanookiKart),
+            new TextImagePair("B Dasher", Resources.Kart_BDasher),
+            new TextImagePair("Master Cycle", Resources.Kart_MasterCycle),
+            new TextImagePair("Unused 1", Resources.Kart_Unknown),
+            new TextImagePair("Unused 2", Resources.Kart_Unknown),
+            new TextImagePair("Streetle", Resources.Kart_Streetle),
+            new TextImagePair("P-Wing", Resources.Kart_PWing),
+            new TextImagePair("City Tripper", Resources.Kart_CityTripper),
+            new TextImagePair("Bone Rattler", Resources.Kart_BoneRattler)
+        };
+
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
         protected override IEnumerable<TextImagePair> GetRowHeaders()
         {
-            yield return new TextImagePair("Standard Kart", Resources.Kart_StandardKart);
-            yield return new TextImagePair("Pipe Frame", Resources.Kart_PipeFrame);
-            yield return new TextImagePair("Mach 8", Resources.Kart_Mach8);
-            yield return new TextImagePair("Steel Driver", Resources.Kart_SteelDriver);
-            yield return new TextImagePair("Cat Cruiser", Resources.Kart_CatCruiser);
-            yield return new TextImagePair("Circuit Special", Resources.Kart_CircuitSpecial);
-            yield return new TextImagePair("Tri-Speeder", Resources.Kart_TriSpeeder);
-            yield return new TextImagePair("Badwagon", Resources.Kart_Badwagon);
-            yield return new TextImagePair("Prancer", Resources.Kart_Prancer);
-            yield return new TextImagePair("Biddybuggy", Resources.Kart_Biddybuggy);
-            yield return new TextImagePair("Landship", Resources.Kart_Landship);
-            yield return new TextImagePair("Sneeker", Resources.Kart_Sneeker);
-            yield return new TextImagePair("Sports Coupe", Resources.Kart_SportsCoupe);
-            yield return new TextImagePair("Gold Standard", Resources.Kart_GoldStandard);
-            yield return new TextImagePair("Standard Bike", Resources.Kart_StandardBike);
-            yield return new TextImagePair("Comet", Resources.Kart_Comet);
-            yield return new TextImagePair("Sport Bike", Resources.Kart_SportBike);
-            yield return new TextImagePair("The Duke", Resources.Kart_TheDuke);
-            yield return new TextImagePair("Flame Rider", Resources.Kart_FlameRider);
-            yield return new TextImagePair("Varmint", Resources.Kart_Varmint);
-            yield return new TextImagePair("Mr. Scooty", Resources.Kart_MrScooty);
-            yield return new TextImagePair("Jet Bike", Resources.Kart_JetBike);
-            yield return new TextImagePair("Yoshi Bike", Resources.Kart_YoshiBike);
-            yield return new TextImagePair("Standard ATV", Resources.Kart_StandardAtv);
-            yield return new TextImagePair("Wild Wiggler", Resources.Kart_WildWiggler);
-            yield return new TextImagePair("Teddy Buggy", Resources.Kart_TeddyBuggy);
-            yield return new TextImagePair("GLA", Resources.Kart_Gla);
-            yield return new TextImagePair("W 25 Silver Arrow", Resources.Kart_W25SilverArrow);
-            yield return new TextImagePair("300 SL Roadster", Resources.Kart_300SlRoadster);
-            yield return new TextImagePair("Blue Falcon", Resources.Kart_BlueFalcon);
-            yield return new TextImagePair("Tanooki Kart", Resources.Kart_TanookiKart);
-            yield return new TextImagePair("B Dasher", Resources.Kart_BDasher);
-            yield return new TextImagePair("Master Cycle", Resources.Kart_MasterCycle);
-            yield return new TextImagePair("Unused 1", Resources.Kart_Unknown);
-            yield return new TextImagePair("Unused 2", Resources.Kart_Unknown);
-            yield return new TextImagePair("Streetle", Resources.Kart_Streetle);
-            yield return new TextImagePair("P-Wing", Resources.Kart_PWing);
-            yield return new TextImagePair("City Tripper", Resources.Kart_CityTripper);
-            yield return new TextImagePair("Bone Rattler", Resources.Kart_BoneRattler);
+            return _textImagePairs.Take(DataGroup.Count);
         }
     }
 }

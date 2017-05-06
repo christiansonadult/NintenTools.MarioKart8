@@ -30,8 +30,8 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             yield return new TextImagePair("Weight");
             yield return new TextImagePair("Acceleration");
-            yield return new TextImagePair("On-Road Traction");
-            yield return new TextImagePair("Off-Road Traction");
+            yield return new TextImagePair($"On-Road{Environment.NewLine}Traction");
+            yield return new TextImagePair($"Off-Road{Environment.NewLine}Traction");
             yield return new TextImagePair("Turbo");
             yield return new TextImagePair($"Speed{Environment.NewLine}Ground");
             yield return new TextImagePair($"Speed{Environment.NewLine}Water");
