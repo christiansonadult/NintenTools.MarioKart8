@@ -92,12 +92,6 @@
     <Compile Include="DataGrids\PointRankFloatDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGrids\FloatSectionDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\IntegerSectionDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
