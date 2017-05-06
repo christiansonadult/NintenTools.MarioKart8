@@ -413,13 +413,13 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             {
                 if (parent.SelectedControl == control)
                 {
-                    control.Visible = true;
                     control.Location = new Point(
                         parent.Padding.Left + control.Margin.Left,
                         parent.Padding.Top + parent.HeaderHeight + control.Margin.Top);
                     control.Size = new Size(
                         parent.Width - parent.Padding.Horizontal - control.Margin.Horizontal,
                         parent.Height - parent.Padding.Vertical - parent.HeaderHeight - control.Margin.Vertical);
+                    control.Visible = true;
                 }
                 else
                 {

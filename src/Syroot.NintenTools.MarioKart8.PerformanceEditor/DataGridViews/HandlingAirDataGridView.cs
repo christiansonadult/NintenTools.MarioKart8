@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
@@ -5,12 +7,12 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class HandlingAirDataGridView : PointRankFloatDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
+        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
-        public HandlingAirDataGridView()
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
         {
-            AddColumn("Roll");
-            AddColumn("Move");
+            yield return new TextImagePair("Roll");
+            yield return new TextImagePair("Move");
         }
     }
 }

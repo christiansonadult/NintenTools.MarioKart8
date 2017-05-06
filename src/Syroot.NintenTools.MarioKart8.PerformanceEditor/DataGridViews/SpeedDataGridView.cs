@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
@@ -7,10 +9,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     {
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
-        public SpeedDataGridView()
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
         {
-            AddColumn("No Coins");
-            AddColumn("10 Coins");
+            yield return new TextImagePair("No Coins");
+            yield return new TextImagePair("10 Coins");
         }
     }
 }

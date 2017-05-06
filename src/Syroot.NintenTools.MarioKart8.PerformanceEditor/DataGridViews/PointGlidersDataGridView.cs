@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -9,25 +10,22 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     {
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
-        protected override NameImageValue[] GetRowNameImageValues()
+        protected override IEnumerable<TextImagePair> GetRowHeaders()
         {
-            return new NameImageValue[]
-            {
-                new NameImageValue("Super Glider", Resources.Glider_SuperGlider),
-                new NameImageValue("Cloud Glider", Resources.Glider_CloudGlider),
-                new NameImageValue("Wario Wing", Resources.Glider_WarioWing),
-                new NameImageValue("Waddle Wing", Resources.Glider_WaddleWing),
-                new NameImageValue("Peach Parasol", Resources.Glider_PeachParasol),
-                new NameImageValue("Parachute", Resources.Glider_Parachute),
-                new NameImageValue("Parafoil", Resources.Glider_Parafoil),
-                new NameImageValue("Flower Glider", Resources.Glider_FlowerGlider),
-                new NameImageValue("Bowser Kite", Resources.Glider_BowserKite),
-                new NameImageValue("Plane Glider", Resources.Glider_PlaneGlider),
-                new NameImageValue("MKTV Parafoil", Resources.Glider_MktvParafoil),
-                new NameImageValue("Gold Glider", Resources.Glider_GoldGlider),
-                new NameImageValue("Hylian Kite", Resources.Glider_HylianKite),
-                new NameImageValue("Paper Glider", Resources.Glider_PaperGlider)
-            };
+            yield return new TextImagePair("Super Glider", Resources.Glider_SuperGlider);
+            yield return new TextImagePair("Cloud Glider", Resources.Glider_CloudGlider);
+            yield return new TextImagePair("Wario Wing", Resources.Glider_WarioWing);
+            yield return new TextImagePair("Waddle Wing", Resources.Glider_WaddleWing);
+            yield return new TextImagePair("Peach Parasol", Resources.Glider_PeachParasol);
+            yield return new TextImagePair("Parachute", Resources.Glider_Parachute);
+            yield return new TextImagePair("Parafoil", Resources.Glider_Parafoil);
+            yield return new TextImagePair("Flower Glider", Resources.Glider_FlowerGlider);
+            yield return new TextImagePair("Bowser Kite", Resources.Glider_BowserKite);
+            yield return new TextImagePair("Plane Glider", Resources.Glider_PlaneGlider);
+            yield return new TextImagePair("MKTV Parafoil", Resources.Glider_MktvParafoil);
+            yield return new TextImagePair("Gold Glider", Resources.Glider_GoldGlider);
+            yield return new TextImagePair("Hylian Kite", Resources.Glider_HylianKite);
+            yield return new TextImagePair("Paper Glider", Resources.Glider_PaperGlider);
         }
     }
 }

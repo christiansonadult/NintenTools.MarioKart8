@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,39 +8,11 @@ using Syroot.NintenTools.MarioKart8.BinData;
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
-    /// Represents the non-generic base of <see cref="SectionDataGridView{T}"/>.
+    /// Represents the non-generic base of <see cref="SectionDataGridView{T}"/>, which is required for the Windows
+    /// Forms Designer.
     /// </summary>
     public abstract class SectionDataGridView : DataGridView
     {
-        // ---- FIELDS -------------------------------------------------------------------------------------------------
-
-        private DwordArrayGroup _dataGroup;
-
-        // ---- PROPERTIES ---------------------------------------------------------------------------------------------
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DwordArrayGroup DataGroup
-        {
-            get
-            {
-                return _dataGroup;
-            }
-            set
-            {
-                _dataGroup = value;
-                if (_dataGroup != null)
-                {
-                    FillData();
-                }
-            }
-        }
-
-        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Called when the whole grid has to be filled with values from a section of the performance data.
-        /// </summary>
-        protected abstract void FillData();
     }
 
     /// <summary>
@@ -49,6 +22,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     public abstract class SectionDataGridView<T> : SectionDataGridView
          where T : struct, IComparable, IConvertible
     {
+        // ---- FIELDS -------------------------------------------------------------------------------------------------
+
+        private DwordArrayGroup _dataGroup;
+        private bool _isSizingColumns;
+
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -112,6 +90,8 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 SelectionBackColor = Color.FromArgb(192, 213, 255),
                 SelectionForeColor = ForeColor
             };
+
+            VerticalScrollBar.VisibleChanged += VerticalScrollBar_VisibleChanged;
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -291,54 +271,36 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         #endregion
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public DwordArrayGroup DataGroup
+        {
+            get
+            {
+                return _dataGroup;
+            }
+            set
+            {
+                _dataGroup = value;
+                Columns.Clear();
+                Rows.Clear();
+
+                if (_dataGroup != null)
+                {
+                    UpdateDataGridView();
+                }
+            }
+        }
+
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Adds a column to the grid with the given title.
+        /// Raised when the client size was changed.
         /// </summary>
-        /// <param name="text">The title of the column.</param>
-        /// <returns>The index of the created column.</returns>
-        protected virtual int AddColumn(string text)
+        /// <param name="e">The <see cref="EventArgs"/>.</param>
+        protected override void OnClientSizeChanged(EventArgs e)
         {
-            int index = Columns.Add($"_dgvc{text}", text);
-            DataGridViewColumn column = Columns[index];
-            column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            return index;
-        }
-
-        /// <summary>
-        /// Called when the value has to be written back to data.
-        /// </summary>
-        /// <param name="row">The row of the data.</param>
-        /// <param name="column">The column of the data.</param>
-        /// <param name="value">The value of the data.</param>
-        protected abstract void SetDataValue(int row, int column, T value);
-
-        /// <summary>
-        /// Called when the user inputs a character and it has to be validated.
-        /// </summary>
-        /// <param name="character">The character which was input.</param>
-        /// <returns><c>true</c> to allow the character, otherwise <c>false</c>.</returns>
-        protected abstract bool ValidateCharacterInput(char character);
-
-        /// <summary>
-        /// Called when the cell value text has to be validated.
-        /// </summary>
-        /// <param name="text">The value to validate.</param>
-        /// <returns><c>true</c> to allow the text, otherwise <c>false</c>.</returns>
-        protected abstract bool ValidateTextValue(string text);
-
-        /// <summary>
-        /// Raised when the editing control for a cell is about to be displayed.
-        /// </summary>
-        /// <param name="e">The <see cref="DataGridViewEditingControlShowingEventArgs"/>.</param>
-        protected override void OnEditingControlShowing(DataGridViewEditingControlShowingEventArgs e)
-        {
-            e.Control.KeyPress -= EditingControlTextBox_KeyPress;
-            if (e.Control is TextBox textBox)
-            {
-                textBox.KeyPress += EditingControlTextBox_KeyPress;
-            }
+            base.OnClientSizeChanged(e);
+            AutoSizeColumns();
         }
 
         /// <summary>
@@ -374,6 +336,19 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         }
 
         /// <summary>
+        /// Raised when the editing control for a cell is about to be displayed.
+        /// </summary>
+        /// <param name="e">The <see cref="DataGridViewEditingControlShowingEventArgs"/>.</param>
+        protected override void OnEditingControlShowing(DataGridViewEditingControlShowingEventArgs e)
+        {
+            e.Control.KeyPress -= EditingControlTextBox_KeyPress;
+            if (e.Control is TextBox textBox)
+            {
+                textBox.KeyPress += EditingControlTextBox_KeyPress;
+            }
+        }
+
+        /// <summary>
         /// Raised when the rows have been painted.
         /// </summary>
         /// <param name="e">The <see cref="DataGridViewRowPostPaintEventArgs"/>.</param>
@@ -389,7 +364,96 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
+        /// <summary>
+        /// Configures the specified column for use in the data grid.
+        /// </summary>
+        /// <param name="column">The <see cref="DataGridViewColumn"/> to configure.</param>
+        /// <param name="header">The contents displayed in the column.</param>
+        protected virtual void ConfigureColumn(DataGridViewColumn column, TextImagePair header)
+        {
+            column.HeaderText = header.Text;
+            column.SortMode = DataGridViewColumnSortMode.NotSortable;
+        }
+
+        /// <summary>
+        /// Configures the specified row for use in the data grid.
+        /// </summary>
+        /// <param name="column">The <see cref="DataGridViewRow"/> to configure.</param>
+        /// <param name="header">The contents displayed in the row.</param>
+        protected virtual void ConfigureRow(DataGridViewRow row, TextImagePair header)
+        {
+            row.HeaderCell = new ImageDataGridViewRowHeaderCell(header.Text, header.Image);
+        }
+
+        /// <summary>
+        /// Called when the column header contents should be returned.
+        /// </summary>
+        /// <returns>The enumeration of column header contents.</returns>
+        protected abstract IEnumerable<TextImagePair> GetColumnHeaders();
+
+        /// <summary>
+        /// Called when the row header contents should be returned.
+        /// </summary>
+        /// <returns>The enumeration of row header contents.</returns>
+        protected abstract IEnumerable<TextImagePair> GetRowHeaders();
+
+        /// <summary>
+        /// Called when the whole grid has to be filled with columns, rows and values from the <see cref="DataGroup"/>.
+        /// </summary>
+        protected abstract void FillData();
+
+        /// <summary>
+        /// Called when the value has to be written back to data.
+        /// </summary>
+        /// <param name="row">The row of the data.</param>
+        /// <param name="column">The column of the data.</param>
+        /// <param name="value">The value of the data.</param>
+        protected abstract void SetDataValue(int row, int column, T value);
+
+        /// <summary>
+        /// Called when the user inputs a character and it has to be validated.
+        /// </summary>
+        /// <param name="character">The character which was input.</param>
+        /// <returns><c>true</c> to allow the character, otherwise <c>false</c>.</returns>
+        protected abstract bool ValidateCharacterInput(char character);
+
+        /// <summary>
+        /// Called when the cell value text has to be validated.
+        /// </summary>
+        /// <param name="text">The value to validate.</param>
+        /// <returns><c>true</c> to allow the text, otherwise <c>false</c>.</returns>
+        protected abstract bool ValidateTextValue(string text);
+
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
+
+        private void UpdateDataGridView()
+        {
+            // Fill in the column headers.
+            List<TextImagePair> columnHeaders = new List<TextImagePair>(GetColumnHeaders());
+            DataGridViewColumn[] columns = new DataGridViewColumn[columnHeaders.Count];
+            int i = 0;
+            foreach (TextImagePair columnHeader in columnHeaders)
+            {
+                DataGridViewColumn column = new DataGridViewTextBoxColumn();
+                ConfigureColumn(column, columnHeader);
+                columns[i++] = column;
+            }
+            Columns.AddRange(columns);
+
+            // Fill in the row headers.
+            List<TextImagePair> rowHeaders = new List<TextImagePair>(GetRowHeaders());
+            Rows.Add(rowHeaders.Count);
+            i = 0;
+            foreach (TextImagePair rowHeader in rowHeaders)
+            {
+                ConfigureRow(Rows[i++], rowHeader);
+            }
+
+            // Fill the data values.
+            FillData();
+
+            AutoSizeColumns();
+        }
 
         private void SetCellValue(DataGridViewCellEventArgs e)
         {
@@ -398,11 +462,57 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             SetDataValue(e.RowIndex, e.ColumnIndex, (T)Convert.ChangeType(cellValue, typeof(T)));
         }
 
+        private void AutoSizeColumns()
+        {
+            if (!_isSizingColumns)
+            {
+                _isSizingColumns = true;
+
+                // Get the available width for the columns.
+                int width = ClientSize.Width - RowHeadersWidth;
+                if (VerticalScrollBar.Visible)
+                {
+                    width -= SystemInformation.VerticalScrollBarWidth;
+                }
+
+                // Resize the columns.
+                int currentColumn = 0;
+                foreach (DataGridViewColumn column in Columns)
+                {
+                    int columnWidth = (int)Math.Ceiling(width / ((float)Columns.Count - currentColumn));
+                    column.Width = Math.Max(80, columnWidth);
+                    width -= columnWidth;
+                    currentColumn++;
+                }
+
+                _isSizingColumns = false;
+            }
+        }
+
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 
         private void EditingControlTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = !ValidateCharacterInput(e.KeyChar);
+        }
+
+        private void VerticalScrollBar_VisibleChanged(object sender, EventArgs e)
+        {
+            AutoSizeColumns();
+        }
+
+        // ---- CLASSES ------------------------------------------------------------------------------------------------
+
+        protected class TextImagePair
+        {
+            internal TextImagePair(string text, Image image = null)
+            {
+                Text = text;
+                Image = image;
+            }
+
+            internal string Text { get; }
+            internal Image Image { get; }
         }
     }
 }

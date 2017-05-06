@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
@@ -5,12 +7,12 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class PhysicsAccelerationDataGridView : PointRankFloatDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
+        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
-        public PhysicsAccelerationDataGridView()
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
         {
-            AddColumn("Limiter");
-            AddColumn("Strength");
+            yield return new TextImagePair("Limiter");
+            yield return new TextImagePair("Strength");
         }
     }
 }

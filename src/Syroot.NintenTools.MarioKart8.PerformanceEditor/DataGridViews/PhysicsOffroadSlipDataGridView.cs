@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Syroot.NintenTools.MarioKart8.BinData;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -7,27 +8,27 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class PhysicsOffroadSlipDataGridView : PointRankFloatDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        public PhysicsOffroadSlipDataGridView()
-        {
-            AddColumn("Light Dirt");
-            AddColumn("Medium Dirt");
-            AddColumn("Heavy Dirt");
-            AddColumn("Light Sand");
-            AddColumn("Medium Sand");
-            AddColumn("Heavy Sand");
-            AddColumn("Light Ice");
-            AddColumn("Medium Ice");
-            AddColumn("Heavy Ice");
-        }
-
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
+        {
+            yield return new TextImagePair("Dirt Light");
+            yield return new TextImagePair("Dirt Medium");
+            yield return new TextImagePair("Dirt Heavy");
+            yield return new TextImagePair("Sand Light");
+            yield return new TextImagePair("Sand Medium");
+            yield return new TextImagePair("Sand Heavy");
+            yield return new TextImagePair("Ice Light");
+            yield return new TextImagePair("Ice Medium");
+            yield return new TextImagePair("Ice Heavy");
+        }
+
+        /// <summary>
+        /// Called when the whole grid has to be filled with columns, rows and values from the <see cref="DataGroup"/>.
+        /// </summary>
         protected override void FillData()
         {
             // Only show the second half holding the slip stats.
-            AddPointRankRows();
             for (int y = 0; y < DataGroup.Count; y++)
             {
                 Dword[] dwords = DataGroup[y];

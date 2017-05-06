@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -7,34 +8,31 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class PointTiresDataGridView : PointSetDataGridView
     {
-        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
+        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
-        protected override NameImageValue[] GetRowNameImageValues()
+        protected override IEnumerable<TextImagePair> GetRowHeaders()
         {
-            return new NameImageValue[]
-            {
-                new NameImageValue("Standard", Resources.Tire_Standard),
-                new NameImageValue("Monster", Resources.Tire_Monster),
-                new NameImageValue("Roller", Resources.Tire_Roller),
-                new NameImageValue("Slim", Resources.Tire_Slim),
-                new NameImageValue("Slick", Resources.Tire_Slick),
-                new NameImageValue("Metal", Resources.Tire_Metal),
-                new NameImageValue("Button", Resources.Tire_Button),
-                new NameImageValue("Off-Road", Resources.Tire_OffRoad),
-                new NameImageValue("Sponge", Resources.Tire_Sponge),
-                new NameImageValue("Wood", Resources.Tire_Wood),
-                new NameImageValue("Cushion", Resources.Tire_Cushion),
-                new NameImageValue("Blue Standard", Resources.Tire_BlueStandard),
-                new NameImageValue("Hot Monster", Resources.Tire_HotMonster),
-                new NameImageValue("Azure Roller", Resources.Tire_AzureRoller),
-                new NameImageValue("Crimson Slim", Resources.Tire_CrimsonSlim),
-                new NameImageValue("Cyber Slick", Resources.Tire_CyberSlick),
-                new NameImageValue("Retro Off-Road", Resources.Tire_RetroOffRoad),
-                new NameImageValue("Gold Tires", Resources.Tire_GoldTires),
-                new NameImageValue("GLA Tires", Resources.Tire_GlaTires),
-                new NameImageValue("Triforce Tires", Resources.Tire_TriforceTires),
-                new NameImageValue("Leaf Tires", Resources.Tire_LeafTires)
-            };
+            yield return new TextImagePair("Standard", Resources.Tire_Standard);
+            yield return new TextImagePair("Monster", Resources.Tire_Monster);
+            yield return new TextImagePair("Roller", Resources.Tire_Roller);
+            yield return new TextImagePair("Slim", Resources.Tire_Slim);
+            yield return new TextImagePair("Slick", Resources.Tire_Slick);
+            yield return new TextImagePair("Metal", Resources.Tire_Metal);
+            yield return new TextImagePair("Button", Resources.Tire_Button);
+            yield return new TextImagePair("Off-Road", Resources.Tire_OffRoad);
+            yield return new TextImagePair("Sponge", Resources.Tire_Sponge);
+            yield return new TextImagePair("Wood", Resources.Tire_Wood);
+            yield return new TextImagePair("Cushion", Resources.Tire_Cushion);
+            yield return new TextImagePair("Blue Standard", Resources.Tire_BlueStandard);
+            yield return new TextImagePair("Hot Monster", Resources.Tire_HotMonster);
+            yield return new TextImagePair("Azure Roller", Resources.Tire_AzureRoller);
+            yield return new TextImagePair("Crimson Slim", Resources.Tire_CrimsonSlim);
+            yield return new TextImagePair("Cyber Slick", Resources.Tire_CyberSlick);
+            yield return new TextImagePair("Retro Off-Road", Resources.Tire_RetroOffRoad);
+            yield return new TextImagePair("Gold Tires", Resources.Tire_GoldTires);
+            yield return new TextImagePair("GLA Tires", Resources.Tire_GlaTires);
+            yield return new TextImagePair("Triforce Tires", Resources.Tire_TriforceTires);
+            yield return new TextImagePair("Leaf Tires", Resources.Tire_LeafTires);
         }
     }
 }

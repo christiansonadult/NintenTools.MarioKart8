@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
@@ -8,17 +9,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     public abstract class FloatSectionDataGridView : SectionDataGridView<float>
     {
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Adds a column to the grid with the given title.
-        /// </summary>
-        /// <param name="text">The title of the column.</param>
-        /// <returns>The index of the created column.</returns>
-        protected override int AddColumn(string text)
+        
+        protected override void ConfigureColumn(DataGridViewColumn column, TextImagePair header)
         {
-            int index = base.AddColumn(text);
-            Columns[index].DefaultCellStyle.Format = "0.0000";
-            return index;
+            base.ConfigureColumn(column, header);
+            column.DefaultCellStyle.Format = "0.0000";
         }
 
         /// <summary>

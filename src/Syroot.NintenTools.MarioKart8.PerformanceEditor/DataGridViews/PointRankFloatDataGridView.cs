@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Syroot.NintenTools.MarioKart8.BinData;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -8,17 +9,26 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public abstract class PointRankFloatDataGridView : FloatSectionDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        public PointRankFloatDataGridView()
-        {
-        }
-
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
+        
+        protected override IEnumerable<TextImagePair> GetRowHeaders()
+        {
+            // Valid point ranks and one for the fallback value.
+            for (int i = 0; i < DataGroup.Count; i++)
+            {
+                if (i == DataGroup.Count - 1)
+                {
+                    yield return new TextImagePair("Fallback");
+                }
+                else
+                {
+                    yield return new TextImagePair($"{i + 1} Point{(i == 0 ? null : "s")}");
+                }
+            }
+        }
 
         protected override void FillData()
         {
-            AddPointRankRows();
             for (int y = 0; y < DataGroup.Count; y++)
             {
                 Dword[] dwords = DataGroup[y];
@@ -32,24 +42,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         protected override void SetDataValue(int row, int column, float value)
         {
             DataGroup[row][column] = value;
-        }
-        
-        protected void AddPointRankRows()
-        {
-            // Add rows for the valid point ranks and one for the fallback value.
-            Rows.Clear();
-            for (int i = 0; i < DataGroup.Count; i++)
-            {
-                Rows.Add();
-                if (i == DataGroup.Count - 1)
-                {
-                    Rows[i].HeaderCell.Value = "Fallback";
-                }
-                else
-                {
-                    Rows[i].HeaderCell.Value = $"{i + 1} Point{(i == 0 ? null : "s")}";
-                }
-            }
         }
     }
 }

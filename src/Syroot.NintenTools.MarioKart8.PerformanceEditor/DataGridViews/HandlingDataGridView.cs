@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
@@ -5,13 +7,13 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class HandlingDataGridView : PointRankFloatDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        public HandlingDataGridView()
+        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
+        
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
         {
-            AddColumn("Steer");
-            AddColumn("Drift");
-            AddColumn("Charge");
+            yield return new TextImagePair("Steer");
+            yield return new TextImagePair("Drift");
+            yield return new TextImagePair("Charge");
         }
     }
 }

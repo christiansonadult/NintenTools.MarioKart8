@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
@@ -5,12 +7,12 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class PhysicsTurboDataGridView : PointRankIntegerDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
+        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
-        public PhysicsTurboDataGridView()
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
         {
-            AddColumn("Mini-Turbo");
-            AddColumn("Super-Turbo");
+            yield return new TextImagePair("Mini-Turbo");
+            yield return new TextImagePair("Super-Turbo");
         }
     }
 }

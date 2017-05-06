@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
@@ -5,13 +7,13 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
     /// </summary>
     public class PhysicsWeightDataGridView : PointRankFloatDataGridView
     {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
+        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
-        public PhysicsWeightDataGridView()
+        protected override IEnumerable<TextImagePair> GetColumnHeaders()
         {
-            AddColumn("Low");
-            AddColumn("High");
-            AddColumn("Unknown");
+            yield return new TextImagePair("Low");
+            yield return new TextImagePair("High");
+            yield return new TextImagePair("Unknown");
         }
     }
 }
