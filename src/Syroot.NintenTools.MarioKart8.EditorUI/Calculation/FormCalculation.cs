@@ -8,7 +8,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
     /// <summary>
     /// Represents a small input dialog to enter a calculation number.
     /// </summary>
-    public partial class FormCalculation : Form
+    internal partial class FormCalculation : Form
     {
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         /// <summary>
         /// Initializes a new instance of the <see cref="FormCalculation"/> class.
         /// </summary>
-        public FormCalculation()
+        internal FormCalculation()
         {
             InitializeComponent();
         }
@@ -29,7 +29,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         /// <summary>
         /// Gets or sets a value indicating whether floating point values can be entered.
         /// </summary>
-        public bool AllowFloat
+        internal bool AllowFloat
         {
             get;
             set;
@@ -38,13 +38,13 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         /// <summary>
         /// Gets or sets the value entered.
         /// </summary>
-        public float Value
+        internal float Value
         {
             get { return Single.Parse(_tbValue.Text); }
             set { _tbValue.Text = value.ToString(); }
         }
 
-        // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
+        // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
 
         /// <summary>
         /// Shows the input dialog with the given title and value settings.
@@ -52,7 +52,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         /// <param name="caption">The text in the title bar of the input box.</param>
         /// <param name="allowFloat"><c>true</c> to allow floating point numbers.</param>
         /// <returns>The value the user entered or <c>null</c> if he canceled.</returns>
-        public static float? Show(string caption, bool allowFloat)
+        internal static float? Show(string caption, bool allowFloat)
         {
             FormCalculation form = new FormCalculation()
             {

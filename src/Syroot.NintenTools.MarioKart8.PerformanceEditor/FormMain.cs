@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Syroot.NintenTools.MarioKart8.BinData;
@@ -8,17 +9,31 @@ using Syroot.NintenTools.MarioKart8.EditorUI;
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     /// <summary>
-    /// The main window of the application.
+    /// Represents the main window of the application.
     /// </summary>
-    public partial class FormMain : Form
+    internal partial class FormMain : Form
     {
+        // ---- CONSTANTS ----------------------------------------------------------------------------------------------
+
+        private static readonly Color _accentColor = Color.FromArgb(0, 66, 200);
+
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
+        private CategoryControl _ccMain;
+        private CalculationContextMenu _ccmAll;
+        
+        private TableLayoutPanel _tlpFile;
+        private FlatButton _fbOpen;
+        private FlatButton _fbSave;
+        private FlatButton _fbSaveAs;
+        
+        private CategoryControl _ccPoints;
         private SectionDataGridView _dgvPointsDrivers;
         private SectionDataGridView _dgvPointsKarts;
         private SectionDataGridView _dgvPointsTires;
         private SectionDataGridView _dgvPointsGliders;
 
+        private CategoryControl _ccPhysics;
         private SectionDataGridView _dgvPhysicsWeight;
         private SectionDataGridView _dgvPhysicsAcceleration;
         private SectionDataGridView _dgvPhysicsOnroad;
@@ -26,11 +41,13 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         private SectionDataGridView _dgvPhysicsOffroadSlip;
         private SectionDataGridView _dgvPhysicsTurbo;
 
+        private CategoryControl _ccSpeed;
         private SectionDataGridView _dgvSpeedGround;
         private SectionDataGridView _dgvSpeedWater;
         private SectionDataGridView _dgvSpeedAntigravity;
         private SectionDataGridView _dgvSpeedGliding;
-
+        
+        private CategoryControl _ccHandling;
         private SectionDataGridView _dgvHandlingGround;
         private SectionDataGridView _dgvHandlingWater;
         private SectionDataGridView _dgvHandlingAntigravity;
@@ -39,21 +56,16 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormMain"/> class.
-        /// </summary>
-        public FormMain()
-        {
-            InitializeComponent();
-            Program.FileChanged += Program_FileChanged;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FormMain"/> class with the given command line
         /// <paramref name="args"/>.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
-        public FormMain(string[] args) : this()
+        internal FormMain(string[] args)
         {
+            CreateInterface();
+            Program.FileChanged += Program_FileChanged;
+
+            // Open a file passed to the application.
             if (args.Length == 1 && File.Exists(args[0]))
             {
                 string argFile = args[0];
@@ -64,53 +76,88 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             }
         }
 
-        // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Raised when the handle of the control was created.
-        /// </summary>
-        /// <param name="e">The <see cref="EventArgs"/>.</param>
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-            if (!DesignMode)
-            {
-                CreateDataGrids();
-            }
-        }
-
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
-        private void CreateDataGrids()
+        private void CreateInterface()
         {
-            _dgvPointsDrivers = CreateDataGrid<PointDriversDataGridView>(_ccPoints, "Drivers");
-            _dgvPointsKarts = CreateDataGrid<PointKartsDataGridView>(_ccPoints, "Karts");
-            _dgvPointsTires = CreateDataGrid<PointTiresDataGridView>(_ccPoints, "Tires");
-            _dgvPointsGliders = CreateDataGrid<PointGlidersDataGridView>(_ccPoints, "Gliders");
+            BackColor = Color.White;
+            ClientSize = new Size(930, 560);
+            Font = SystemFonts.MessageBoxFont;
+            Icon = Program.R.GetIcon("Icon.ico");
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Mario Kart 8 Performance Editor";
 
-            _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccPhysics, "Weight");
-            _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccPhysics, "Acceleration");
-            _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccPhysics, "On-Road Slip");
-            _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccPhysics, "Off-Road Brake");
-            _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccPhysics, "Off-Road Slip");
-            _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccPhysics, "Turbo");
+            _ccmAll = new CalculationContextMenu();
 
-            _dgvSpeedGround = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Ground");
-            _dgvSpeedWater = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Water");
-            _dgvSpeedAntigravity = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Anti-Gravity");
-            _dgvSpeedGliding = CreateDataGrid<SpeedAirDataGridView>(_ccSpeed, "Gliding");
+            _ccMain = new CategoryControl(0, _accentColor);
+            {
+                _tlpFile = new TableLayoutPanel();
+                _tlpFile.Margin = new Padding(0);
+                for (int i = 0; i < 3; i++) _tlpFile.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                {
+                    _fbOpen = new FlatButton("Open", _fbOpen_Click);
+                    _tlpFile.Controls.Add(_fbOpen);
+                    _fbSave = new FlatButton("Save", _fbSave_Click);
+                    _tlpFile.Controls.Add(_fbSave);
+                    _fbSaveAs = new FlatButton("Save As", _fbSaveAs_Click);
+                    _tlpFile.Controls.Add(_fbSaveAs);
+                }
+                _ccMain.Controls.Add(_tlpFile);
+                _ccMain.SetTitle(_tlpFile, "File");
 
-            _dgvHandlingGround = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Ground");
-            _dgvHandlingWater = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Water");
-            _dgvHandlingAntigravity = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Anti-Gravity");
-            _dgvHandlingGliding = CreateDataGrid<HandlingAirDataGridView>(_ccHandling, "Gliding");
+                _ccPoints = new CategoryControl(1, _accentColor);
+                _ccPoints.Enabled = false;
+                {
+                    _dgvPointsDrivers = CreateDataGrid<PointDriversDataGridView>(_ccPoints, "Drivers");
+                    _dgvPointsKarts = CreateDataGrid<PointKartsDataGridView>(_ccPoints, "Karts");
+                    _dgvPointsTires = CreateDataGrid<PointTiresDataGridView>(_ccPoints, "Tires");
+                    _dgvPointsGliders = CreateDataGrid<PointGlidersDataGridView>(_ccPoints, "Gliders");
+                }
+                _ccMain.Controls.Add(_ccPoints);
+                _ccMain.SetTitle(_ccPoints, "Points");
+
+                _ccPhysics = new CategoryControl(1, _accentColor);
+                _ccPhysics.Enabled = false;
+                {
+                    _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccPhysics, "Weight");
+                    _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccPhysics, "Acceleration");
+                    _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccPhysics, "On-Road Slip");
+                    _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccPhysics, "Off-Road Brake");
+                    _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccPhysics, "Off-Road Slip");
+                    _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccPhysics, "Turbo");
+                }
+                _ccMain.Controls.Add(_ccPhysics);
+                _ccMain.SetTitle(_ccPhysics, "Physics");
+
+                _ccSpeed = new CategoryControl(1, _accentColor);
+                _ccSpeed.Enabled = false;
+                {
+                    _dgvSpeedGround = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Ground");
+                    _dgvSpeedWater = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Water");
+                    _dgvSpeedAntigravity = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Anti-Gravity");
+                    _dgvSpeedGliding = CreateDataGrid<SpeedAirDataGridView>(_ccSpeed, "Gliding");
+                }
+                _ccMain.Controls.Add(_ccSpeed);
+                _ccMain.SetTitle(_ccSpeed, "Speed");
+
+                _ccHandling = new CategoryControl(1, _accentColor);
+                _ccHandling.Enabled = false;
+                {
+                    _dgvHandlingGround = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Ground");
+                    _dgvHandlingWater = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Water");
+                    _dgvHandlingAntigravity = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Anti-Gravity");
+                    _dgvHandlingGliding = CreateDataGrid<HandlingAirDataGridView>(_ccHandling, "Gliding");
+                }
+                _ccMain.Controls.Add(_ccHandling);
+                _ccMain.SetTitle(_ccHandling, "Handling");
+            }
+            Controls.Add(_ccMain);
         }
-
         private SectionDataGridView CreateDataGrid<T>(CategoryControl parent, string title)
             where T : SectionDataGridView
         {
             SectionDataGridView dataGrid = Activator.CreateInstance<T>();
-            dataGrid.ContextMenuStrip = _cmsGrid;
+            dataGrid.ContextMenuStrip = _ccmAll;
             parent.Controls.Add(dataGrid);
             parent.SetTitle(dataGrid, title);
             return dataGrid;
@@ -163,8 +210,8 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             _ccPhysics.Enabled = fileOpen;
             _ccSpeed.Enabled = fileOpen;
             _ccHandling.Enabled = fileOpen;
-            _btSave.Visible = fileOpen;
-            _btSaveAs.Visible = fileOpen;
+            _fbSave.Visible = fileOpen;
+            _fbSaveAs.Visible = fileOpen;
 
             UpdateDataGrids();
         }
@@ -183,7 +230,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             Program.OpenFile(file);
         }
 
-        private void _btOpen_Click(object sender, EventArgs e)
+        private void _fbOpen_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -197,12 +244,12 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             }
         }
 
-        private void _btSave_Click(object sender, EventArgs e)
+        private void _fbSave_Click(object sender, EventArgs e)
         {
             Program.SaveFile(Program.FileName, false);
         }
 
-        private void _btSaveAs_Click(object sender, EventArgs e)
+        private void _fbSaveAs_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
@@ -212,132 +259,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     Program.SaveFile(saveFileDialog.FileName, true);
-                }
-            }
-        }
-
-        private void _cmsGridSet_Click(object sender, EventArgs e)
-        {
-            DataGridView dataGridView = _cmsGrid.SourceControl as DataGridView;
-            bool isFloatGrid = dataGridView is FloatSectionDataGridView;
-
-            float? value = FormCalculation.Show("Set", isFloatGrid);
-            if (value != null)
-            {
-                if (isFloatGrid)
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (float)value;
-                    }
-                }
-                else
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (int)value;
-                    }
-                }
-            }
-        }
-
-        private void _cmsGridAdd_Click(object sender, EventArgs e)
-        {
-            DataGridView dataGridView = _cmsGrid.SourceControl as DataGridView;
-            bool isFloatGrid = dataGridView is FloatSectionDataGridView;
-
-            float? value = FormCalculation.Show("Add", isFloatGrid);
-            if (value != null)
-            {
-                if (isFloatGrid)
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (float)cell.Value + value;
-                    }
-                }
-                else
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (int)cell.Value + (int)value;
-                    }
-                }
-            }
-        }
-
-        private void _cmsGridSubtract_Click(object sender, EventArgs e)
-        {
-            DataGridView dataGridView = _cmsGrid.SourceControl as DataGridView;
-            bool isFloatGrid = dataGridView is FloatSectionDataGridView;
-
-            float? value = FormCalculation.Show("Subtract", isFloatGrid);
-            if (value != null)
-            {
-                if (isFloatGrid)
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (float)cell.Value - value;
-                    }
-                }
-                else
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (int)cell.Value - (int)value;
-                    }
-                }
-            }
-
-        }
-
-        private void _cmsGridMultiply_Click(object sender, EventArgs e)
-        {
-            DataGridView dataGridView = _cmsGrid.SourceControl as DataGridView;
-            bool isFloatGrid = dataGridView is FloatSectionDataGridView;
-
-            float? value = FormCalculation.Show("Multiply", isFloatGrid);
-            if (value != null)
-            {
-                if (isFloatGrid)
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (float)cell.Value * value;
-                    }
-                }
-                else
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (int)cell.Value * (int)value;
-                    }
-                }
-            }
-        }
-
-        private void _cmsGridDivide_Click(object sender, EventArgs e)
-        {
-            DataGridView dataGridView = _cmsGrid.SourceControl as DataGridView;
-            bool isFloatGrid = dataGridView is FloatSectionDataGridView;
-
-            float? value = FormCalculation.Show("Divide", isFloatGrid);
-            if (value.HasValue && value != 0)
-            {
-                if (isFloatGrid)
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (float)cell.Value / value;
-                    }
-                }
-                else
-                {
-                    foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-                    {
-                        cell.Value = (int)cell.Value / (int)value;
-                    }
                 }
             }
         }

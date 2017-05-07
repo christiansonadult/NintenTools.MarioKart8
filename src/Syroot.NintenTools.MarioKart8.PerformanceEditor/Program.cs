@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 using Syroot.BinaryData;
 using Syroot.NintenTools.MarioKart8.BinData;
@@ -19,6 +20,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         internal static event EventHandler FileChanged;
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Gets the <see cref="ResourceLoader"/> which can be used to access resources in this assembly.
+        /// </summary>
+        internal static ResourceLoader R { get; private set; }
 
         /// <summary>
         /// Gets the name of the <see cref="File"/>.
@@ -73,9 +79,11 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         [STAThread]
         private static void Main(string[] args)
         {
+            R = new ResourceLoader(Assembly.GetEntryAssembly(),
+                "Syroot.NintenTools.MarioKart8.PerformanceEditor.Resources");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ToolStripManager.Renderer = new VisualStudioRenderer();
             Application.Run(new FormMain(args));
         }
     }

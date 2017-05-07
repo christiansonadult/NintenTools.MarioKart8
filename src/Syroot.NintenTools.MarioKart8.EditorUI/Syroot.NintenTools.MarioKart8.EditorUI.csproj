@@ -39,6 +39,9 @@
     <Compile Include="CategoryControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Calculation\CalculationContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataGrids\FloatSectionDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -46,10 +49,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGrids\TextImagePair.cs" />
-    <Compile Include="FormCalculation.cs">
+    <Compile Include="FlatButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Calculation\FormCalculation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCalculation.Designer.cs">
+    <Compile Include="Calculation\FormCalculation.Designer.cs">
       <DependentUpon>FormCalculation.cs</DependentUpon>
     </Compile>
     <Compile Include="DataGrids\ImageDataGridViewRowHeaderCell.cs" />
@@ -57,11 +63,12 @@
     <Compile Include="DataGrids\SectionDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ResourceLoader.cs" />
     <Compile Include="ToolStrip\VisualStudioColorTable.cs" />
     <Compile Include="ToolStrip\VisualStudioRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormCalculation.resx">
+    <EmbeddedResource Include="Calculation\FormCalculation.resx">
       <DependentUpon>FormCalculation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -70,6 +77,21 @@
       <Project>{c1f7feb1-d5f7-42ee-827f-22458fc7bc4e}</Project>
       <Name>Syroot.NintenTools.MarioKart8</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Menu_Subtract.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Menu_Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Menu_Divide.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Menu_Multiply.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Menu_Set.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,20 +12,20 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
     /// control.
     /// </summary>
     [ProvideProperty("Title", typeof(Control))]
-    public partial class CategoryControl : ContainerControl, IExtenderProvider
+    public partial class CategoryControl : ContainerControl
     {
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
-        private CategoryControlLayoutEngine _layoutEngine;
+        private ControlLayoutEngine _layoutEngine;
         private Dictionary<Control, string> _controlTitles;
         private Control _selectedControl;
         private Control _hoveredControl;
         private int _headerHeight;
         private Color _headerBackColor;
-        private Color _headerHoveredBackColor;
-        private Color _headerSelectedBackColor;
+        private Color _headerBackColorHovered;
+        private Color _headerBackColorSelected;
         private Color _headerForeColor;
-        private Color _headerDisabledForeColor;
+        private Color _headerForeColorDisabled;
         private SolidBrush _brHeaderBackColor;
         private SolidBrush _brHeaderHoveredBackColor;
         private SolidBrush _brHeaderSelectedBackColor;
@@ -38,18 +38,24 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoryControl"/> class.
         /// </summary>
-        public CategoryControl()
+        public CategoryControl(int level, Color accent)
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer
-                | ControlStyles.ResizeRedraw, true);
+            SetStyle(
+                ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw,
+                true);
+            Margin = new Padding(0);
+            Dock = DockStyle.Fill;
 
             _controlTitles = new Dictionary<Control, string>();
-
             _headerHeight = 30;
-            _headerBackColor = SystemColors.Control;
-            _headerSelectedBackColor = SystemColors.Highlight;
-            _headerForeColor = SystemColors.ControlText;
-            _headerDisabledForeColor = SystemColors.GrayText;
+
+            int gain = level * 32;
+            _headerBackColor = Color.FromArgb(32 + gain, 32 + gain, 32 + gain);
+            _headerBackColorHovered = Color.FromArgb(16, 255, 255, 255);
+            _headerBackColorSelected = Color.FromArgb(accent.R + gain, accent.G + gain, accent.B + gain);
+            _headerForeColor = Color.White;
+            _headerForeColorDisabled = Color.FromArgb(64, 64, 64);
+
             _sfText = new StringFormat(StringFormatFlags.NoWrap)
             {
                 Alignment = StringAlignment.Center,
@@ -63,8 +69,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
-
-        [DefaultValue(30)]
+        
+        /// <summary>
+        /// Gets or sets the height of the header in pixels.
+        /// </summary>
         public int HeaderHeight
         {
             get
@@ -79,7 +87,9 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             }
         }
 
-        [DefaultValue(typeof(Color), "Control")]
+        /// <summary>
+        /// Gets or sets the background color of the header.
+        /// </summary>
         public Color HeaderBackColor
         {
             get
@@ -94,37 +104,43 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             }
         }
 
-        [DefaultValue(typeof(Color), "Transparent")]
-        public Color HeaderHoveredBackColor
+        /// <summary>
+        /// Gets or sets the background color of the currently hovered control area.
+        /// </summary>
+        public Color HeaderBackColorHovered
         {
             get
             {
-                return _headerHoveredBackColor;
+                return _headerBackColorHovered;
             }
             set
             {
-                _headerHoveredBackColor = value;
+                _headerBackColorHovered = value;
                 CreateHeaderHoveredBackColorBrush();
                 Refresh();
             }
         }
 
-        [DefaultValue(typeof(Color), "Highlight")]
-        public Color HeaderSelectedBackColor
+        /// <summary>
+        /// Gets or sets the background color of the control area of the currently selected control.
+        /// </summary>
+        public Color HeaderBackColorSelected
         {
             get
             {
-                return _headerSelectedBackColor;
+                return _headerBackColorSelected;
             }
             set
             {
-                _headerSelectedBackColor = value;
+                _headerBackColorSelected = value;
                 CreateHeaderSelectedBackColorBrush();
                 Refresh();
             }
         }
 
-        [DefaultValue(typeof(Color), "ControlText")]
+        /// <summary>
+        /// Gets or sets the font color of enabled controls.
+        /// </summary>
         public Color HeaderForeColor
         {
             get
@@ -138,22 +154,27 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                 Refresh();
             }
         }
-
-        [DefaultValue(typeof(Color), "GrayText")]
-        public Color HeaderDisabledForeColor
+        
+        /// <summary>
+        /// Gets or sets the font color of disabled controls.
+        /// </summary>
+        public Color HeaderForeColorDisabled
         {
             get
             {
-                return _headerDisabledForeColor;
+                return _headerForeColorDisabled;
             }
             set
             {
-                _headerDisabledForeColor = value;
+                _headerForeColorDisabled = value;
                 CreateHeaderDisabledForeColorBrush();
                 Refresh();
             }
         }
 
+        /// <summary>
+        /// Gets or sets the currently active and displayed <see cref="Control"/>.
+        /// </summary>
         public Control SelectedControl
         {
             get
@@ -168,6 +189,9 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="LayoutEngine"/> used to layout controls in this container.
+        /// </summary>
         public override LayoutEngine LayoutEngine
         {
             get
@@ -180,13 +204,13 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                 {
                     if (_layoutEngine == null)
                     {
-                        _layoutEngine = new CategoryControlLayoutEngine();
+                        _layoutEngine = new ControlLayoutEngine();
                     }
                     return _layoutEngine;
                 }
             }
         }
-
+        
         private Control HoveredControl
         {
             get
@@ -204,20 +228,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         }
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
-
-        // ---- IExtenderProvider ----
-
-        /// <summary>
-        /// Gets a value indicating whether the title property will be made available for the given object.
-        /// </summary>
-        /// <param name="extendee">The object to check for.</param>
-        /// <returns><c>true</c> to provide the property for this object, otherwise <c>false</c>.</returns>
-        public bool CanExtend(object extendee)
-        {
-            Control extendedControl = extendee as Control;
-            return extendedControl != null && extendedControl.Parent == this;
-        }
-
+        
         /// <summary>
         /// Gets the title property for the extended control.
         /// </summary>
@@ -242,17 +253,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             _controlTitles[control] = value;
             Refresh();
         }
-
-        /// <summary>
-        /// Returns a value indicating whether the designer should store the title for the given control or not.
-        /// </summary>
-        /// <param name="control">The control to check for.</param>
-        /// <returns><c>true</c> to serialize the property, otherwise <c>false</c>.</returns>
-        private bool ShouldSerializeTitle(Control control)
-        {
-            return _controlTitles.ContainsKey(control);
-        }
-
+        
         /// <summary>
         /// Resets the title property for the given control.
         /// </summary>
@@ -361,12 +362,12 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         private void CreateHeaderHoveredBackColorBrush()
         {
-            _brHeaderHoveredBackColor = new SolidBrush(HeaderHoveredBackColor);
+            _brHeaderHoveredBackColor = new SolidBrush(HeaderBackColorHovered);
         }
 
         private void CreateHeaderSelectedBackColorBrush()
         {
-            _brHeaderSelectedBackColor = new SolidBrush(HeaderSelectedBackColor);
+            _brHeaderSelectedBackColor = new SolidBrush(HeaderBackColorSelected);
         }
 
         private void CreateHeaderForeColorBrush()
@@ -376,7 +377,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         private void CreateHeaderDisabledForeColorBrush()
         {
-            _brHeaderDisabledForeColor = new SolidBrush(HeaderDisabledForeColor);
+            _brHeaderDisabledForeColor = new SolidBrush(HeaderForeColorDisabled);
         }
 
         private Control GetCategoryAt(Point position)
@@ -402,35 +403,35 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         {
             Refresh();
         }
-    }
 
-    public class CategoryControlLayoutEngine : LayoutEngine
-    {
-        // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
+        // ---- CLASSES ------------------------------------------------------------------------------------------------
 
-        public override bool Layout(object container, LayoutEventArgs layoutEventArgs)
+        private class ControlLayoutEngine : LayoutEngine
         {
-            CategoryControl parent = (CategoryControl)container;
-
-            foreach (Control control in parent.Controls)
+            public override bool Layout(object container, LayoutEventArgs layoutEventArgs)
             {
-                if (parent.SelectedControl == control)
-                {
-                    control.Location = new Point(
-                        parent.Padding.Left + control.Margin.Left,
-                        parent.Padding.Top + parent.HeaderHeight + control.Margin.Top);
-                    control.Size = new Size(
-                        parent.Width - parent.Padding.Horizontal - control.Margin.Horizontal,
-                        parent.Height - parent.Padding.Vertical - parent.HeaderHeight - control.Margin.Vertical);
-                    control.Visible = true;
-                }
-                else
-                {
-                    control.Visible = false;
-                }
-            }
+                CategoryControl parent = (CategoryControl)container;
 
-            return false;
+                foreach (Control control in parent.Controls)
+                {
+                    if (parent.SelectedControl == control)
+                    {
+                        control.Location = new Point(
+                            parent.Padding.Left + control.Margin.Left,
+                            parent.Padding.Top + parent.HeaderHeight + control.Margin.Top);
+                        control.Size = new Size(
+                            parent.Width - parent.Padding.Horizontal - control.Margin.Horizontal,
+                            parent.Height - parent.Padding.Vertical - parent.HeaderHeight - control.Margin.Vertical);
+                        control.Visible = true;
+                    }
+                    else
+                    {
+                        control.Visible = false;
+                    }
+                }
+
+                return false;
+            }
         }
     }
 }

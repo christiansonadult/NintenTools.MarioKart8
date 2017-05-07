@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Syroot.NintenTools.MarioKart8.EditorUI;
-using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
@@ -14,20 +13,20 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         private static readonly List<TextImagePair> _textImagePairs = new List<TextImagePair>()
         {
-            new TextImagePair("Super Glider", Resources.Glider_SuperGlider),
-            new TextImagePair("Cloud Glider", Resources.Glider_CloudGlider),
-            new TextImagePair("Wario Wing", Resources.Glider_WarioWing),
-            new TextImagePair("Waddle Wing", Resources.Glider_WaddleWing),
-            new TextImagePair("Peach Parasol", Resources.Glider_PeachParasol),
-            new TextImagePair("Parachute", Resources.Glider_Parachute),
-            new TextImagePair("Parafoil", Resources.Glider_Parafoil),
-            new TextImagePair("Flower Glider", Resources.Glider_FlowerGlider),
-            new TextImagePair("Bowser Kite", Resources.Glider_BowserKite),
-            new TextImagePair("Plane Glider", Resources.Glider_PlaneGlider),
-            new TextImagePair("MKTV Parafoil", Resources.Glider_MktvParafoil),
-            new TextImagePair("Gold Glider", Resources.Glider_GoldGlider),
-            new TextImagePair("Hylian Kite", Resources.Glider_HylianKite),
-            new TextImagePair("Paper Glider", Resources.Glider_PaperGlider),
+            new TextImagePair("Super Glider", Program.R.GetBitmap("Glider_SuperGlider.png")),
+            new TextImagePair("Cloud Glider", Program.R.GetBitmap("Glider_CloudGlider.png")),
+            new TextImagePair("Wario Wing", Program.R.GetBitmap("Glider_WarioWing.png")),
+            new TextImagePair("Waddle Wing", Program.R.GetBitmap("Glider_WaddleWing.png")),
+            new TextImagePair("Peach Parasol", Program.R.GetBitmap("Glider_PeachParasol.png")),
+            new TextImagePair("Parachute", Program.R.GetBitmap("Glider_Parachute.png")),
+            new TextImagePair("Parafoil", Program.R.GetBitmap("Glider_Parafoil.png")),
+            new TextImagePair("Flower Glider", Program.R.GetBitmap("Glider_FlowerGlider.png")),
+            new TextImagePair("Bowser Kite", Program.R.GetBitmap("Glider_BowserKite.png")),
+            new TextImagePair("Plane Glider", Program.R.GetBitmap("Glider_PlaneGlider.png")),
+            new TextImagePair("MKTV Parafoil", Program.R.GetBitmap("Glider_MktvParafoil.png")),
+            new TextImagePair("Gold Glider", Program.R.GetBitmap("Glider_GoldGlider.png")),
+            new TextImagePair("Hylian Kite", Program.R.GetBitmap("Glider_HylianKite.png")),
+            new TextImagePair("Paper Glider", Program.R.GetBitmap("Glider_PaperGlider.png"))
         };
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------

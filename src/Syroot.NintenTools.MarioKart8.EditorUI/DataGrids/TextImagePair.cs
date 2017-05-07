@@ -19,7 +19,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             Text = text;
             Image = image;
         }
-
+        
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>

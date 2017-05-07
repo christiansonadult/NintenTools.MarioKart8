@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Syroot.NintenTools.MarioKart8.EditorUI;
-using Syroot.NintenTools.MarioKart8.PerformanceEditor.Properties;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
@@ -14,27 +13,27 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         private static readonly List<TextImagePair> _textImagePairs = new List<TextImagePair>()
         {
-            new TextImagePair("Standard", Resources.Tire_Standard),
-            new TextImagePair("Monster", Resources.Tire_Monster),
-            new TextImagePair("Roller", Resources.Tire_Roller),
-            new TextImagePair("Slim", Resources.Tire_Slim),
-            new TextImagePair("Slick", Resources.Tire_Slick),
-            new TextImagePair("Metal", Resources.Tire_Metal),
-            new TextImagePair("Button", Resources.Tire_Button),
-            new TextImagePair("Off-Road", Resources.Tire_OffRoad),
-            new TextImagePair("Sponge", Resources.Tire_Sponge),
-            new TextImagePair("Wood", Resources.Tire_Wood),
-            new TextImagePair("Cushion", Resources.Tire_Cushion),
-            new TextImagePair("Blue Standard", Resources.Tire_BlueStandard),
-            new TextImagePair("Hot Monster", Resources.Tire_HotMonster),
-            new TextImagePair("Azure Roller", Resources.Tire_AzureRoller),
-            new TextImagePair("Crimson Slim", Resources.Tire_CrimsonSlim),
-            new TextImagePair("Cyber Slick", Resources.Tire_CyberSlick),
-            new TextImagePair("Retro Off-Road", Resources.Tire_RetroOffRoad),
-            new TextImagePair("Gold Tires", Resources.Tire_GoldTires),
-            new TextImagePair("GLA Tires", Resources.Tire_GlaTires),
-            new TextImagePair("Triforce Tires", Resources.Tire_TriforceTires),
-            new TextImagePair("Leaf Tires", Resources.Tire_LeafTires)
+            new TextImagePair("Standard", Program.R.GetBitmap("Tire_Standard.png")),
+            new TextImagePair("Monster", Program.R.GetBitmap("Tire_Monster.png")),
+            new TextImagePair("Roller", Program.R.GetBitmap("Tire_Roller.png")),
+            new TextImagePair("Slim", Program.R.GetBitmap("Tire_Slim.png")),
+            new TextImagePair("Slick", Program.R.GetBitmap("Tire_Slick.png")),
+            new TextImagePair("Metal", Program.R.GetBitmap("Tire_Metal.png")),
+            new TextImagePair("Button", Program.R.GetBitmap("Tire_Button.png")),
+            new TextImagePair("Off-Road", Program.R.GetBitmap("Tire_OffRoad.png")),
+            new TextImagePair("Sponge", Program.R.GetBitmap("Tire_Sponge.png")),
+            new TextImagePair("Wood", Program.R.GetBitmap("Tire_Wood.png")),
+            new TextImagePair("Cushion", Program.R.GetBitmap("Tire_Cushion.png")),
+            new TextImagePair("Blue Standard", Program.R.GetBitmap("Tire_BlueStandard.png")),
+            new TextImagePair("Hot Monster", Program.R.GetBitmap("Tire_HotMonster.png")),
+            new TextImagePair("Azure Roller", Program.R.GetBitmap("Tire_AzureRoller.png")),
+            new TextImagePair("Crimson Slim", Program.R.GetBitmap("Tire_CrimsonSlim.png")),
+            new TextImagePair("Cyber Slick", Program.R.GetBitmap("Tire_CyberSlick.png")),
+            new TextImagePair("Retro Off-Road", Program.R.GetBitmap("Tire_RetroOffRoad.png")),
+            new TextImagePair("Gold Tires", Program.R.GetBitmap("Tire_GoldTires.png")),
+            new TextImagePair("GLA Tires", Program.R.GetBitmap("Tire_GlaTires.png")),
+            new TextImagePair("Triforce Tires", Program.R.GetBitmap("Tire_TriforceTires.png")),
+            new TextImagePair("Leaf Tires", Program.R.GetBitmap("Tire_LeafTires.png"))
         };
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------

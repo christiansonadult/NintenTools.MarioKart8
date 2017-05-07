@@ -7,15 +7,14 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
     /// <summary>
     /// Represents a tool strip renderer for a Visual Studio 2015-like interface.
     /// </summary>
-    public class VisualStudioRenderer : ToolStripProfessionalRenderer
+    internal class VisualStudioRenderer : ToolStripProfessionalRenderer
     {
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisualStudioRenderer"/> class.
         /// </summary>
-        public VisualStudioRenderer()
-            : base(new VisualStudioColorTable())
+        internal VisualStudioRenderer() : base(new VisualStudioColorTable())
         {
             RoundedEdges = false;
         }
