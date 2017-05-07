@@ -110,6 +110,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             where T : SectionDataGridView
         {
             SectionDataGridView dataGrid = Activator.CreateInstance<T>();
+            dataGrid.ContextMenuStrip = _cmsGrid;
             parent.Controls.Add(dataGrid);
             parent.SetTitle(dataGrid, title);
             return dataGrid;
@@ -322,7 +323,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             bool isFloatGrid = dataGridView is FloatSectionDataGridView;
 
             float? value = FormCalculation.Show("Divide", isFloatGrid);
-            if (value != null)
+            if (value.HasValue && value != 0)
             {
                 if (isFloatGrid)
                 {

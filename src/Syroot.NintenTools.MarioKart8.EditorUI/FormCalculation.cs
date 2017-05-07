@@ -84,10 +84,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void _tbValue_KeyPress(object sender, KeyPressEventArgs e)
         {
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
-
+            
             bool valid = Char.IsControl(e.KeyChar)
                 || Char.IsDigit(e.KeyChar)
-                || (AllowFloat && Char.IsPunctuation(e.KeyChar))
+                || (AllowFloat && e.KeyChar == numberFormat.NumberDecimalSeparator[0])
                 || (!AllowFloat && e.KeyChar.ToString() == numberFormat.NegativeSign);
             e.Handled = !valid;
         }

@@ -13,7 +13,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         protected override void ConfigureColumn(DataGridViewColumn column, TextImagePair header)
         {
             base.ConfigureColumn(column, header);
-            column.DefaultCellStyle.Format = "0.0000";
+            column.DefaultCellStyle.Format = "0.0000#####";
         }
 
         /// <summary>

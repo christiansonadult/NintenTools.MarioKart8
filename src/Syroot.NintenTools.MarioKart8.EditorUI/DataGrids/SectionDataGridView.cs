@@ -33,6 +33,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
         private DwordArrayGroup _dataGroup;
+        private bool _isUpdatingData;
         private bool _isSizingColumns;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
@@ -164,7 +165,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         protected override void OnCellValueChanged(DataGridViewCellEventArgs e)
         {
             base.OnCellValueChanged(e);
-            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+            if (!_isUpdatingData && e.ColumnIndex >= 0 && e.RowIndex >= 0)
             {
                 SetCellValue(e);
             }
@@ -285,7 +286,9 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             }
 
             // Fill the data values.
+            _isUpdatingData = true;
             FillData();
+            _isUpdatingData = false;
 
             AutoSizeColumns();
         }
@@ -294,7 +297,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         {
             // Write the value back to the performance data.
             object cellValue = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            SetDataValue(e.RowIndex, e.ColumnIndex, (T)Convert.ChangeType(cellValue, typeof(T)));
+            T newValue = (T)Convert.ChangeType(cellValue, typeof(T));
+            _isUpdatingData = true;
+            Rows[e.RowIndex].Cells[e.ColumnIndex].Value = newValue;
+            _isUpdatingData = false;
+            SetDataValue(e.RowIndex, e.ColumnIndex, newValue);
         }
 
         private void AutoSizeColumns()
