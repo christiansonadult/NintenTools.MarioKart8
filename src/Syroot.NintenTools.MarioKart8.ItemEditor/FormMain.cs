@@ -137,7 +137,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         {
             AllowDrop = true;
             BackColor = Color.White;
-            ClientSize = new Size(1000, 625);
+            ClientSize = new Size(1000, 630);
             DoubleBuffered = true;
             Font = SystemFonts.MessageBoxFont;
             Icon = Program.R.GetIcon("Icon.ico");
@@ -151,7 +151,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             _crMain.AddCategory("File");
             _crMain.AddCategory("Versus Races", false);
             _crMain.AddCategory("Battle Mode", false);
-            _crMain.AddCategory("Distances", false);
+            //_crMain.AddCategory("Distances", false);
             _crMain.SelectedCategoryChanged += _crMain_SelectedCategoryChanged;
 
             _crItemVersusSet = new CategoryRow(1, _accentColor);
@@ -220,7 +220,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             bool fileOpen = Program.File != null;
             _crMain.EnableCategory((int)CategoryMain.Versus, fileOpen);
             _crMain.EnableCategory((int)CategoryMain.Battle, fileOpen);
-            _crMain.EnableCategory((int)CategoryMain.Distances, fileOpen);
+            //_crMain.EnableCategory((int)CategoryMain.Distances, fileOpen);
             _fbSave.Visible = fileOpen;
             _fbSaveAs.Visible = fileOpen;
 
