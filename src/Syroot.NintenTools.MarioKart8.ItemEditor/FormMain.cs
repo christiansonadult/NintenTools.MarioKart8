@@ -2,8 +2,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using Syroot.NintenTools.MarioKart8.BinData;
-using Syroot.NintenTools.MarioKart8.BinData.Performance;
 using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.ItemEditor
@@ -16,43 +14,31 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
 
         private static readonly Color _accentColor = Color.FromArgb(200, 66, 0);
+        private static readonly BinDataProvider[][][] _dataProviders = new BinDataProvider[][][]
+        {
+            null,
+            new BinDataProvider[][]
+            {
+                new BinDataProvider[] { new GrandPrixItemRaceDataProvider(), new GrandPrixAIItemRaceDataProvider() }
+            }
+        };
 
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
-        private CategoryControl _ccMain;
-        private CalculationContextMenu _ccmAll;
-        
+        private CategoryRow _crMain;
+        private CategoryRow _crItemSet;
+        private CategoryRow _crPlayerType;
         private TableLayoutPanel _tlpFile;
         private FlatButton _fbOpen;
         private FlatButton _fbSave;
         private FlatButton _fbSaveAs;
+        private BinDataGrid _binDataGrid;
+
+        private int _category1;
+        private int _category2;
+        private int _category3;
+        private int _lastCategory1 = (int)CategoryMain.Versus;
         
-        private CategoryControl _ccVersus;
-        private SectionDataGridView _dgvPointsDrivers;
-        private SectionDataGridView _dgvPointsKarts;
-        private SectionDataGridView _dgvPointsTires;
-        private SectionDataGridView _dgvPointsGliders;
-
-        private CategoryControl _ccBattle;
-        private SectionDataGridView _dgvPhysicsWeight;
-        private SectionDataGridView _dgvPhysicsAcceleration;
-        private SectionDataGridView _dgvPhysicsOnroad;
-        private SectionDataGridView _dgvPhysicsOffroadBrake;
-        private SectionDataGridView _dgvPhysicsOffroadSlip;
-        private SectionDataGridView _dgvPhysicsTurbo;
-
-        private CategoryControl _ccVersusTitle;
-        private SectionDataGridView _dgvSpeedGround;
-        private SectionDataGridView _dgvSpeedWater;
-        private SectionDataGridView _dgvSpeedAntigravity;
-        private SectionDataGridView _dgvSpeedGliding;
-        
-        private CategoryControl _ccBattleTitle;
-        private SectionDataGridView _dgvHandlingGround;
-        private SectionDataGridView _dgvHandlingWater;
-        private SectionDataGridView _dgvHandlingAntigravity;
-        private SectionDataGridView _dgvHandlingGliding;
-
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -62,7 +48,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         /// <param name="args">The command line arguments.</param>
         internal FormMain(string[] args)
         {
-            CreateInterface();
+            InitializeUI();
             Program.FileChanged += Program_FileChanged;
 
             // Open a file passed to the application.
@@ -78,143 +64,115 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
 
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
-        private void CreateInterface()
+        private void InitializeUI()
         {
+            AllowDrop = true;
             BackColor = Color.White;
-            ClientSize = new Size(930, 560);
+            ClientSize = new Size(1000, 560);
+            DoubleBuffered = true;
             Font = SystemFonts.MessageBoxFont;
             Icon = Program.R.GetIcon("Icon.ico");
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Mario Kart 8 Performance Editor";
+            Text = "Mario Kart 8 Item Editor";
+            DragEnter += FormMain_DragEnter;
+            DragDrop += FormMain_DragDrop;
 
-            _ccmAll = new CalculationContextMenu();
+            // Set up category rows.
+            _crMain = new CategoryRow(0, _accentColor);
+            _crMain.AddCategory("File");
+            _crMain.AddCategory("Versus Races", false);
+            _crMain.AddCategory("Battle Mode", false);
+            _crMain.AddCategory("Distances", false);
+            _crMain.SelectedCategoryChanged += _crMain_SelectedCategoryChanged;
 
-            _ccMain = new CategoryControl(0, _accentColor);
+            _crItemSet = new CategoryRow(1, _accentColor);
+            _crItemSet.AddCategory("Grand Prix");
+            _crItemSet.AddCategory("All Items");
+            _crItemSet.AddCategory("Mushrooms Only");
+            _crItemSet.AddCategory("Shells Only");
+            _crItemSet.AddCategory("Bananas Only");
+            _crItemSet.AddCategory("Bob-ombs Only");
+            _crItemSet.AddCategory("Frantic Mode");
+            _crItemSet.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
+
+            _crPlayerType = new CategoryRow(2, _accentColor);
+            _crPlayerType.AddCategory("No AI Racers");
+            _crPlayerType.AddCategory("With AI Racers");
+            _crPlayerType.SelectedCategoryChanged += _crPlayerType_SelectedCategoryChanged;
+
+            // Set up file section.
+            _fbOpen = new FlatButton("Open", _fbOpen_Click);
+            _fbSave = new FlatButton("Save", _fbSave_Click);
+            _fbSaveAs = new FlatButton("Save As", _fbSaveAs_Click);
+            _tlpFile = new TableLayoutPanel();
+            _tlpFile.Margin = new Padding(0);
+            _tlpFile.Dock = DockStyle.Fill;
+            for (int i = 0; i < 3; i++)
             {
-                _tlpFile = new TableLayoutPanel();
-                _tlpFile.Margin = new Padding(0);
-                for (int i = 0; i < 3; i++) _tlpFile.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                {
-                    _fbOpen = new FlatButton("Open", _fbOpen_Click);
-                    _tlpFile.Controls.Add(_fbOpen);
-                    _fbSave = new FlatButton("Save", _fbSave_Click);
-                    _tlpFile.Controls.Add(_fbSave);
-                    _fbSaveAs = new FlatButton("Save As", _fbSaveAs_Click);
-                    _tlpFile.Controls.Add(_fbSaveAs);
-                }
-                _ccMain.Controls.Add(_tlpFile);
-                _ccMain.SetTitle(_tlpFile, "File");
-
-                _ccVersus = new CategoryControl(1, _accentColor);
-                _ccVersus.Enabled = false;
-                {
-                    _dgvPointsDrivers = CreateDataGrid<PointDriversDataGridView>(_ccVersus, "Drivers");
-                    _dgvPointsKarts = CreateDataGrid<PointKartsDataGridView>(_ccVersus, "Karts");
-                    _dgvPointsTires = CreateDataGrid<PointTiresDataGridView>(_ccVersus, "Tires");
-                    _dgvPointsGliders = CreateDataGrid<PointGlidersDataGridView>(_ccVersus, "Gliders");
-                }
-                _ccMain.Controls.Add(_ccVersus);
-                _ccMain.SetTitle(_ccVersus, "Points");
-
-                _ccBattle = new CategoryControl(1, _accentColor);
-                _ccBattle.Enabled = false;
-                {
-                    _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccBattle, "Weight");
-                    _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccBattle, "Acceleration");
-                    _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccBattle, "On-Road Slip");
-                    _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccBattle, "Off-Road Brake");
-                    _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccBattle, "Off-Road Slip");
-                    _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccBattle, "Turbo");
-                }
-                _ccMain.Controls.Add(_ccBattle);
-                _ccMain.SetTitle(_ccBattle, "Physics");
-
-                _ccVersusTitle = new CategoryControl(1, _accentColor);
-                _ccVersusTitle.Enabled = false;
-                {
-                    _dgvSpeedGround = CreateDataGrid<SpeedDataGridView>(_ccVersusTitle, "Ground");
-                    _dgvSpeedWater = CreateDataGrid<SpeedDataGridView>(_ccVersusTitle, "Water");
-                    _dgvSpeedAntigravity = CreateDataGrid<SpeedDataGridView>(_ccVersusTitle, "Anti-Gravity");
-                    _dgvSpeedGliding = CreateDataGrid<SpeedAirDataGridView>(_ccVersusTitle, "Gliding");
-                }
-                _ccMain.Controls.Add(_ccVersusTitle);
-                _ccMain.SetTitle(_ccVersusTitle, "Speed");
-
-                _ccBattleTitle = new CategoryControl(1, _accentColor);
-                _ccBattleTitle.Enabled = false;
-                {
-                    _dgvHandlingGround = CreateDataGrid<HandlingDataGridView>(_ccBattleTitle, "Ground");
-                    _dgvHandlingWater = CreateDataGrid<HandlingDataGridView>(_ccBattleTitle, "Water");
-                    _dgvHandlingAntigravity = CreateDataGrid<HandlingDataGridView>(_ccBattleTitle, "Anti-Gravity");
-                    _dgvHandlingGliding = CreateDataGrid<HandlingAirDataGridView>(_ccBattleTitle, "Gliding");
-                }
-                _ccMain.Controls.Add(_ccBattleTitle);
-                _ccMain.SetTitle(_ccBattleTitle, "Handling");
+                _tlpFile.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             }
-            Controls.Add(_ccMain);
+            _tlpFile.Controls.Add(_fbOpen);
+            _tlpFile.Controls.Add(_fbSave);
+            _tlpFile.Controls.Add(_fbSaveAs);
+
+            // Set up data grid.
+            _binDataGrid = new BinDataGrid();
+            _binDataGrid.MinimumColumnWidth = 90;
+
+            // Add the controls in reversed order so that docking works as expected.
+            Controls.Add(_binDataGrid);
+            Controls.Add(_tlpFile);
+            Controls.Add(_crPlayerType);
+            Controls.Add(_crItemSet);
+            Controls.Add(_crMain);
+            
+            UpdateUI();
         }
 
-        private SectionDataGridView CreateDataGrid<T>(CategoryControl parent, string title)
-            where T : SectionDataGridView
+        private void UpdateUI()
         {
-            SectionDataGridView dataGrid = Activator.CreateInstance<T>();
-            dataGrid.ContextMenuStrip = _ccmAll;
-            parent.Controls.Add(dataGrid);
-            parent.SetTitle(dataGrid, title);
-            return dataGrid;
-        }
+            // Show the correct data (do this as first operation as it takes the longest time).
+            _binDataGrid.DataProvider = _dataProviders[_category1]?[_category2][_category3];
 
-        private void UpdateDataGrids()
-        {
-            BinFile performance = Program.File;
+            // Enable categories and buttons when a file is open.
+            bool fileOpen = Program.File != null;
+            _crMain.EnableCategory((int)CategoryMain.Versus, fileOpen);
+            _crMain.EnableCategory((int)CategoryMain.Battle, fileOpen);
+            _crMain.EnableCategory((int)CategoryMain.Distances, fileOpen);
+            _fbSave.Visible = fileOpen;
+            _fbSaveAs.Visible = fileOpen;
 
-            _dgvPointsDrivers.DataGroup = (DwordArrayGroup)performance[(int)Section.DriverPoints][0];
-            _dgvPointsKarts.DataGroup = (DwordArrayGroup)performance[(int)Section.KartPoints][0];
-            _dgvPointsTires.DataGroup = (DwordArrayGroup)performance[(int)Section.TirePoints][0];
-            _dgvPointsGliders.DataGroup = (DwordArrayGroup)performance[(int)Section.GliderPoints][0];
+            // Show the file section or the data grid.
+            bool isDataView = _category1 != (int)CategoryMain.File;
+            _tlpFile.Visible = !isDataView;
+            _binDataGrid.Visible = isDataView;
 
-            _dgvPhysicsWeight.DataGroup = (DwordArrayGroup)performance[(int)Section.WeightStats][0];
-            _dgvPhysicsAcceleration.DataGroup = (DwordArrayGroup)performance[(int)Section.AccelerationStats][0];
-            _dgvPhysicsOnroad.DataGroup = (DwordArrayGroup)performance[(int)Section.OnroadStats][0];
-            _dgvPhysicsOffroadBrake.DataGroup = (DwordArrayGroup)performance[(int)Section.OffroadStats][0];
-            _dgvPhysicsOffroadSlip.DataGroup = (DwordArrayGroup)performance[(int)Section.OffroadStats][0];
-            _dgvPhysicsTurbo.DataGroup = (DwordArrayGroup)performance[(int)Section.TurboStats][0];
-
-            _dgvSpeedGround.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedGroundStats][0];
-            _dgvSpeedWater.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedWaterStats][0];
-            _dgvSpeedAntigravity.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedAntigravityStats][0];
-            _dgvSpeedGliding.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedAirStats][0];
-
-            _dgvHandlingGround.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingGroundStats][0];
-            _dgvHandlingWater.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingWaterStats][0];
-            _dgvHandlingAntigravity.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingAntigravityStats][0];
-            _dgvHandlingGliding.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingAirStats][0];
+            // Show the correct secondary row.
+            _crPlayerType.Visible = _category1 != (int)CategoryMain.File && _category1 != (int)CategoryMain.Distances;
+            _crItemSet.Visible = _category1 != (int)CategoryMain.File && _category1 != (int)CategoryMain.Distances;
+            
+            _binDataGrid.Focus();
         }
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 
         private void Program_FileChanged(object sender, EventArgs e)
         {
+            // Update window title and switch to data view if a file was opened.
             bool fileOpen = Program.File != null;
             if (fileOpen)
             {
                 string fileName = Program.FileName;
                 Text = $"{Path.GetFileName(fileName)} ({Path.GetDirectoryName(fileName)}) - {Application.ProductName}";
-                _ccMain.SelectedControl = _ccVersus;
+                _crMain.SelectedCategory = _lastCategory1;
             }
             else
             {
                 Text = Application.ProductName;
-                _ccMain.SelectedControl = _tlpFile;
+                _crMain.SelectedCategory = (int)CategoryMain.File;
             }
-            _ccVersus.Enabled = fileOpen;
-            _ccBattle.Enabled = fileOpen;
-            _ccVersusTitle.Enabled = fileOpen;
-            _ccBattleTitle.Enabled = fileOpen;
-            _fbSave.Visible = fileOpen;
-            _fbSaveAs.Visible = fileOpen;
 
-            UpdateDataGrids();
+            UpdateUI();
         }
 
         private void FormMain_DragEnter(object sender, DragEventArgs e)
@@ -229,6 +187,47 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
             Program.OpenFile(file);
+        }
+
+        private void _crMain_SelectedCategoryChanged(object sender, EventArgs e)
+        {
+            _category1 = _crMain.SelectedCategory;
+
+            // Remember the last data category.
+            if (_category1 > (int)CategoryMain.File)
+            {
+                _lastCategory1 = _category1;
+            }
+
+            // Switch to the correct subcategory.
+            //switch ((CategoryMain)_category1)
+            //{
+            //    case CategoryMain.Points:
+            //        _category2 = _crItemSet.SelectedCategory;
+            //        break;
+            //    case CategoryMain.Physics:
+            //        _category2 = _crPlayerType.SelectedCategory;
+            //        break;
+            //    case CategoryMain.Handling:
+            //    case CategoryMain.Speed:
+            //        _category2 = _crSpeedHandling.SelectedCategory;
+            //        break;
+            //}
+            UpdateUI();
+        }
+
+        private void _crItemSet_SelectedCategoryChanged(object sender, EventArgs e)
+        {
+            CategoryRow categoryRow = (CategoryRow)sender;
+            _category2 = categoryRow.SelectedCategory;
+            UpdateUI();
+        }
+
+        private void _crPlayerType_SelectedCategoryChanged(object sender, EventArgs e)
+        {
+            CategoryRow categoryRow = (CategoryRow)sender;
+            _category3 = categoryRow.SelectedCategory;
+            UpdateUI();
         }
 
         private void _fbOpen_Click(object sender, EventArgs e)
@@ -262,6 +261,16 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
                     Program.SaveFile(saveFileDialog.FileName, true);
                 }
             }
+        }
+        
+        // ---- ENUMERATIONS -------------------------------------------------------------------------------------------
+
+        private enum CategoryMain
+        {
+            File,
+            Versus,
+            Battle,
+            Distances
         }
     }
 }

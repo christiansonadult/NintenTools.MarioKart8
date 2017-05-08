@@ -36,7 +36,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlExtensions.cs" />
     <Compile Include="DataGrid\BinDataGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -47,6 +46,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataGrid\BinDataProvider.cs" />
+    <Compile Include="DataGrid\ImageDataGridColumnHeader.cs" />
     <Compile Include="DataGrid\TextImagePair.cs" />
     <Compile Include="FlatButton.cs">
       <SubType>Component</SubType>

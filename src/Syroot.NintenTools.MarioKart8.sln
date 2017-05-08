@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editors", "Editors", "{F9B6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{4EF8273A-9132-4620-B2E7-CFA81E688E59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syroot.NintenTools.MarioKart8.ItemEditor", "Syroot.NintenTools.MarioKart8.ItemEditor\Syroot.NintenTools.MarioKart8.ItemEditor.csproj", "{014323EF-E6ED-449A-A2F9-EE89B014FA03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{A703B975-948E-427D-88FF-F52C545401AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A703B975-948E-427D-88FF-F52C545401AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A703B975-948E-427D-88FF-F52C545401AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{D6E69695-BF77-4DFE-B269-1B6F2F0EB687} = {4EF8273A-9132-4620-B2E7-CFA81E688E59}
 		{488CA917-96CD-4A76-98EB-AC799A6BD263} = {F9B6CF57-ABE6-41E3-8533-318410669651}
 		{A703B975-948E-427D-88FF-F52C545401AF} = {F9B6CF57-ABE6-41E3-8533-318410669651}
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03} = {F9B6CF57-ABE6-41E3-8533-318410669651}
 	EndGlobalSection
 EndGlobal

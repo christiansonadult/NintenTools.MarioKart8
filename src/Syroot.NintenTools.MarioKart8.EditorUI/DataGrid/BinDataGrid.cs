@@ -312,6 +312,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         {
             DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
             column.HeaderText = header.Text;
+            column.HeaderCell = new ImageDataGridColumnHeader(header.Text, header.Image);
             column.SortMode = DataGridViewColumnSortMode.NotSortable;
             if (_dataProvider.AllowFloats)
             {

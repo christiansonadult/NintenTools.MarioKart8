@@ -32,7 +32,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         internal static string FileName { get; private set; }
 
         /// <summary>
-        /// Gets the <see cref="BinFile"/> instance representing the item data.
+        /// Gets the <see cref="BinFile"/> instance representing the performance data.
         /// </summary>
         internal static BinFile File { get; private set; }
 

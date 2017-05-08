@@ -44,7 +44,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             int gain = level * 32;
             BackColor = Color.FromArgb(32 + gain, 32 + gain, 32 + gain);
             _backColorHovered = Color.FromArgb(16, 255, 255, 255);
-            _backColorSelected = Color.FromArgb(accent.R + gain, accent.G + gain, accent.B + gain);
+            _backColorSelected = Color.FromArgb(
+                Math.Min(255, accent.R + gain),
+                Math.Min(255, accent.G + gain),
+                Math.Min(255, accent.B + gain));
             ForeColor = Color.White;
             _foreColorDisabled = Color.FromArgb(64, 64, 64);
 
