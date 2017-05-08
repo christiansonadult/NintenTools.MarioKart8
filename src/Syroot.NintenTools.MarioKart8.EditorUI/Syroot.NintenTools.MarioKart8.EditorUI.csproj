@@ -36,19 +36,18 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CategoryControl.cs">
+    <Compile Include="ControlExtensions.cs" />
+    <Compile Include="DataGrid\BinDataGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CategoryRow.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Calculation\CalculationContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGrids\FloatSectionDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\IntegerSectionDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\TextImagePair.cs" />
+    <Compile Include="DataGrid\BinDataProvider.cs" />
+    <Compile Include="DataGrid\TextImagePair.cs" />
     <Compile Include="FlatButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -58,14 +57,11 @@
     <Compile Include="Calculation\FormCalculation.Designer.cs">
       <DependentUpon>FormCalculation.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataGrids\ImageDataGridViewRowHeaderCell.cs" />
+    <Compile Include="DataGrid\ImageDataGridRowHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataGrids\SectionDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ResourceLoader.cs" />
-    <Compile Include="ToolStrip\VisualStudioColorTable.cs" />
-    <Compile Include="ToolStrip\VisualStudioRenderer.cs" />
+    <Compile Include="Calculation\VisualStudioColorTable.cs" />
+    <Compile Include="Calculation\VisualStudioRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Calculation\FormCalculation.resx">
@@ -79,19 +75,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Menu_Subtract.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Menu_Add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Menu_Divide.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Menu_Multiply.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Menu_Set.png" />
+    <EmbeddedResource Include="Resources\Menu\Add.png" />
+    <EmbeddedResource Include="Resources\Menu\Divide.png" />
+    <EmbeddedResource Include="Resources\Menu\Multiply.png" />
+    <EmbeddedResource Include="Resources\Menu\Set.png" />
+    <EmbeddedResource Include="Resources\Menu\Subtract.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

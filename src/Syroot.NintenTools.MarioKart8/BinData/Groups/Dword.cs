@@ -24,7 +24,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         /// </summary>
         [FieldOffset(0)]
         public Single Single;
-
+        
         // ---- OPERATORS ----------------------------------------------------------------------------------------------
 
         /// <summary>

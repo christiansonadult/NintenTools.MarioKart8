@@ -41,57 +41,15 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataGrids\HandlingAirDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointGlidersDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointTiresDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointKartsDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointDriversDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\SpeedAirDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\HandlingDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointSetDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\SpeedDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointRankIntegerDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PhysicsTurboDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PhysicsOffroadSlipDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PhysicsOffroadBrakeDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PhysicsOnroadDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PhysicsAccelerationDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PhysicsWeightDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataGrids\PointRankFloatDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="DataProviders\HandlingDataProviders.cs" />
+    <Compile Include="DataProviders\SpeedDataProviders.cs" />
+    <Compile Include="DataProviders\PhysicsDataProviders.cs" />
+    <Compile Include="DataProviders\RanksDataProviderBase.cs" />
+    <Compile Include="DataProviders\PointsDataProviderBase.cs" />
+    <Compile Include="DataProviders\PointsGlidersDataProvider.cs" />
+    <Compile Include="DataProviders\PointsTiresDataProvider.cs" />
+    <Compile Include="DataProviders\PointsKartsDataProvider.cs" />
+    <Compile Include="DataProviders\PointsDriversDataProvider.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,125 +60,7 @@
     <None Include="Properties\App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Driver_BabyDaisy.png" />
-    <EmbeddedResource Include="Resources\Driver_BabyLuigi.png" />
-    <EmbeddedResource Include="Resources\Driver_BabyMario.png" />
-    <EmbeddedResource Include="Resources\Driver_BabyPeach.png" />
-    <EmbeddedResource Include="Resources\Driver_BabyRosalina.png" />
-    <EmbeddedResource Include="Resources\Driver_Bowser.png" />
-    <EmbeddedResource Include="Resources\Driver_BowserJr.png" />
-    <EmbeddedResource Include="Resources\Driver_CatPeach.png" />
-    <EmbeddedResource Include="Resources\Driver_Daisy.png" />
-    <EmbeddedResource Include="Resources\Driver_DonkeyKong.png" />
-    <EmbeddedResource Include="Resources\Driver_DryBones.png" />
-    <EmbeddedResource Include="Resources\Driver_DryBowser.png" />
-    <EmbeddedResource Include="Resources\Driver_Iggy.png" />
-    <EmbeddedResource Include="Resources\Driver_InklingFemale.png" />
-    <EmbeddedResource Include="Resources\Driver_InklingMale.png" />
-    <EmbeddedResource Include="Resources\Driver_Isabelle.png" />
-    <EmbeddedResource Include="Resources\Driver_KingBoo.png" />
-    <EmbeddedResource Include="Resources\Driver_Koopa.png" />
-    <EmbeddedResource Include="Resources\Driver_Lakitu.png" />
-    <EmbeddedResource Include="Resources\Driver_Larry.png" />
-    <EmbeddedResource Include="Resources\Driver_Lemmy.png" />
-    <EmbeddedResource Include="Resources\Driver_Link.png" />
-    <EmbeddedResource Include="Resources\Driver_Ludwig.png" />
-    <EmbeddedResource Include="Resources\Driver_Luigi.png" />
-    <EmbeddedResource Include="Resources\Driver_Mario.png" />
-    <EmbeddedResource Include="Resources\Driver_MetalMario.png" />
-    <EmbeddedResource Include="Resources\Driver_Mii.png" />
-    <EmbeddedResource Include="Resources\Driver_Morton.png" />
-    <EmbeddedResource Include="Resources\Driver_Peach.png" />
-    <EmbeddedResource Include="Resources\Driver_PinkGoldPeach.png" />
-    <EmbeddedResource Include="Resources\Driver_Rosalina.png" />
-    <EmbeddedResource Include="Resources\Driver_Roy.png" />
-    <EmbeddedResource Include="Resources\Driver_ShyGuy.png" />
-    <EmbeddedResource Include="Resources\Driver_TanookiMario.png" />
-    <EmbeddedResource Include="Resources\Driver_Toad.png" />
-    <EmbeddedResource Include="Resources\Driver_Toadette.png" />
-    <EmbeddedResource Include="Resources\Driver_VillagerFemale.png" />
-    <EmbeddedResource Include="Resources\Driver_VillagerMale.png" />
-    <EmbeddedResource Include="Resources\Driver_Waluigi.png" />
-    <EmbeddedResource Include="Resources\Driver_Wario.png" />
-    <EmbeddedResource Include="Resources\Driver_Wendy.png" />
-    <EmbeddedResource Include="Resources\Driver_Yoshi.png" />
-    <EmbeddedResource Include="Resources\Glider_BowserKite.png" />
-    <EmbeddedResource Include="Resources\Glider_CloudGlider.png" />
-    <EmbeddedResource Include="Resources\Glider_FlowerGlider.png" />
-    <EmbeddedResource Include="Resources\Glider_GoldGlider.png" />
-    <EmbeddedResource Include="Resources\Glider_HylianKite.png" />
-    <EmbeddedResource Include="Resources\Glider_MktvParafoil.png" />
-    <EmbeddedResource Include="Resources\Glider_PaperGlider.png" />
-    <EmbeddedResource Include="Resources\Glider_Parachute.png" />
-    <EmbeddedResource Include="Resources\Glider_Parafoil.png" />
-    <EmbeddedResource Include="Resources\Glider_PeachParasol.png" />
-    <EmbeddedResource Include="Resources\Glider_PlaneGlider.png" />
-    <EmbeddedResource Include="Resources\Glider_SuperGlider.png" />
-    <EmbeddedResource Include="Resources\Glider_WaddleWing.png" />
-    <EmbeddedResource Include="Resources\Glider_WarioWing.png" />
     <EmbeddedResource Include="Resources\Icon.ico" />
-    <EmbeddedResource Include="Resources\Kart_300SlRoadster.png" />
-    <EmbeddedResource Include="Resources\Kart_Badwagon.png" />
-    <EmbeddedResource Include="Resources\Kart_BDasher.png" />
-    <EmbeddedResource Include="Resources\Kart_Biddybuggy.png" />
-    <EmbeddedResource Include="Resources\Kart_BlueFalcon.png" />
-    <EmbeddedResource Include="Resources\Kart_BoneRattler.png" />
-    <EmbeddedResource Include="Resources\Kart_CatCruiser.png" />
-    <EmbeddedResource Include="Resources\Kart_CircuitSpecial.png" />
-    <EmbeddedResource Include="Resources\Kart_CityTripper.png" />
-    <EmbeddedResource Include="Resources\Kart_Comet.png" />
-    <EmbeddedResource Include="Resources\Kart_FlameRider.png" />
-    <EmbeddedResource Include="Resources\Kart_Gla.png" />
-    <EmbeddedResource Include="Resources\Kart_GoldStandard.png" />
-    <EmbeddedResource Include="Resources\Kart_Inkstriker.png" />
-    <EmbeddedResource Include="Resources\Kart_JetBike.png" />
-    <EmbeddedResource Include="Resources\Kart_KoopaClown.png" />
-    <EmbeddedResource Include="Resources\Kart_Landship.png" />
-    <EmbeddedResource Include="Resources\Kart_Mach8.png" />
-    <EmbeddedResource Include="Resources\Kart_MasterCycle.png" />
-    <EmbeddedResource Include="Resources\Kart_MrScooty.png" />
-    <EmbeddedResource Include="Resources\Kart_PipeFrame.png" />
-    <EmbeddedResource Include="Resources\Kart_Prancer.png" />
-    <EmbeddedResource Include="Resources\Kart_PWing.png" />
-    <EmbeddedResource Include="Resources\Kart_Sneeker.png" />
-    <EmbeddedResource Include="Resources\Kart_SplatBuggy.png" />
-    <EmbeddedResource Include="Resources\Kart_SportBike.png" />
-    <EmbeddedResource Include="Resources\Kart_SportsCoupe.png" />
-    <EmbeddedResource Include="Resources\Kart_StandardAtv.png" />
-    <EmbeddedResource Include="Resources\Kart_StandardBike.png" />
-    <EmbeddedResource Include="Resources\Kart_StandardKart.png" />
-    <EmbeddedResource Include="Resources\Kart_SteelDriver.png" />
-    <EmbeddedResource Include="Resources\Kart_Streetle.png" />
-    <EmbeddedResource Include="Resources\Kart_TanookiKart.png" />
-    <EmbeddedResource Include="Resources\Kart_TeddyBuggy.png" />
-    <EmbeddedResource Include="Resources\Kart_TheDuke.png" />
-    <EmbeddedResource Include="Resources\Kart_TriSpeeder.png" />
-    <EmbeddedResource Include="Resources\Kart_Unknown.png" />
-    <EmbeddedResource Include="Resources\Kart_Varmint.png" />
-    <EmbeddedResource Include="Resources\Kart_W25SilverArrow.png" />
-    <EmbeddedResource Include="Resources\Kart_WildWiggler.png" />
-    <EmbeddedResource Include="Resources\Kart_YoshiBike.png" />
-    <EmbeddedResource Include="Resources\Tire_AzureRoller.png" />
-    <EmbeddedResource Include="Resources\Tire_BlueStandard.png" />
-    <EmbeddedResource Include="Resources\Tire_Button.png" />
-    <EmbeddedResource Include="Resources\Tire_CrimsonSlim.png" />
-    <EmbeddedResource Include="Resources\Tire_Cushion.png" />
-    <EmbeddedResource Include="Resources\Tire_CyberSlick.png" />
-    <EmbeddedResource Include="Resources\Tire_GlaTires.png" />
-    <EmbeddedResource Include="Resources\Tire_GoldTires.png" />
-    <EmbeddedResource Include="Resources\Tire_HotMonster.png" />
-    <EmbeddedResource Include="Resources\Tire_LeafTires.png" />
-    <EmbeddedResource Include="Resources\Tire_Metal.png" />
-    <EmbeddedResource Include="Resources\Tire_Monster.png" />
-    <EmbeddedResource Include="Resources\Tire_OffRoad.png" />
-    <EmbeddedResource Include="Resources\Tire_RetroOffRoad.png" />
-    <EmbeddedResource Include="Resources\Tire_Roller.png" />
-    <EmbeddedResource Include="Resources\Tire_Slick.png" />
-    <EmbeddedResource Include="Resources\Tire_Slim.png" />
-    <EmbeddedResource Include="Resources\Tire_Sponge.png" />
-    <EmbeddedResource Include="Resources\Tire_Standard.png" />
-    <EmbeddedResource Include="Resources\Tire_TriforceTires.png" />
-    <EmbeddedResource Include="Resources\Tire_Wood.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Syroot.IO.BinaryData">
@@ -242,6 +82,126 @@
       <Project>{c1f7feb1-d5f7-42ee-827f-22458fc7bc4e}</Project>
       <Name>Syroot.NintenTools.MarioKart8</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Drivers\BabyDaisy.png" />
+    <EmbeddedResource Include="Resources\Drivers\BabyLuigi.png" />
+    <EmbeddedResource Include="Resources\Drivers\BabyMario.png" />
+    <EmbeddedResource Include="Resources\Drivers\BabyPeach.png" />
+    <EmbeddedResource Include="Resources\Drivers\BabyRosalina.png" />
+    <EmbeddedResource Include="Resources\Drivers\Bowser.png" />
+    <EmbeddedResource Include="Resources\Drivers\BowserJr.png" />
+    <EmbeddedResource Include="Resources\Drivers\CatPeach.png" />
+    <EmbeddedResource Include="Resources\Drivers\Daisy.png" />
+    <EmbeddedResource Include="Resources\Drivers\DonkeyKong.png" />
+    <EmbeddedResource Include="Resources\Drivers\DryBones.png" />
+    <EmbeddedResource Include="Resources\Drivers\DryBowser.png" />
+    <EmbeddedResource Include="Resources\Drivers\Iggy.png" />
+    <EmbeddedResource Include="Resources\Drivers\InklingFemale.png" />
+    <EmbeddedResource Include="Resources\Drivers\InklingMale.png" />
+    <EmbeddedResource Include="Resources\Drivers\Isabelle.png" />
+    <EmbeddedResource Include="Resources\Drivers\KingBoo.png" />
+    <EmbeddedResource Include="Resources\Drivers\Koopa.png" />
+    <EmbeddedResource Include="Resources\Drivers\Lakitu.png" />
+    <EmbeddedResource Include="Resources\Drivers\Larry.png" />
+    <EmbeddedResource Include="Resources\Drivers\Lemmy.png" />
+    <EmbeddedResource Include="Resources\Drivers\Link.png" />
+    <EmbeddedResource Include="Resources\Drivers\Ludwig.png" />
+    <EmbeddedResource Include="Resources\Drivers\Luigi.png" />
+    <EmbeddedResource Include="Resources\Drivers\Mario.png" />
+    <EmbeddedResource Include="Resources\Drivers\MetalMario.png" />
+    <EmbeddedResource Include="Resources\Drivers\Mii.png" />
+    <EmbeddedResource Include="Resources\Drivers\Morton.png" />
+    <EmbeddedResource Include="Resources\Drivers\Peach.png" />
+    <EmbeddedResource Include="Resources\Drivers\PinkGoldPeach.png" />
+    <EmbeddedResource Include="Resources\Drivers\Rosalina.png" />
+    <EmbeddedResource Include="Resources\Drivers\Roy.png" />
+    <EmbeddedResource Include="Resources\Drivers\ShyGuy.png" />
+    <EmbeddedResource Include="Resources\Drivers\TanookiMario.png" />
+    <EmbeddedResource Include="Resources\Drivers\Toad.png" />
+    <EmbeddedResource Include="Resources\Drivers\Toadette.png" />
+    <EmbeddedResource Include="Resources\Drivers\VillagerFemale.png" />
+    <EmbeddedResource Include="Resources\Drivers\VillagerMale.png" />
+    <EmbeddedResource Include="Resources\Drivers\Waluigi.png" />
+    <EmbeddedResource Include="Resources\Drivers\Wario.png" />
+    <EmbeddedResource Include="Resources\Drivers\Wendy.png" />
+    <EmbeddedResource Include="Resources\Drivers\Yoshi.png" />
+    <EmbeddedResource Include="Resources\Gliders\BowserKite.png" />
+    <EmbeddedResource Include="Resources\Gliders\CloudGlider.png" />
+    <EmbeddedResource Include="Resources\Gliders\FlowerGlider.png" />
+    <EmbeddedResource Include="Resources\Gliders\GoldGlider.png" />
+    <EmbeddedResource Include="Resources\Gliders\HylianKite.png" />
+    <EmbeddedResource Include="Resources\Gliders\MktvParafoil.png" />
+    <EmbeddedResource Include="Resources\Gliders\PaperGlider.png" />
+    <EmbeddedResource Include="Resources\Gliders\Parachute.png" />
+    <EmbeddedResource Include="Resources\Gliders\Parafoil.png" />
+    <EmbeddedResource Include="Resources\Gliders\PeachParasol.png" />
+    <EmbeddedResource Include="Resources\Gliders\PlaneGlider.png" />
+    <EmbeddedResource Include="Resources\Gliders\SuperGlider.png" />
+    <EmbeddedResource Include="Resources\Gliders\WaddleWing.png" />
+    <EmbeddedResource Include="Resources\Gliders\WarioWing.png" />
+    <EmbeddedResource Include="Resources\Karts\300SlRoadster.png" />
+    <EmbeddedResource Include="Resources\Karts\Badwagon.png" />
+    <EmbeddedResource Include="Resources\Karts\BDasher.png" />
+    <EmbeddedResource Include="Resources\Karts\Biddybuggy.png" />
+    <EmbeddedResource Include="Resources\Karts\BlueFalcon.png" />
+    <EmbeddedResource Include="Resources\Karts\BoneRattler.png" />
+    <EmbeddedResource Include="Resources\Karts\CatCruiser.png" />
+    <EmbeddedResource Include="Resources\Karts\CircuitSpecial.png" />
+    <EmbeddedResource Include="Resources\Karts\CityTripper.png" />
+    <EmbeddedResource Include="Resources\Karts\Comet.png" />
+    <EmbeddedResource Include="Resources\Karts\FlameRider.png" />
+    <EmbeddedResource Include="Resources\Karts\Gla.png" />
+    <EmbeddedResource Include="Resources\Karts\GoldStandard.png" />
+    <EmbeddedResource Include="Resources\Karts\Inkstriker.png" />
+    <EmbeddedResource Include="Resources\Karts\JetBike.png" />
+    <EmbeddedResource Include="Resources\Karts\KoopaClown.png" />
+    <EmbeddedResource Include="Resources\Karts\Landship.png" />
+    <EmbeddedResource Include="Resources\Karts\Mach8.png" />
+    <EmbeddedResource Include="Resources\Karts\MasterCycle.png" />
+    <EmbeddedResource Include="Resources\Karts\MrScooty.png" />
+    <EmbeddedResource Include="Resources\Karts\PipeFrame.png" />
+    <EmbeddedResource Include="Resources\Karts\Prancer.png" />
+    <EmbeddedResource Include="Resources\Karts\PWing.png" />
+    <EmbeddedResource Include="Resources\Karts\Sneeker.png" />
+    <EmbeddedResource Include="Resources\Karts\SplatBuggy.png" />
+    <EmbeddedResource Include="Resources\Karts\SportBike.png" />
+    <EmbeddedResource Include="Resources\Karts\SportsCoupe.png" />
+    <EmbeddedResource Include="Resources\Karts\StandardAtv.png" />
+    <EmbeddedResource Include="Resources\Karts\StandardBike.png" />
+    <EmbeddedResource Include="Resources\Karts\StandardKart.png" />
+    <EmbeddedResource Include="Resources\Karts\SteelDriver.png" />
+    <EmbeddedResource Include="Resources\Karts\Streetle.png" />
+    <EmbeddedResource Include="Resources\Karts\TanookiKart.png" />
+    <EmbeddedResource Include="Resources\Karts\TeddyBuggy.png" />
+    <EmbeddedResource Include="Resources\Karts\TheDuke.png" />
+    <EmbeddedResource Include="Resources\Karts\TriSpeeder.png" />
+    <EmbeddedResource Include="Resources\Karts\Unknown.png" />
+    <EmbeddedResource Include="Resources\Karts\Varmint.png" />
+    <EmbeddedResource Include="Resources\Karts\W25SilverArrow.png" />
+    <EmbeddedResource Include="Resources\Karts\WildWiggler.png" />
+    <EmbeddedResource Include="Resources\Karts\YoshiBike.png" />
+    <EmbeddedResource Include="Resources\Tires\AzureRoller.png" />
+    <EmbeddedResource Include="Resources\Tires\BlueStandard.png" />
+    <EmbeddedResource Include="Resources\Tires\Button.png" />
+    <EmbeddedResource Include="Resources\Tires\CrimsonSlim.png" />
+    <EmbeddedResource Include="Resources\Tires\Cushion.png" />
+    <EmbeddedResource Include="Resources\Tires\CyberSlick.png" />
+    <EmbeddedResource Include="Resources\Tires\GlaTires.png" />
+    <EmbeddedResource Include="Resources\Tires\GoldTires.png" />
+    <EmbeddedResource Include="Resources\Tires\HotMonster.png" />
+    <EmbeddedResource Include="Resources\Tires\LeafTires.png" />
+    <EmbeddedResource Include="Resources\Tires\Metal.png" />
+    <EmbeddedResource Include="Resources\Tires\Monster.png" />
+    <EmbeddedResource Include="Resources\Tires\OffRoad.png" />
+    <EmbeddedResource Include="Resources\Tires\RetroOffRoad.png" />
+    <EmbeddedResource Include="Resources\Tires\Roller.png" />
+    <EmbeddedResource Include="Resources\Tires\Slick.png" />
+    <EmbeddedResource Include="Resources\Tires\Slim.png" />
+    <EmbeddedResource Include="Resources\Tires\Sponge.png" />
+    <EmbeddedResource Include="Resources\Tires\Standard.png" />
+    <EmbeddedResource Include="Resources\Tires\TriforceTires.png" />
+    <EmbeddedResource Include="Resources\Tires\Wood.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

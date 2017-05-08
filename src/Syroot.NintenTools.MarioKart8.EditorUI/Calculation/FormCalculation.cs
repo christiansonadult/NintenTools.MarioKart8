@@ -29,7 +29,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         /// <summary>
         /// Gets or sets a value indicating whether floating point values can be entered.
         /// </summary>
-        internal bool AllowFloat
+        internal bool AllowFloats
         {
             get;
             set;
@@ -57,11 +57,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             FormCalculation form = new FormCalculation()
             {
                 Text = caption,
-                AllowFloat = allowFloat
+                AllowFloats = allowFloat
             };
 
             // Set the last default value.
-            if (form.AllowFloat)
+            if (form.AllowFloats)
             {
                 form.Value = _lastValue;
             }
@@ -84,17 +84,18 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void _tbValue_KeyPress(object sender, KeyPressEventArgs e)
         {
             NumberFormatInfo numberFormat = CultureInfo.CurrentCulture.NumberFormat;
-            
-            bool valid = Char.IsControl(e.KeyChar)
+            string keyString = e.KeyChar.ToString();
+
+            bool valid = (Char.IsControl(e.KeyChar)
                 || Char.IsDigit(e.KeyChar)
-                || (AllowFloat && e.KeyChar == numberFormat.NumberDecimalSeparator[0])
-                || (!AllowFloat && e.KeyChar.ToString() == numberFormat.NegativeSign);
+                || keyString == numberFormat.NegativeSign
+                || (AllowFloats && keyString == numberFormat.NumberDecimalSeparator));
             e.Handled = !valid;
         }
 
         private void _tbValue_Validating(object sender, CancelEventArgs e)
         {
-            if (AllowFloat)
+            if (AllowFloats)
             {
                 e.Cancel = !Single.TryParse(_tbValue.Text, out float result);
             }

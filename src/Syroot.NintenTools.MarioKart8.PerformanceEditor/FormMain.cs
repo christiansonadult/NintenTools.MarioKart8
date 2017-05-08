@@ -2,8 +2,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using Syroot.NintenTools.MarioKart8.BinData;
-using Syroot.NintenTools.MarioKart8.BinData.Performance;
 using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
@@ -16,43 +14,57 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
 
         private static readonly Color _accentColor = Color.FromArgb(0, 66, 200);
+        private static readonly BinDataProvider[][] _dataProviders = new BinDataProvider[][]
+        {
+            null,
+            new BinDataProvider[]
+            {
+                new PointsDriversDataProvider(),
+                new PointsKartsDataProvider(),
+                new PointsTiresDataProvider(),
+                new PointsGlidersDataProvider()
+            },
+            new BinDataProvider[]
+            {
+                new PhysicsWeightDataProvider(),
+                new PhysicsAccelerationDataProvider(),
+                new PhysicsOnroadDataProvider(),
+                new PhysicsOffroadSlipDataProvider(),
+                new PhysicsOffroadBrakeDataProvider(),
+                new PhysicTurboDataProvider()
+            },
+            new BinDataProvider[]
+            {
+                new SpeedGroundDataProvider(),
+                new SpeedWaterDataProvider(),
+                new SpeedAntigravityDataProvider(),
+                new SpeedGlidingDataProvider()
+            },
+            new BinDataProvider[]
+            {
+                new HandlingGroundDataProvider(),
+                new HandlingWaterDataProvider(),
+                new HandlingAntigravityDataProvider(),
+                new HandlingGlidingDataProvider()
+            }
+        };
 
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
-        private CategoryControl _ccMain;
-        private CalculationContextMenu _ccmAll;
-        
+        private CategoryRow _crMain;
+        private CategoryRow _crPoints;
+        private CategoryRow _crPhysics;
+        private CategoryRow _crSpeedHandling;
         private TableLayoutPanel _tlpFile;
         private FlatButton _fbOpen;
         private FlatButton _fbSave;
         private FlatButton _fbSaveAs;
+        private BinDataGrid _binDataGrid;
+
+        private int _category1;
+        private int _category2;
+        private int _lastCategory1 = (int)CategoryMain.Points;
         
-        private CategoryControl _ccPoints;
-        private SectionDataGridView _dgvPointsDrivers;
-        private SectionDataGridView _dgvPointsKarts;
-        private SectionDataGridView _dgvPointsTires;
-        private SectionDataGridView _dgvPointsGliders;
-
-        private CategoryControl _ccPhysics;
-        private SectionDataGridView _dgvPhysicsWeight;
-        private SectionDataGridView _dgvPhysicsAcceleration;
-        private SectionDataGridView _dgvPhysicsOnroad;
-        private SectionDataGridView _dgvPhysicsOffroadBrake;
-        private SectionDataGridView _dgvPhysicsOffroadSlip;
-        private SectionDataGridView _dgvPhysicsTurbo;
-
-        private CategoryControl _ccSpeed;
-        private SectionDataGridView _dgvSpeedGround;
-        private SectionDataGridView _dgvSpeedWater;
-        private SectionDataGridView _dgvSpeedAntigravity;
-        private SectionDataGridView _dgvSpeedGliding;
-        
-        private CategoryControl _ccHandling;
-        private SectionDataGridView _dgvHandlingGround;
-        private SectionDataGridView _dgvHandlingWater;
-        private SectionDataGridView _dgvHandlingAntigravity;
-        private SectionDataGridView _dgvHandlingGliding;
-
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -62,7 +74,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         /// <param name="args">The command line arguments.</param>
         internal FormMain(string[] args)
         {
-            CreateInterface();
+            InitializeUI();
             Program.FileChanged += Program_FileChanged;
 
             // Open a file passed to the application.
@@ -78,142 +90,132 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
 
-        private void CreateInterface()
+        private void InitializeUI()
         {
+            AllowDrop = true;
             BackColor = Color.White;
-            ClientSize = new Size(930, 560);
+            ClientSize = new Size(1000, 560);
+            DoubleBuffered = true;
             Font = SystemFonts.MessageBoxFont;
             Icon = Program.R.GetIcon("Icon.ico");
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mario Kart 8 Performance Editor";
+            DragEnter += FormMain_DragEnter;
+            DragDrop += FormMain_DragDrop;
 
-            _ccmAll = new CalculationContextMenu();
+            // Set up category rows.
+            _crMain = new CategoryRow(0, _accentColor);
+            _crMain.AddCategory("File");
+            _crMain.AddCategory("Points", false);
+            _crMain.AddCategory("Physics", false);
+            _crMain.AddCategory("Speed", false);
+            _crMain.AddCategory("Handling", false);
+            _crMain.SelectedCategoryChanged += _crMain_SelectedCategoryChanged;
 
-            _ccMain = new CategoryControl(0, _accentColor);
+            _crPoints = new CategoryRow(1, _accentColor);
+            _crPoints.AddCategory("Drivers");
+            _crPoints.AddCategory("Karts");
+            _crPoints.AddCategory("Tires");
+            _crPoints.AddCategory("Gliders");
+            _crPoints.SelectedCategoryChanged += _crSecondary_SelectedCategoryChanged;
+
+            _crPhysics = new CategoryRow(1, _accentColor);
+            _crPhysics.AddCategory("Weight");
+            _crPhysics.AddCategory("Acceleration");
+            _crPhysics.AddCategory("On-Road Slip");
+            _crPhysics.AddCategory("Off-Road Slip");
+            _crPhysics.AddCategory("Off-Road Brake");
+            _crPhysics.AddCategory("Turbo");
+            _crPhysics.SelectedCategoryChanged += _crSecondary_SelectedCategoryChanged;
+
+            _crSpeedHandling = new CategoryRow(1, _accentColor);
+            _crSpeedHandling.AddCategory("Ground");
+            _crSpeedHandling.AddCategory("Water");
+            _crSpeedHandling.AddCategory("Anti-Gravity");
+            _crSpeedHandling.AddCategory("Gliding");
+            _crSpeedHandling.SelectedCategoryChanged += _crSecondary_SelectedCategoryChanged;
+
+            // Set up file section.
+            _fbOpen = new FlatButton("Open", _fbOpen_Click);
+            _fbSave = new FlatButton("Save", _fbSave_Click);
+            _fbSaveAs = new FlatButton("Save As", _fbSaveAs_Click);
+            _tlpFile = new TableLayoutPanel();
+            _tlpFile.Margin = new Padding(0);
+            _tlpFile.Dock = DockStyle.Fill;
+            for (int i = 0; i < 3; i++)
             {
-                _tlpFile = new TableLayoutPanel();
-                _tlpFile.Margin = new Padding(0);
-                for (int i = 0; i < 3; i++) _tlpFile.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                {
-                    _fbOpen = new FlatButton("Open", _fbOpen_Click);
-                    _tlpFile.Controls.Add(_fbOpen);
-                    _fbSave = new FlatButton("Save", _fbSave_Click);
-                    _tlpFile.Controls.Add(_fbSave);
-                    _fbSaveAs = new FlatButton("Save As", _fbSaveAs_Click);
-                    _tlpFile.Controls.Add(_fbSaveAs);
-                }
-                _ccMain.Controls.Add(_tlpFile);
-                _ccMain.SetTitle(_tlpFile, "File");
-
-                _ccPoints = new CategoryControl(1, _accentColor);
-                _ccPoints.Enabled = false;
-                {
-                    _dgvPointsDrivers = CreateDataGrid<PointDriversDataGridView>(_ccPoints, "Drivers");
-                    _dgvPointsKarts = CreateDataGrid<PointKartsDataGridView>(_ccPoints, "Karts");
-                    _dgvPointsTires = CreateDataGrid<PointTiresDataGridView>(_ccPoints, "Tires");
-                    _dgvPointsGliders = CreateDataGrid<PointGlidersDataGridView>(_ccPoints, "Gliders");
-                }
-                _ccMain.Controls.Add(_ccPoints);
-                _ccMain.SetTitle(_ccPoints, "Points");
-
-                _ccPhysics = new CategoryControl(1, _accentColor);
-                _ccPhysics.Enabled = false;
-                {
-                    _dgvPhysicsWeight = CreateDataGrid<PhysicsWeightDataGridView>(_ccPhysics, "Weight");
-                    _dgvPhysicsAcceleration = CreateDataGrid<PhysicsAccelerationDataGridView>(_ccPhysics, "Acceleration");
-                    _dgvPhysicsOnroad = CreateDataGrid<PhysicsOnroadDataGridView>(_ccPhysics, "On-Road Slip");
-                    _dgvPhysicsOffroadBrake = CreateDataGrid<PhysicsOffroadBrakeDataGridView>(_ccPhysics, "Off-Road Brake");
-                    _dgvPhysicsOffroadSlip = CreateDataGrid<PhysicsOffroadSlipDataGridView>(_ccPhysics, "Off-Road Slip");
-                    _dgvPhysicsTurbo = CreateDataGrid<PhysicsTurboDataGridView>(_ccPhysics, "Turbo");
-                }
-                _ccMain.Controls.Add(_ccPhysics);
-                _ccMain.SetTitle(_ccPhysics, "Physics");
-
-                _ccSpeed = new CategoryControl(1, _accentColor);
-                _ccSpeed.Enabled = false;
-                {
-                    _dgvSpeedGround = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Ground");
-                    _dgvSpeedWater = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Water");
-                    _dgvSpeedAntigravity = CreateDataGrid<SpeedDataGridView>(_ccSpeed, "Anti-Gravity");
-                    _dgvSpeedGliding = CreateDataGrid<SpeedAirDataGridView>(_ccSpeed, "Gliding");
-                }
-                _ccMain.Controls.Add(_ccSpeed);
-                _ccMain.SetTitle(_ccSpeed, "Speed");
-
-                _ccHandling = new CategoryControl(1, _accentColor);
-                _ccHandling.Enabled = false;
-                {
-                    _dgvHandlingGround = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Ground");
-                    _dgvHandlingWater = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Water");
-                    _dgvHandlingAntigravity = CreateDataGrid<HandlingDataGridView>(_ccHandling, "Anti-Gravity");
-                    _dgvHandlingGliding = CreateDataGrid<HandlingAirDataGridView>(_ccHandling, "Gliding");
-                }
-                _ccMain.Controls.Add(_ccHandling);
-                _ccMain.SetTitle(_ccHandling, "Handling");
+                _tlpFile.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             }
-            Controls.Add(_ccMain);
+            _tlpFile.Controls.Add(_fbOpen);
+            _tlpFile.Controls.Add(_fbSave);
+            _tlpFile.Controls.Add(_fbSaveAs);
+
+            // Set up data grid.
+            _binDataGrid = new BinDataGrid();
+            _binDataGrid.MinimumColumnWidth = 95;
+
+            // Add the controls in reversed order so that docking works as expected.
+            Controls.Add(_binDataGrid);
+            Controls.Add(_tlpFile);
+            Controls.Add(_crSpeedHandling);
+            Controls.Add(_crPhysics);
+            Controls.Add(_crPoints);
+            Controls.Add(_crMain);
+            
+            UpdateUI();
         }
-        private SectionDataGridView CreateDataGrid<T>(CategoryControl parent, string title)
-            where T : SectionDataGridView
+
+        private void UpdateUI()
         {
-            SectionDataGridView dataGrid = Activator.CreateInstance<T>();
-            dataGrid.ContextMenuStrip = _ccmAll;
-            parent.Controls.Add(dataGrid);
-            parent.SetTitle(dataGrid, title);
-            return dataGrid;
-        }
+            this.SuspendDrawing();
 
-        private void UpdateDataGrids()
-        {
-            BinFile performance = Program.File;
+            // Show the correct data (do this as first operation as it takes the longest time).
+            _binDataGrid.DataProvider = _dataProviders[_category1]?[_category2];
 
-            _dgvPointsDrivers.DataGroup = (DwordArrayGroup)performance[(int)Section.DriverPoints][0];
-            _dgvPointsKarts.DataGroup = (DwordArrayGroup)performance[(int)Section.KartPoints][0];
-            _dgvPointsTires.DataGroup = (DwordArrayGroup)performance[(int)Section.TirePoints][0];
-            _dgvPointsGliders.DataGroup = (DwordArrayGroup)performance[(int)Section.GliderPoints][0];
+            // Enable categories and buttons when a file is open.
+            bool fileOpen = Program.File != null;
+            _crMain.EnableCategory((int)CategoryMain.Points, fileOpen);
+            _crMain.EnableCategory((int)CategoryMain.Physics, fileOpen);
+            _crMain.EnableCategory((int)CategoryMain.Speed, fileOpen);
+            _crMain.EnableCategory((int)CategoryMain.Handling, fileOpen);
+            _fbSave.Visible = fileOpen;
+            _fbSaveAs.Visible = fileOpen;
 
-            _dgvPhysicsWeight.DataGroup = (DwordArrayGroup)performance[(int)Section.WeightStats][0];
-            _dgvPhysicsAcceleration.DataGroup = (DwordArrayGroup)performance[(int)Section.AccelerationStats][0];
-            _dgvPhysicsOnroad.DataGroup = (DwordArrayGroup)performance[(int)Section.OnroadStats][0];
-            _dgvPhysicsOffroadBrake.DataGroup = (DwordArrayGroup)performance[(int)Section.OffroadStats][0];
-            _dgvPhysicsOffroadSlip.DataGroup = (DwordArrayGroup)performance[(int)Section.OffroadStats][0];
-            _dgvPhysicsTurbo.DataGroup = (DwordArrayGroup)performance[(int)Section.TurboStats][0];
+            // Show the file section or the data grid.
+            bool isDataView = _category1 != (int)CategoryMain.File;
+            _tlpFile.Visible = !isDataView;
+            _binDataGrid.Visible = isDataView;
 
-            _dgvSpeedGround.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedGroundStats][0];
-            _dgvSpeedWater.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedWaterStats][0];
-            _dgvSpeedAntigravity.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedAntigravityStats][0];
-            _dgvSpeedGliding.DataGroup = (DwordArrayGroup)performance[(int)Section.SpeedAirStats][0];
+            // Show the correct secondary row.
+            _crPoints.Visible = _category1 == (int)CategoryMain.Points;
+            _crPhysics.Visible = _category1 == (int)CategoryMain.Physics;
+            _crSpeedHandling.Visible = _category1 == (int)CategoryMain.Speed
+                || _category1 == (int)CategoryMain.Handling;
+            
+            this.ResumeDrawing();
 
-            _dgvHandlingGround.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingGroundStats][0];
-            _dgvHandlingWater.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingWaterStats][0];
-            _dgvHandlingAntigravity.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingAntigravityStats][0];
-            _dgvHandlingGliding.DataGroup = (DwordArrayGroup)performance[(int)Section.HandlingAirStats][0];
+            _binDataGrid.Focus();
         }
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 
         private void Program_FileChanged(object sender, EventArgs e)
         {
+            // Update window title and switch to data view if a file was opened.
             bool fileOpen = Program.File != null;
             if (fileOpen)
             {
                 string fileName = Program.FileName;
                 Text = $"{Path.GetFileName(fileName)} ({Path.GetDirectoryName(fileName)}) - {Application.ProductName}";
-                _ccMain.SelectedControl = _ccPoints;
+                _crMain.SelectedCategory = _lastCategory1;
             }
             else
             {
                 Text = Application.ProductName;
-                _ccMain.SelectedControl = _tlpFile;
+                _crMain.SelectedCategory = (int)CategoryMain.File;
             }
-            _ccPoints.Enabled = fileOpen;
-            _ccPhysics.Enabled = fileOpen;
-            _ccSpeed.Enabled = fileOpen;
-            _ccHandling.Enabled = fileOpen;
-            _fbSave.Visible = fileOpen;
-            _fbSaveAs.Visible = fileOpen;
 
-            UpdateDataGrids();
+            UpdateUI();
         }
 
         private void FormMain_DragEnter(object sender, DragEventArgs e)
@@ -228,6 +230,40 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
             Program.OpenFile(file);
+        }
+
+        private void _crMain_SelectedCategoryChanged(object sender, EventArgs e)
+        {
+            _category1 = _crMain.SelectedCategory;
+
+            // Remember the last data category.
+            if (_category1 > (int)CategoryMain.File)
+            {
+                _lastCategory1 = _category1;
+            }
+
+            // Switch to the correct subcategory.
+            switch ((CategoryMain)_category1)
+            {
+                case CategoryMain.Points:
+                    _category2 = _crPoints.SelectedCategory;
+                    break;
+                case CategoryMain.Physics:
+                    _category2 = _crPhysics.SelectedCategory;
+                    break;
+                case CategoryMain.Handling:
+                case CategoryMain.Speed:
+                    _category2 = _crSpeedHandling.SelectedCategory;
+                    break;
+            }
+            UpdateUI();
+        }
+
+        private void _crSecondary_SelectedCategoryChanged(object sender, EventArgs e)
+        {
+            CategoryRow categoryRow = (CategoryRow)sender;
+            _category2 = categoryRow.SelectedCategory;
+            UpdateUI();
         }
 
         private void _fbOpen_Click(object sender, EventArgs e)
@@ -261,6 +297,17 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                     Program.SaveFile(saveFileDialog.FileName, true);
                 }
             }
+        }
+        
+        // ---- ENUMERATIONS -------------------------------------------------------------------------------------------
+
+        private enum CategoryMain
+        {
+            File,
+            Points,
+            Physics,
+            Speed,
+            Handling
         }
     }
 }
