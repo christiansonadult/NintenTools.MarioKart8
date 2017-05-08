@@ -13,6 +13,8 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         protected internal virtual int FirstColumn { get; }
 
+        protected internal virtual string RowHeaderTitle { get; }
+
         protected internal abstract IEnumerable<TextImagePair> Columns { get; }
 
         protected internal abstract IEnumerable<TextImagePair> Rows { get; }

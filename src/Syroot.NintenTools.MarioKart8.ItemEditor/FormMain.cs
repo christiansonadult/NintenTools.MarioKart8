@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Syroot.NintenTools.MarioKart8.BinData.Item;
 using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.ItemEditor
@@ -19,14 +20,82 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             null,
             new BinDataProvider[][]
             {
-                new BinDataProvider[] { new GrandPrixItemRaceDataProvider(), new GrandPrixAIItemRaceDataProvider() }
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrix, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrixAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.All, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.AllAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.Mushrooms, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.MushroomsAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.Shells, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.ShellsAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.Bananas, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.BananasAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.Bobombs, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.BobombsAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.Frantic, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.FranticAI, true)
+                }
+            },
+            new BinDataProvider[][]
+            {
+                new BinDataProvider[]
+                {
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.All, false),
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.AllAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.Mushrooms, false),
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.MushroomsAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.Shells, false),
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.ShellsAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.Bananas, false),
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.BananasAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.Bobombs, false),
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.BobombsAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.Frantic, false),
+                    new BattleDataProvider(Section.BattleSets, BattleItemSet.FranticAI, true)
+                }
             }
         };
 
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
         private CategoryRow _crMain;
-        private CategoryRow _crItemSet;
+        private CategoryRow _crItemVersusSet;
+        private CategoryRow _crItemBattleSet;
         private CategoryRow _crPlayerType;
         private TableLayoutPanel _tlpFile;
         private FlatButton _fbOpen;
@@ -68,7 +137,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         {
             AllowDrop = true;
             BackColor = Color.White;
-            ClientSize = new Size(1000, 560);
+            ClientSize = new Size(1000, 625);
             DoubleBuffered = true;
             Font = SystemFonts.MessageBoxFont;
             Icon = Program.R.GetIcon("Icon.ico");
@@ -85,15 +154,24 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             _crMain.AddCategory("Distances", false);
             _crMain.SelectedCategoryChanged += _crMain_SelectedCategoryChanged;
 
-            _crItemSet = new CategoryRow(1, _accentColor);
-            _crItemSet.AddCategory("Grand Prix");
-            _crItemSet.AddCategory("All Items");
-            _crItemSet.AddCategory("Mushrooms Only");
-            _crItemSet.AddCategory("Shells Only");
-            _crItemSet.AddCategory("Bananas Only");
-            _crItemSet.AddCategory("Bob-ombs Only");
-            _crItemSet.AddCategory("Frantic Mode");
-            _crItemSet.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
+            _crItemVersusSet = new CategoryRow(1, _accentColor);
+            _crItemVersusSet.AddCategory("Grand Prix");
+            _crItemVersusSet.AddCategory("All Items");
+            _crItemVersusSet.AddCategory("Mushrooms Only");
+            _crItemVersusSet.AddCategory("Shells Only");
+            _crItemVersusSet.AddCategory("Bananas Only");
+            _crItemVersusSet.AddCategory("Bob-ombs Only");
+            _crItemVersusSet.AddCategory("Frantic Mode");
+            _crItemVersusSet.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
+
+            _crItemBattleSet = new CategoryRow(1, _accentColor);
+            _crItemBattleSet.AddCategory("All Items");
+            _crItemBattleSet.AddCategory("Mushrooms Only");
+            _crItemBattleSet.AddCategory("Shells Only");
+            _crItemBattleSet.AddCategory("Bananas Only");
+            _crItemBattleSet.AddCategory("Bob-ombs Only");
+            _crItemBattleSet.AddCategory("Frantic Mode");
+            _crItemBattleSet.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
 
             _crPlayerType = new CategoryRow(2, _accentColor);
             _crPlayerType.AddCategory("No AI Racers");
@@ -118,12 +196,14 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             // Set up data grid.
             _binDataGrid = new BinDataGrid();
             _binDataGrid.MinimumColumnWidth = 90;
+            _binDataGrid.TopLeftHeaderCell.Value = "blabla";
 
             // Add the controls in reversed order so that docking works as expected.
             Controls.Add(_binDataGrid);
             Controls.Add(_tlpFile);
             Controls.Add(_crPlayerType);
-            Controls.Add(_crItemSet);
+            Controls.Add(_crItemBattleSet);
+            Controls.Add(_crItemVersusSet);
             Controls.Add(_crMain);
             
             UpdateUI();
@@ -131,6 +211,8 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
 
         private void UpdateUI()
         {
+            SuspendLayout();
+
             // Show the correct data (do this as first operation as it takes the longest time).
             _binDataGrid.DataProvider = _dataProviders[_category1]?[_category2][_category3];
 
@@ -147,11 +229,34 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             _tlpFile.Visible = !isDataView;
             _binDataGrid.Visible = isDataView;
 
-            // Show the correct secondary row.
-            _crPlayerType.Visible = _category1 != (int)CategoryMain.File && _category1 != (int)CategoryMain.Distances;
-            _crItemSet.Visible = _category1 != (int)CategoryMain.File && _category1 != (int)CategoryMain.Distances;
+            // Show the correct secondary and tertiary rows.
+            switch ((CategoryMain)_category1)
+            {
+                case CategoryMain.File:
+                    _crPlayerType.Visible = false;
+                    _crItemVersusSet.Visible = false;
+                    _crItemBattleSet.Visible = false;
+                    break;
+                case CategoryMain.Versus:
+                    _crPlayerType.Visible = true;
+                    _crItemVersusSet.Visible = true;
+                    _crItemBattleSet.Visible = false;
+                    break;
+                case CategoryMain.Battle:
+                    _crPlayerType.Visible = true;
+                    _crItemVersusSet.Visible = false;
+                    _crItemBattleSet.Visible = true;
+                    break;
+                case CategoryMain.Distances:
+                    _crPlayerType.Visible = true;
+                    _crItemVersusSet.Visible = false;
+                    _crItemBattleSet.Visible = false;
+                    break;
+            }
             
             _binDataGrid.Focus();
+
+            ResumeLayout();
         }
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
@@ -200,19 +305,18 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             }
 
             // Switch to the correct subcategory.
-            //switch ((CategoryMain)_category1)
-            //{
-            //    case CategoryMain.Points:
-            //        _category2 = _crItemSet.SelectedCategory;
-            //        break;
-            //    case CategoryMain.Physics:
-            //        _category2 = _crPlayerType.SelectedCategory;
-            //        break;
-            //    case CategoryMain.Handling:
-            //    case CategoryMain.Speed:
-            //        _category2 = _crSpeedHandling.SelectedCategory;
-            //        break;
-            //}
+            switch ((CategoryMain)_category1)
+            {
+                case CategoryMain.Versus:
+                    _category2 = _crItemVersusSet.SelectedCategory;
+                    break;
+                case CategoryMain.Battle:
+                    _category2 = _crItemBattleSet.SelectedCategory;
+                    break;
+                case CategoryMain.Distances:
+                    //_category2 = _crSpeedHandling.SelectedCategory;
+                    break;
+            }
             UpdateUI();
         }
 

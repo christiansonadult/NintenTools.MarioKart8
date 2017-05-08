@@ -40,8 +40,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
             // Fix height of headers for now to limit the size of images.
             preferredSize.Width = cellStyle.Padding.Horizontal + Math.Max(textSize.Width, imageSize.Width / 2);
-            preferredSize.Height = cellStyle.Padding.Vertical + imageSize.Height / 4 + cellStyle.Padding.Top
-                + textSize.Height;
+            preferredSize.Height = cellStyle.Padding.Vertical + textSize.Height;
+            if (_image != null)
+            {
+                preferredSize.Height += imageSize.Height / 4 + cellStyle.Padding.Top;
+            }
 
             return preferredSize;
         }
@@ -61,7 +64,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             {
                 imageBounds = new Rectangle(
                     cellBounds.X + (cellBounds.Width / 2),
-                    cellBounds.Y + cellStyle.Padding.Top,
+                    cellBounds.Y,
                     0,
                     0);
             }

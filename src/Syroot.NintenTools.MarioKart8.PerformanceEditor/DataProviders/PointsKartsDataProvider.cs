@@ -112,5 +112,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 return pairs.Take(DataGroup.Count);
             }
         }
+
+        protected override string RowHeaderTitle
+        {
+            get { return "Kart"; }
+        }
     }
 }

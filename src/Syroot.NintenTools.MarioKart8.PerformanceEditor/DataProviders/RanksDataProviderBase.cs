@@ -41,5 +41,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 }
             }
         }
+
+        protected override string RowHeaderTitle
+        {
+            get { return "Total Points"; }
+        }
     }
 }

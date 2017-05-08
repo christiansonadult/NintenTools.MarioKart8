@@ -5,8 +5,23 @@ using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.ItemEditor
 {
-    internal abstract class ItemRaceDataProviderBase : BinDataProvider
+    internal abstract class ItemDataProviderBase : BinDataProvider
     {
+        // ---- FIELDS -------------------------------------------------------------------------------------------------
+
+        private Section _section;
+        private int _set;
+
+        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
+
+        internal ItemDataProviderBase(Section section, int set)
+        {
+            _section = section;
+            _set = set;
+        }
+
+        // ---- PROPERTIES ---------------------------------------------------------------------------------------------
+
         protected override IEnumerable<TextImagePair> Columns
         {
             get
@@ -44,44 +59,14 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             }
         }
 
-        protected override IEnumerable<TextImagePair> Rows
+        protected override string RowHeaderTitle
         {
-            get
-            {
-                DwordArrayGroup distances = (DwordArrayGroup)Program.File[(int)Section.Distances][IsAISet ? 1 : 0];
-                foreach (Dword[] distance in distances)
-                {
-                    yield return new TextImagePair(distance[0].Int32.ToString());
-                }
-            }
+            get { return "Distance"; }
         }
 
-        protected abstract bool IsAISet { get; }
-    }
-
-    internal class GrandPrixItemRaceDataProvider : ItemRaceDataProviderBase
-    {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.RaceSets][(int)RaceItemSet.GrandPrix]; }
-        }
-
-        protected override bool IsAISet
-        {
-            get { return false; }
-        }
-    }
-
-    internal class GrandPrixAIItemRaceDataProvider : ItemRaceDataProviderBase
-    {
-        protected override DwordArrayGroup DataGroup
-        {
-            get { return (DwordArrayGroup)Program.File[(int)Section.RaceSets][(int)RaceItemSet.GrandPrixAI]; }
-        }
-
-        protected override bool IsAISet
-        {
-            get { return true; }
+            get { return (DwordArrayGroup)Program.File[(int)_section][_set]; }
         }
     }
 }

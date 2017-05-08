@@ -41,7 +41,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataProviders\ItemRaceDataProviders.cs" />
+    <Compile Include="DataProviders\BattleDataProvider.cs" />
+    <Compile Include="DataProviders\RaceDataProvider.cs" />
+    <Compile Include="DataProviders\ItemDataProviderBase.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

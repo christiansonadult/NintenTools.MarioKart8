@@ -39,5 +39,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         {
             get { return _textImagePairs.Take(DataGroup.Count); }
         }
+
+        protected override string RowHeaderTitle
+        {
+            get { return "Glider"; }
+        }
     }
 }

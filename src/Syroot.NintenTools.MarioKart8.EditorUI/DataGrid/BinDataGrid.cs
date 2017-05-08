@@ -77,10 +77,13 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 
             // Clear existing columns and rows.
+            TopLeftHeaderCell.Value = null;
             Columns.Clear();
             Rows.Clear();
             if (_dataProvider != null)
             {
+                TopLeftHeaderCell.Value = _dataProvider.RowHeaderTitle;
+
                 // Fill in the columns to display.
                 foreach (TextImagePair header in _dataProvider.Columns)
                 {
@@ -165,6 +168,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             base.OnCellValueChanged(e);
 
             // Write the value back into the data provider.
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+            {
+                return;
+            }
+
             object value = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
             if (_dataProvider.AllowFloats)
             {
@@ -237,7 +245,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                 Alignment = DataGridViewContentAlignment.MiddleCenter,
                 BackColor = Color.FromArgb(236, 236, 236),
                 ForeColor = Color.FromArgb(64, 64, 64),
-                Padding = new Padding(4, 6, 4, 7),
+                Padding = new Padding(4, 7, 4, 6),
                 WrapMode = DataGridViewTriState.True
             };
             ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;

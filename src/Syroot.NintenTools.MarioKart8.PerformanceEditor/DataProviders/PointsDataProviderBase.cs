@@ -6,12 +6,6 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
     internal abstract class PointsDataProviderBase : BinDataProvider
     {
-        /*
-            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedHeaders;
-            ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            ColumnHeadersHeight = 44;
-            RowHeadersDefaultCellStyle.Padding = new Padding(4);
-         */
         protected override IEnumerable<TextImagePair> Columns
         {
             get

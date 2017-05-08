@@ -29,7 +29,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Item
         UnusedBananas,
         UnusedBobombs,
         UnusedMushrooms2,
-        Frantic, FrancticAI
+        Frantic, FranticAI
     }
 
     /// <summary>

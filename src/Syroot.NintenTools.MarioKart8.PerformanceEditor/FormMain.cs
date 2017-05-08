@@ -167,7 +167,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
         private void UpdateUI()
         {
-            this.SuspendDrawing();
+            SuspendLayout();
 
             // Show the correct data (do this as first operation as it takes the longest time).
             _binDataGrid.DataProvider = _dataProviders[_category1]?[_category2];
@@ -191,8 +191,8 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             _crPhysics.Visible = _category1 == (int)CategoryMain.Physics;
             _crSpeedHandling.Visible = _category1 == (int)CategoryMain.Speed
                 || _category1 == (int)CategoryMain.Handling;
-            
-            this.ResumeDrawing();
+
+            ResumeLayout();
 
             _binDataGrid.Focus();
         }
