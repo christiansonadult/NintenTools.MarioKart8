@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace Syroot.NintenTools.MarioKart8.EditorUI
 {
     /// <summary>
-    /// Represents a context menu offering typical calculation methods for a <see cref="SectionDataGridView"/>.
+    /// Represents a context menu offering typical calculation methods for a <see cref="BinDataGrid"/>.
     /// </summary>
     public class CalculationContextMenu : ContextMenuStrip
     {

@@ -106,7 +106,10 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         private FlatButton _fbSave;
         private FlatButton _fbSaveAs;
         private BinDataGrid _binDataGrid;
-        
+
+        private int _itemSet;
+        private int _playerType;
+
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -273,9 +276,6 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
 
             ResumeLayout();
         }
-
-        private int _itemSet;
-        private int _playerType;
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 

@@ -56,18 +56,30 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Raised when the mouse pointer enters the control bounds.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/>.</param>
         protected override void OnMouseEnter(EventArgs e)
         {
             _isHovered = true;
             Refresh();
         }
 
+        /// <summary>
+        /// Raised when the mouse pointer leaves the control bounds.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/>.</param>
         protected override void OnMouseLeave(EventArgs e)
         {
             _isHovered = false;
             Refresh();
         }
 
+        /// <summary>
+        /// Raised when the control has to paint its contents.
+        /// </summary>
+        /// <param name="e">The <see cref="PaintEventArgs"/>.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             Color backColor = _isHovered ? _backColorHovered : BackColor;

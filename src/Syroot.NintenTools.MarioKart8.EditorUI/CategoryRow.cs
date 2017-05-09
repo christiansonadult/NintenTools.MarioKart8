@@ -170,7 +170,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         }
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
-
+        
+        /// <summary>
+        /// Adds a category with the given display <paramref name="text"/>.
+        /// </summary>
+        /// <param name="text">The text to display for the category.</param>
         public void AddCategory(string text)
         {
             _categoryTexts.Add(text);
@@ -178,12 +182,21 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             Refresh();
         }
 
+        /// <summary>
+        /// Enables or disables a category at the given <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index">The <paramref name="index"/> of the category which will be enabled or disabled.</param>
+        /// <param name="enabled"><c>true</c> to enable the category; otherwise <c>false</c>.</param>
         public void EnableCategory(int index, bool enabled)
         {
             _categoryStates[index] = enabled;
             Refresh();
         }
 
+        /// <summary>
+        /// Removes the category at the given <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index"></param>
         public void RemoveCategory(int index)
         {
             _categoryTexts.RemoveAt(index);
@@ -193,24 +206,40 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Raised when the mouse pointer enters the control bounds.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/>.</param>
         protected override void OnMouseEnter(EventArgs e)
         {
             HoveredCategory = GetCategoryAt(PointToClient(Cursor.Position));
             base.OnMouseEnter(e);
         }
 
+        /// <summary>
+        /// Raised when the mouse pointer moves inside the control bounds.
+        /// </summary>
+        /// <param name="e">The <see cref="MouseEventArgs"/>.</param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             HoveredCategory = GetCategoryAt(e.Location);
             base.OnMouseMove(e);
         }
 
+        /// <summary>
+        /// Raised when the mouse pointer leaves the control bounds.
+        /// </summary>
+        /// <param name="e">The <see cref="EventArgs"/>.</param>
         protected override void OnMouseLeave(EventArgs e)
         {
             HoveredCategory = -1;
             base.OnMouseLeave(e);
         }
 
+        /// <summary>
+        /// Raised when the mouse pointer clicks inside the control bounds.
+        /// </summary>
+        /// <param name="e">The <see cref="MouseEventArgs"/>.</param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
             // Must be inside the header.
@@ -222,6 +251,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             base.OnMouseClick(e);
         }
 
+        /// <summary>
+        /// Raised when the control has to paint its contents.
+        /// </summary>
+        /// <param name="e">The <see cref="PaintEventArgs"/>.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
