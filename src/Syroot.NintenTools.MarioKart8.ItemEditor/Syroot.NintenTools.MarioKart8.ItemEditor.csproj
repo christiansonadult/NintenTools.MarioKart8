@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataProviders\BattleDataProvider.cs" />
+    <Compile Include="DataProviders\DistanceDataProviderBase.cs" />
     <Compile Include="DataProviders\RaceDataProvider.cs" />
     <Compile Include="DataProviders\ItemDataProviderBase.cs" />
     <Compile Include="FormMain.cs">

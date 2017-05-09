@@ -7,10 +7,8 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Item
     /// </summary>
     public enum Section
     {
-        RaceTitleSets, RaceSets,
-        Distances,
-        BattleTitleSets, BattleSets,
-        BalloonCounts
+        RaceTitleSets, RaceSets, RaceDistances,
+        BattleTitleSets, BattleSets, BattleDistances
     }
 
     /// <summary>
@@ -35,7 +33,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Item
     /// <summary>
     /// Represents the distances used according to AI players participating in the race.
     /// </summary>
-    public enum DistanceType
+    public enum RaceDistanceType
     {
         NoAI,
         WithAI
@@ -59,6 +57,11 @@ namespace Syroot.NintenTools.MarioKart8.BinData.Item
         UnusedBobombs,
         UnusedShellsBananas2,
         Frantic, FranticAI
+    }
+
+    public enum BattleDistanceType
+    {
+        // TODO: Find out what each "distance" set means.
     }
 }
 

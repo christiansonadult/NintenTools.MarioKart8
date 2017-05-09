@@ -171,10 +171,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
 
-        public void AddCategory(string text, bool enabled = true)
+        public void AddCategory(string text)
         {
             _categoryTexts.Add(text);
-            _categoryStates.Add(enabled);
+            _categoryStates.Add(true);
             Refresh();
         }
 

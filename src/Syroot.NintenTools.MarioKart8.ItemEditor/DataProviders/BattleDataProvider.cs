@@ -34,7 +34,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
                 yield return new TextImagePair($"> 0 Minutes{Environment.NewLine}> 2 Balloons");
                 yield return new TextImagePair($"> 0 Minutes{Environment.NewLine}2 Balloons");
                 yield return new TextImagePair($"> 0 Minutes{Environment.NewLine}1 Balloon");
-                yield return new TextImagePair($"Any Minutes{Environment.NewLine}0 Balloons");
+                yield return new TextImagePair($"Any Minute{Environment.NewLine}0 Balloons");
             }
         }
 

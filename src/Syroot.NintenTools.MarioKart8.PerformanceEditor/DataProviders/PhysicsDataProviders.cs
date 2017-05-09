@@ -86,9 +86,14 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 
     internal class PhysicsOffroadBrakeDataProvider : PhysicsOffroadDataProviderBase
     {
-        protected override int FirstColumn
+        protected override Dword GetValue(int x, int y)
         {
-            get { return 9; }
+            return DataGroup[y][x + 9];
+        }
+
+        protected override void SetValue(int x, int y, Dword value)
+        {
+            DataGroup[y][x + 9] = value;
         }
     }
 

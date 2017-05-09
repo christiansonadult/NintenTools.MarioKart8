@@ -106,10 +106,10 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             // Set up category rows.
             _crMain = new CategoryRow(0, _accentColor);
             _crMain.AddCategory("File");
-            _crMain.AddCategory("Points", false);
-            _crMain.AddCategory("Physics", false);
-            _crMain.AddCategory("Speed", false);
-            _crMain.AddCategory("Handling", false);
+            _crMain.AddCategory("Points");
+            _crMain.AddCategory("Physics");
+            _crMain.AddCategory("Speed");
+            _crMain.AddCategory("Handling");
             _crMain.SelectedCategoryChanged += _crMain_SelectedCategoryChanged;
 
             _crPoints = new CategoryRow(1, _accentColor);

@@ -16,6 +16,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
 
         private BinDataProvider _dataProvider;
         private int _minimumColumnWidth;
+        private bool _isRefillingData;
         private bool _isSizingColumns;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
@@ -73,6 +74,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         public void Refill()
         {
             // Suspend expensive layouting and drawing operations.
+            _isRefillingData = true;
             ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 
@@ -107,11 +109,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                     {
                         if (_dataProvider.AllowFloats)
                         {
-                            Rows[y].Cells[x].Value = dwords[x + _dataProvider.FirstColumn].Single;
+                            Rows[y].Cells[x].Value = _dataProvider.GetValue(x, y).Single;
                         }
                         else
                         {
-                            Rows[y].Cells[x].Value = dwords[x + _dataProvider.FirstColumn].Int32;
+                            Rows[y].Cells[x].Value = _dataProvider.GetValue(x, y).Int32;
                         }
                     }
                 }
@@ -121,6 +123,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             AutoSizeColumns();
+            _isRefillingData = false;
         }
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
@@ -140,7 +143,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                 }
                 else
                 {
-                    e.Value = _dataProvider.DataGroup[e.RowIndex][e.ColumnIndex + _dataProvider.FirstColumn].Single;
+                    e.Value = _dataProvider.GetValue(e.ColumnIndex, e.RowIndex).Single;
                 }
             }
             else
@@ -151,7 +154,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                 }
                 else
                 {
-                    e.Value = _dataProvider.DataGroup[e.RowIndex][e.ColumnIndex + _dataProvider.FirstColumn].Int32;
+                    e.Value = _dataProvider.GetValue(e.ColumnIndex, e.RowIndex).Int32;
                 }
             }
 
@@ -168,7 +171,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             base.OnCellValueChanged(e);
 
             // Write the value back into the data provider.
-            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+            if (_isRefillingData || e.RowIndex < 0 || e.ColumnIndex < 0)
             {
                 return;
             }
@@ -176,11 +179,11 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             object value = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
             if (_dataProvider.AllowFloats)
             {
-                _dataProvider.DataGroup[e.RowIndex][e.ColumnIndex + _dataProvider.FirstColumn] = (float)value;
+                _dataProvider.SetValue(e.ColumnIndex, e.RowIndex, (float)value);
             }
             else
             {
-                _dataProvider.DataGroup[e.RowIndex][e.ColumnIndex + _dataProvider.FirstColumn] = (int)value;
+                _dataProvider.SetValue(e.ColumnIndex, e.RowIndex, (int)value);
             }
         }
 

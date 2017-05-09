@@ -22,11 +22,6 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             {
                 new BinDataProvider[]
                 {
-                    new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrix, false),
-                    new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrixAI, true)
-                },
-                new BinDataProvider[]
-                {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.All, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.AllAI, true)
                 },
@@ -54,6 +49,15 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.Frantic, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.FranticAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrix, false),
+                    new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrixAI, true)
+                },
+                new BinDataProvider[]
+                {
+                    new RaceDistanceDataProvider()
                 }
             },
             new BinDataProvider[][]
@@ -94,19 +98,14 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
         private CategoryRow _crMain;
-        private CategoryRow _crItemVersusSet;
-        private CategoryRow _crItemBattleSet;
+        private CategoryRow _crItemVersus;
+        private CategoryRow _crItemBattle;
         private CategoryRow _crPlayerType;
         private TableLayoutPanel _tlpFile;
         private FlatButton _fbOpen;
         private FlatButton _fbSave;
         private FlatButton _fbSaveAs;
         private BinDataGrid _binDataGrid;
-
-        private int _category1;
-        private int _category2;
-        private int _category3;
-        private int _lastCategory1 = (int)CategoryMain.Versus;
         
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
@@ -135,6 +134,8 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
 
         private void InitializeUI()
         {
+            SuspendLayout();
+
             AllowDrop = true;
             BackColor = Color.White;
             ClientSize = new Size(1000, 630);
@@ -149,33 +150,33 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             // Set up category rows.
             _crMain = new CategoryRow(0, _accentColor);
             _crMain.AddCategory("File");
-            _crMain.AddCategory("Versus Races", false);
-            _crMain.AddCategory("Battle Mode", false);
-            //_crMain.AddCategory("Distances", false);
+            _crMain.AddCategory("Versus Races");
+            _crMain.AddCategory("Battle Mode");
             _crMain.SelectedCategoryChanged += _crMain_SelectedCategoryChanged;
 
-            _crItemVersusSet = new CategoryRow(1, _accentColor);
-            _crItemVersusSet.AddCategory("Grand Prix");
-            _crItemVersusSet.AddCategory("All Items");
-            _crItemVersusSet.AddCategory("Mushrooms Only");
-            _crItemVersusSet.AddCategory("Shells Only");
-            _crItemVersusSet.AddCategory("Bananas Only");
-            _crItemVersusSet.AddCategory("Bob-ombs Only");
-            _crItemVersusSet.AddCategory("Frantic Mode");
-            _crItemVersusSet.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
+            _crItemVersus = new CategoryRow(1, _accentColor);
+            _crItemVersus.AddCategory("All Items");
+            _crItemVersus.AddCategory("Mushrooms Only");
+            _crItemVersus.AddCategory("Shells Only");
+            _crItemVersus.AddCategory("Bananas Only");
+            _crItemVersus.AddCategory("Bob-ombs Only");
+            _crItemVersus.AddCategory("Frantic Mode");
+            _crItemVersus.AddCategory("Grand Prix");
+            _crItemVersus.AddCategory("Distances");
+            _crItemVersus.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
 
-            _crItemBattleSet = new CategoryRow(1, _accentColor);
-            _crItemBattleSet.AddCategory("All Items");
-            _crItemBattleSet.AddCategory("Mushrooms Only");
-            _crItemBattleSet.AddCategory("Shells Only");
-            _crItemBattleSet.AddCategory("Bananas Only");
-            _crItemBattleSet.AddCategory("Bob-ombs Only");
-            _crItemBattleSet.AddCategory("Frantic Mode");
-            _crItemBattleSet.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
+            _crItemBattle = new CategoryRow(1, _accentColor);
+            _crItemBattle.AddCategory("All Items");
+            _crItemBattle.AddCategory("Mushrooms Only");
+            _crItemBattle.AddCategory("Shells Only");
+            _crItemBattle.AddCategory("Bananas Only");
+            _crItemBattle.AddCategory("Bob-ombs Only");
+            _crItemBattle.AddCategory("Frantic Mode");
+            _crItemBattle.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
 
             _crPlayerType = new CategoryRow(2, _accentColor);
-            _crPlayerType.AddCategory("No AI Racers");
-            _crPlayerType.AddCategory("With AI Racers");
+            _crPlayerType.AddCategory("Player Racer");
+            _crPlayerType.AddCategory("Software Racer");
             _crPlayerType.SelectedCategoryChanged += _crPlayerType_SelectedCategoryChanged;
 
             // Set up file section.
@@ -196,17 +197,18 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             // Set up data grid.
             _binDataGrid = new BinDataGrid();
             _binDataGrid.MinimumColumnWidth = 90;
-            _binDataGrid.TopLeftHeaderCell.Value = "blabla";
 
             // Add the controls in reversed order so that docking works as expected.
             Controls.Add(_binDataGrid);
             Controls.Add(_tlpFile);
             Controls.Add(_crPlayerType);
-            Controls.Add(_crItemBattleSet);
-            Controls.Add(_crItemVersusSet);
+            Controls.Add(_crItemBattle);
+            Controls.Add(_crItemVersus);
             Controls.Add(_crMain);
             
             UpdateUI();
+
+            ResumeLayout();
         }
 
         private void UpdateUI()
@@ -214,50 +216,66 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             SuspendLayout();
 
             // Show the correct data (do this as first operation as it takes the longest time).
-            _binDataGrid.DataProvider = _dataProviders[_category1]?[_category2][_category3];
+            switch ((CategoryMain)_crMain.SelectedCategory)
+            {
+                case CategoryMain.Versus:
+                    if (_crItemVersus.SelectedCategory == (int)CategoryVersus.Distances)
+                    {
+                        _binDataGrid.DataProvider
+                            = _dataProviders[(int)CategoryMain.Versus][(int)CategoryVersus.Distances][0];
+                    }
+                    else
+                    {
+                        _binDataGrid.DataProvider = _dataProviders[(int)CategoryMain.Versus][_itemSet][_playerType];
+                    }
+                    break;
+                case CategoryMain.Battle:
+                    _binDataGrid.DataProvider = _dataProviders[(int)CategoryMain.Battle][_itemSet][_playerType];
+                    break;
+            }
 
             // Enable categories and buttons when a file is open.
             bool fileOpen = Program.File != null;
             _crMain.EnableCategory((int)CategoryMain.Versus, fileOpen);
             _crMain.EnableCategory((int)CategoryMain.Battle, fileOpen);
-            //_crMain.EnableCategory((int)CategoryMain.Distances, fileOpen);
             _fbSave.Visible = fileOpen;
             _fbSaveAs.Visible = fileOpen;
 
             // Show the file section or the data grid.
-            bool isDataView = _category1 != (int)CategoryMain.File;
+            bool isDataView = _crMain.SelectedCategory != (int)CategoryMain.File;
             _tlpFile.Visible = !isDataView;
             _binDataGrid.Visible = isDataView;
 
             // Show the correct secondary and tertiary rows.
-            switch ((CategoryMain)_category1)
+            switch ((CategoryMain)_crMain.SelectedCategory)
             {
                 case CategoryMain.File:
+                    _crItemVersus.Visible = false;
+                    _crItemBattle.Visible = false;
                     _crPlayerType.Visible = false;
-                    _crItemVersusSet.Visible = false;
-                    _crItemBattleSet.Visible = false;
                     break;
                 case CategoryMain.Versus:
-                    _crPlayerType.Visible = true;
-                    _crItemVersusSet.Visible = true;
-                    _crItemBattleSet.Visible = false;
+                    _crItemVersus.Visible = true;
+                    _crItemBattle.Visible = false;
+                    _crPlayerType.Visible = _itemSet != (int)CategoryVersus.Distances;
                     break;
                 case CategoryMain.Battle:
+                    _crItemVersus.Visible = false;
+                    _crItemBattle.Visible = true;
                     _crPlayerType.Visible = true;
-                    _crItemVersusSet.Visible = false;
-                    _crItemBattleSet.Visible = true;
-                    break;
-                case CategoryMain.Distances:
-                    _crPlayerType.Visible = true;
-                    _crItemVersusSet.Visible = false;
-                    _crItemBattleSet.Visible = false;
                     break;
             }
-            
+            // Fix ridiculously uncontrollable Windows Forms docking order.
+            _crPlayerType.BringToFront();
+            _binDataGrid.BringToFront();
+
             _binDataGrid.Focus();
 
             ResumeLayout();
         }
+
+        private int _itemSet;
+        private int _playerType;
 
         // ---- EVENTHANDLERS ------------------------------------------------------------------------------------------
 
@@ -269,7 +287,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             {
                 string fileName = Program.FileName;
                 Text = $"{Path.GetFileName(fileName)} ({Path.GetDirectoryName(fileName)}) - {Application.ProductName}";
-                _crMain.SelectedCategory = _lastCategory1;
+                _crMain.SelectedCategory = (int)CategoryMain.Versus;
             }
             else
             {
@@ -296,41 +314,25 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
 
         private void _crMain_SelectedCategoryChanged(object sender, EventArgs e)
         {
-            _category1 = _crMain.SelectedCategory;
-
-            // Remember the last data category.
-            if (_category1 > (int)CategoryMain.File)
+            if (_crMain.SelectedCategory == (int)CategoryMain.Battle)
             {
-                _lastCategory1 = _category1;
+                _itemSet = Math.Min(_itemSet, (int)CategoryBattle.Frantic);
             }
-
-            // Switch to the correct subcategory.
-            switch ((CategoryMain)_category1)
-            {
-                case CategoryMain.Versus:
-                    _category2 = _crItemVersusSet.SelectedCategory;
-                    break;
-                case CategoryMain.Battle:
-                    _category2 = _crItemBattleSet.SelectedCategory;
-                    break;
-                case CategoryMain.Distances:
-                    //_category2 = _crSpeedHandling.SelectedCategory;
-                    break;
-            }
+            _crItemVersus.SelectedCategory = _itemSet;
+            _crItemBattle.SelectedCategory = _itemSet;
             UpdateUI();
         }
 
         private void _crItemSet_SelectedCategoryChanged(object sender, EventArgs e)
         {
-            CategoryRow categoryRow = (CategoryRow)sender;
-            _category2 = categoryRow.SelectedCategory;
+            CategoryRow crItemSet = (CategoryRow)sender;
+            _itemSet = crItemSet.SelectedCategory;
             UpdateUI();
         }
 
         private void _crPlayerType_SelectedCategoryChanged(object sender, EventArgs e)
         {
-            CategoryRow categoryRow = (CategoryRow)sender;
-            _category3 = categoryRow.SelectedCategory;
+            _playerType = _crPlayerType.SelectedCategory;
             UpdateUI();
         }
 
@@ -373,8 +375,29 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         {
             File,
             Versus,
-            Battle,
+            Battle
+        }
+
+        private enum CategoryVersus
+        {
+            AllItems,
+            MushroomsOnly,
+            ShellsOnly,
+            BananasOnly,
+            BobombsOnly,
+            Frantic,
+            GrandPrix,
             Distances
+        }
+
+        private enum CategoryBattle
+        {
+            AllItems,
+            MushroomsOnly,
+            ShellsOnly,
+            BananasOnly,
+            BobombsOnly,
+            Frantic
         }
     }
 }

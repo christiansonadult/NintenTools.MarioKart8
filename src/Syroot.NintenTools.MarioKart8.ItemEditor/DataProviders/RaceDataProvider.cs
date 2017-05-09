@@ -25,7 +25,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         {
             get
             {
-                DwordArrayGroup distances = (DwordArrayGroup)Program.File[(int)Section.Distances][_isAISet ? 1 : 0];
+                DwordArrayGroup distances = (DwordArrayGroup)Program.File[(int)Section.RaceDistances][_isAISet ? 1 : 0];
                 foreach (Dword[] distance in distances)
                 {
                     yield return new TextImagePair(distance[0].Int32.ToString());
