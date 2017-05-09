@@ -3,11 +3,11 @@ using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
-    internal abstract class RanksDataProviderBase : BinDataProvider
+    internal abstract class RanksDataProviderBase : DwordArrayGroupDataProvider
     {
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
-        protected override bool AllowFloats
+        protected override bool UseFloats
         {
             get { return true; }
         }

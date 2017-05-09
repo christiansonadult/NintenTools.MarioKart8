@@ -35,10 +35,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void Set_Clicked(object sender, EventArgs e)
         {
             BinDataGrid binDataGrid = SourceControl as BinDataGrid;
-            float? value = FormCalculation.Show("Set", binDataGrid.DataProvider.AllowFloats);
+            float? value = FormCalculation.Show("Set", binDataGrid.DataProvider.UseFloats);
             if (value != null)
             {
-                if (binDataGrid.DataProvider.AllowFloats)
+                if (binDataGrid.DataProvider.UseFloats)
                 {
                     foreach (DataGridViewCell cell in binDataGrid.SelectedCells)
                     {
@@ -58,10 +58,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void Add_Clicked(object sender, EventArgs e)
         {
             BinDataGrid binDataGrid = SourceControl as BinDataGrid;
-            float? value = FormCalculation.Show("Add", binDataGrid.DataProvider.AllowFloats);
+            float? value = FormCalculation.Show("Add", binDataGrid.DataProvider.UseFloats);
             if (value != null)
             {
-                if (binDataGrid.DataProvider.AllowFloats)
+                if (binDataGrid.DataProvider.UseFloats)
                 {
                     foreach (DataGridViewCell cell in binDataGrid.SelectedCells)
                     {
@@ -81,10 +81,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void Subtract_Clicked(object sender, EventArgs e)
         {
             BinDataGrid binDataGrid = SourceControl as BinDataGrid;
-            float? value = FormCalculation.Show("Subtract", binDataGrid.DataProvider.AllowFloats);
+            float? value = FormCalculation.Show("Subtract", binDataGrid.DataProvider.UseFloats);
             if (value != null)
             {
-                if (binDataGrid.DataProvider.AllowFloats)
+                if (binDataGrid.DataProvider.UseFloats)
                 {
                     foreach (DataGridViewCell cell in binDataGrid.SelectedCells)
                     {
@@ -104,10 +104,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void Multiply_Clicked(object sender, EventArgs e)
         {
             BinDataGrid binDataGrid = SourceControl as BinDataGrid;
-            float? value = FormCalculation.Show("Multiply", binDataGrid.DataProvider.AllowFloats);
+            float? value = FormCalculation.Show("Multiply", binDataGrid.DataProvider.UseFloats);
             if (value != null)
             {
-                if (binDataGrid.DataProvider.AllowFloats)
+                if (binDataGrid.DataProvider.UseFloats)
                 {
                     foreach (DataGridViewCell cell in binDataGrid.SelectedCells)
                     {
@@ -127,10 +127,10 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         private void Divide_Clicked(object sender, EventArgs e)
         {
             BinDataGrid binDataGrid = SourceControl as BinDataGrid;
-            float? value = FormCalculation.Show("Divide", binDataGrid.DataProvider.AllowFloats);
+            float? value = FormCalculation.Show("Divide", binDataGrid.DataProvider.UseFloats);
             if (value.HasValue && value != 0)
             {
-                if (binDataGrid.DataProvider.AllowFloats)
+                if (binDataGrid.DataProvider.UseFloats)
                 {
                     foreach (DataGridViewCell cell in binDataGrid.SelectedCells)
                     {

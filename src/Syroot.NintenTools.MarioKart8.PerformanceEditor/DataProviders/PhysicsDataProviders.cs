@@ -104,7 +104,7 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
             get { return (DwordArrayGroup)Program.File[(int)Section.TurboStats][0]; }
         }
 
-        protected override bool AllowFloats
+        protected override bool UseFloats
         {
             get { return false; }
         }

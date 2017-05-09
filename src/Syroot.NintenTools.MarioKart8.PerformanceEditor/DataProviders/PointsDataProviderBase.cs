@@ -4,7 +4,7 @@ using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
 {
-    internal abstract class PointsDataProviderBase : BinDataProvider
+    internal abstract class PointsDataProviderBase : DwordArrayGroupDataProvider
     {
         protected override IEnumerable<TextImagePair> Columns
         {

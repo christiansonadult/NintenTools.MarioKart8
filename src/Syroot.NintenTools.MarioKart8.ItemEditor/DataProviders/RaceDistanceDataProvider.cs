@@ -6,38 +6,20 @@ using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.ItemEditor
 {
-    internal abstract class DistanceDataProviderBase : BinDataProvider
-    {
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        internal DistanceDataProviderBase(Section section)
-        {
-        }
-
-        // ---- PROPERTIES ---------------------------------------------------------------------------------------------
-
-    }
-
-    internal class RaceDistanceDataProvider : BinDataProvider
+    internal class RaceDistanceDataProvider : DwordArrayGroupDataProvider
     {
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
         private int _raceDistanceType;
-
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        internal RaceDistanceDataProvider()
-        {
-        }
-
+        
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         protected override IEnumerable<TextImagePair> Columns
         {
             get
             {
-                yield return new TextImagePair("No AI Racers");
-                yield return new TextImagePair("With AI Racers");
+                yield return new TextImagePair("Human Racer");
+                yield return new TextImagePair("Software Racer");
             }
         }
 

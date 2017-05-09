@@ -14,17 +14,17 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
 
         private static readonly Color _accentColor = Color.FromArgb(0, 66, 200);
-        private static readonly BinDataProvider[][] _dataProviders = new BinDataProvider[][]
+        private static readonly DwordDataProvider[][] _dataProviders = new DwordDataProvider[][]
         {
             null,
-            new BinDataProvider[]
+            new DwordDataProvider[]
             {
                 new PointsDriversDataProvider(),
                 new PointsKartsDataProvider(),
                 new PointsTiresDataProvider(),
                 new PointsGlidersDataProvider()
             },
-            new BinDataProvider[]
+            new DwordDataProvider[]
             {
                 new PhysicsWeightDataProvider(),
                 new PhysicsAccelerationDataProvider(),
@@ -33,14 +33,14 @@ namespace Syroot.NintenTools.MarioKart8.PerformanceEditor
                 new PhysicsOffroadBrakeDataProvider(),
                 new PhysicTurboDataProvider()
             },
-            new BinDataProvider[]
+            new DwordDataProvider[]
             {
                 new SpeedGroundDataProvider(),
                 new SpeedWaterDataProvider(),
                 new SpeedAntigravityDataProvider(),
                 new SpeedGlidingDataProvider()
             },
-            new BinDataProvider[]
+            new DwordDataProvider[]
             {
                 new HandlingGroundDataProvider(),
                 new HandlingWaterDataProvider(),

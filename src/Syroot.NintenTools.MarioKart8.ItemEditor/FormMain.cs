@@ -15,79 +15,79 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
 
         private static readonly Color _accentColor = Color.FromArgb(200, 66, 0);
-        private static readonly BinDataProvider[][][] _dataProviders = new BinDataProvider[][][]
+        private static readonly DwordDataProvider[][][] _dataProviders = new DwordDataProvider[][][]
         {
             null,
-            new BinDataProvider[][]
+            new DwordDataProvider[][]
             {
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.All, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.AllAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.Mushrooms, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.MushroomsAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.Shells, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.ShellsAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.Bananas, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.BananasAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.Bobombs, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.BobombsAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.Frantic, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.FranticAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrix, false),
                     new RaceDataProvider(Section.RaceSets, RaceItemSet.GrandPrixAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new RaceDistanceDataProvider()
                 }
             },
-            new BinDataProvider[][]
+            new DwordDataProvider[][]
             {
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.All, false),
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.AllAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.Mushrooms, false),
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.MushroomsAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.Shells, false),
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.ShellsAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.Bananas, false),
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.BananasAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.Bobombs, false),
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.BobombsAI, true)
                 },
-                new BinDataProvider[]
+                new DwordDataProvider[]
                 {
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.Frantic, false),
                     new BattleDataProvider(Section.BattleSets, BattleItemSet.FranticAI, true)
@@ -175,7 +175,7 @@ namespace Syroot.NintenTools.MarioKart8.ItemEditor
             _crItemBattle.SelectedCategoryChanged += _crItemSet_SelectedCategoryChanged;
 
             _crPlayerType = new CategoryRow(2, _accentColor);
-            _crPlayerType.AddCategory("Player Racer");
+            _crPlayerType.AddCategory("Human Racer");
             _crPlayerType.AddCategory("Software Racer");
             _crPlayerType.SelectedCategoryChanged += _crPlayerType_SelectedCategoryChanged;
 

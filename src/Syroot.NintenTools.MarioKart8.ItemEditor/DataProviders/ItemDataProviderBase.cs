@@ -5,7 +5,7 @@ using Syroot.NintenTools.MarioKart8.EditorUI;
 
 namespace Syroot.NintenTools.MarioKart8.ItemEditor
 {
-    internal abstract class ItemDataProviderBase : BinDataProvider
+    internal abstract class ItemDataProviderBase : DwordArrayGroupDataProvider
     {
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 

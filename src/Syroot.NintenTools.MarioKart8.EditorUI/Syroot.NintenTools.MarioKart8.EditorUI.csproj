@@ -45,7 +45,9 @@
     <Compile Include="Calculation\CalculationContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGrid\BinDataProvider.cs" />
+    <Compile Include="DataGrid\DwordArrayGroupDataProvider.cs" />
+    <Compile Include="DataGrid\DwordDataProvider.cs" />
+    <Compile Include="DataGrid\DataProvider.cs" />
     <Compile Include="DataGrid\ImageDataGridColumnHeader.cs" />
     <Compile Include="DataGrid\TextImagePair.cs" />
     <Compile Include="FlatButton.cs">

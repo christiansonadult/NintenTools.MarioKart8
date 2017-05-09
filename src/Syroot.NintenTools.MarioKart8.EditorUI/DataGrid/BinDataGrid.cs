@@ -14,7 +14,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
     {
         // ---- FIELDS -------------------------------------------------------------------------------------------------
 
-        private BinDataProvider _dataProvider;
+        private DwordDataProvider _dataProvider;
         private int _minimumColumnWidth;
         private bool _isRefillingData;
         private bool _isSizingColumns;
@@ -34,9 +34,9 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets or sets the <see cref="BinDataProvider"/> which controls which and how data is display and edited.
+        /// Gets or sets the <see cref="DwordDataProvider"/> which controls which and how data is display and edited.
         /// </summary>
-        public BinDataProvider DataProvider
+        public DwordDataProvider DataProvider
         {
             get { return _dataProvider; }
             set
@@ -104,10 +104,9 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
                 // Fill in the data.
                 for (int y = 0; y < Rows.Count; y++)
                 {
-                    Dword[] dwords = _dataProvider.DataGroup[y];
                     for (int x = 0; x < Columns.Count; x++)
                     {
-                        if (_dataProvider.AllowFloats)
+                        if (_dataProvider.UseFloats)
                         {
                             Rows[y].Cells[x].Value = _dataProvider.GetValue(x, y).Single;
                         }
@@ -135,7 +134,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
         protected override void OnCellParsing(DataGridViewCellParsingEventArgs e)
         {
             // Discard invalid inputs and convert valid ones.
-            if (_dataProvider.AllowFloats)
+            if (_dataProvider.UseFloats)
             {
                 if (Single.TryParse((string)e.Value, out float f))
                 {
@@ -177,7 +176,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             }
 
             object value = Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            if (_dataProvider.AllowFloats)
+            if (_dataProvider.UseFloats)
             {
                 _dataProvider.SetValue(e.ColumnIndex, e.RowIndex, (float)value);
             }
@@ -325,7 +324,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             column.HeaderText = header.Text;
             column.HeaderCell = new ImageDataGridColumnHeader(header.Text, header.Image);
             column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            if (_dataProvider.AllowFloats)
+            if (_dataProvider.UseFloats)
             {
                 column.DefaultCellStyle.Format = "0.0000#####";
             }
@@ -347,7 +346,7 @@ namespace Syroot.NintenTools.MarioKart8.EditorUI
             bool valid = (Char.IsControl(e.KeyChar)
                 || Char.IsDigit(e.KeyChar)
                 || keyString == numberFormat.NegativeSign
-                || (_dataProvider.AllowFloats && keyString == numberFormat.NumberDecimalSeparator));
+                || (_dataProvider.UseFloats && keyString == numberFormat.NumberDecimalSeparator));
             e.Handled = !valid;
         }
     }
