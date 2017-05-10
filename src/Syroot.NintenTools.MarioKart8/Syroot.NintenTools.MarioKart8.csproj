@@ -6,7 +6,7 @@
 		<AssemblyName>Syroot.NintenTools.MarioKart8</AssemblyName>
 		<AssemblyTitle>NintenTools.MarioKart8</AssemblyTitle>
 		<Authors>Syroot</Authors>
-		<VersionPrefix>0.3.0-alpha6</VersionPrefix>
+		<VersionPrefix>0.3.1-alpha1</VersionPrefix>
 
 		<PackageId>Syroot.NintenTools.MarioKart8</PackageId>
 		<PackageTags>mk8;mario kart 8;nintendo</PackageTags>
