@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.Adjust200", "Syroot.NintenTools.MarioKart8.Adjust200\Syroot.NintenTools.MarioKart8.Adjust200.csproj", "{D90335E4-9285-4B3C-B4A2-ABFC866C741A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.BinDumper", "Syroot.NintenTools.MarioKart8.BinDumper\Syroot.NintenTools.MarioKart8.BinDumper.csproj", "{98A3D893-237B-4C0C-A5C9-33044D2AA28D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.NoLakitu", "Syroot.NintenTools.MarioKart8.NoLakitu\Syroot.NintenTools.MarioKart8.NoLakitu.csproj", "{DB42900B-CD41-4141-9CE5-3B123522B6EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syroot.NintenTools.MarioKart8.ObjDump", "Syroot.NintenTools.MarioKart8.ObjDump\Syroot.NintenTools.MarioKart8.ObjDump.csproj", "{94B82A4F-2654-44D8-8A6C-DF833AFDC1B8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D90335E4-9285-4B3C-B4A2-ABFC866C741A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90335E4-9285-4B3C-B4A2-ABFC866C741A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D90335E4-9285-4B3C-B4A2-ABFC866C741A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D90335E4-9285-4B3C-B4A2-ABFC866C741A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98A3D893-237B-4C0C-A5C9-33044D2AA28D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98A3D893-237B-4C0C-A5C9-33044D2AA28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98A3D893-237B-4C0C-A5C9-33044D2AA28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98A3D893-237B-4C0C-A5C9-33044D2AA28D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB42900B-CD41-4141-9CE5-3B123522B6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB42900B-CD41-4141-9CE5-3B123522B6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB42900B-CD41-4141-9CE5-3B123522B6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB42900B-CD41-4141-9CE5-3B123522B6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94B82A4F-2654-44D8-8A6C-DF833AFDC1B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B82A4F-2654-44D8-8A6C-DF833AFDC1B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94B82A4F-2654-44D8-8A6C-DF833AFDC1B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94B82A4F-2654-44D8-8A6C-DF833AFDC1B8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Syroot.NintenTools.MarioKart8\Syroot.NintenTools.MarioKart8.csproj" />
+	  <PackageReference Include="Syroot.NintenTools.MarioKart8" Version="0.3.1-alpha1" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syroot.NintenTools.MarioKart8.BinEditors", "Syroot.NintenTools.MarioKart8.BinEditors\Syroot.NintenTools.MarioKart8.BinEditors.csproj", "{A703B975-948E-427D-88FF-F52C545401AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syroot.NintenTools.MarioKart8.BinEditors.Item", "Syroot.NintenTools.MarioKart8.BinEditors.Item\Syroot.NintenTools.MarioKart8.BinEditors.Item.csproj", "{014323EF-E6ED-449A-A2F9-EE89B014FA03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syroot.NintenTools.MarioKart8.BinEditors.Performance", "Syroot.NintenTools.MarioKart8.BinEditors.Performance\Syroot.NintenTools.MarioKart8.BinEditors.Performance.csproj", "{488CA917-96CD-4A76-98EB-AC799A6BD263}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A703B975-948E-427D-88FF-F52C545401AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A703B975-948E-427D-88FF-F52C545401AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A703B975-948E-427D-88FF-F52C545401AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A703B975-948E-427D-88FF-F52C545401AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{014323EF-E6ED-449A-A2F9-EE89B014FA03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488CA917-96CD-4A76-98EB-AC799A6BD263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488CA917-96CD-4A76-98EB-AC799A6BD263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488CA917-96CD-4A76-98EB-AC799A6BD263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488CA917-96CD-4A76-98EB-AC799A6BD263}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
