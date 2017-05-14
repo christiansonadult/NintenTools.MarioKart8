@@ -42,7 +42,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Item
 
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.RaceDistances][_raceDistanceType]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.RaceDistances][_raceDistanceType]; }
         }
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------

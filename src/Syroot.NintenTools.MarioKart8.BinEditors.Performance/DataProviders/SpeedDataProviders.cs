@@ -21,7 +21,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.SpeedGroundStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.SpeedGroundStats][0]; }
         }
     }
 
@@ -29,7 +29,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.SpeedWaterStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.SpeedWaterStats][0]; }
         }
     }
 
@@ -37,7 +37,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.SpeedAntigravityStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.SpeedAntigravityStats][0]; }
         }
     }
 
@@ -45,7 +45,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.SpeedAirStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.SpeedAirStats][0]; }
         }
 
         protected override IEnumerable<TextImagePair> Columns

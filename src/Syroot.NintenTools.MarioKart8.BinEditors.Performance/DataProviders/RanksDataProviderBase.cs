@@ -17,7 +17,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
         {
             get
             {
-                if (Program.IsMarioKart8Deluxe)
+                if (Program.Editor.IsMK8Deluxe)
                 {
                     // Valid point ranks.
                     for (int i = 0; i < DataGroup.Count; i++)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using Syroot.NintenTools.MarioKart8.BinData;
 using Syroot.NintenTools.MarioKart8.BinEditors.DataProvider;
 
 namespace Syroot.NintenTools.MarioKart8.BinEditors.UI

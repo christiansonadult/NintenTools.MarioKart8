@@ -9,7 +9,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.WeightStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.WeightStats][0]; }
         }
 
         protected override IEnumerable<TextImagePair> Columns
@@ -27,7 +27,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.AccelerationStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.AccelerationStats][0]; }
         }
 
         protected override IEnumerable<TextImagePair> Columns
@@ -44,7 +44,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.OnroadStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.OnroadStats][0]; }
         }
 
         protected override IEnumerable<TextImagePair> Columns
@@ -60,7 +60,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.OffroadStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.OffroadStats][0]; }
         }
 
         protected override IEnumerable<TextImagePair> Columns
@@ -101,7 +101,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
     {
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.TurboStats][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.TurboStats][0]; }
         }
 
         protected override bool UseFloats
@@ -115,7 +115,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
             {
                 yield return new TextImagePair("Mini-Turbo");
                 yield return new TextImagePair("Super-Turbo");
-                if (Program.IsMarioKart8Deluxe)
+                if (Program.Editor.IsMK8Deluxe)
                 {
                     yield return new TextImagePair("Ultra-Turbo");
                 }

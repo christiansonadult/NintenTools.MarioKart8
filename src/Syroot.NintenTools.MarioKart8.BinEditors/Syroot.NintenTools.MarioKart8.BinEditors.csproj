@@ -36,6 +36,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditorAppBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\BinDataGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -49,6 +52,7 @@
     <Compile Include="DataProvider\DwordDataProvider.cs" />
     <Compile Include="DataProvider\DataProviderBase.cs" />
     <Compile Include="UI\ImageDataGridColumnHeader.cs" />
+    <Compile Include="UI\CategoryChangedEventArgs.cs" />
     <Compile Include="UI\TextImagePair.cs" />
     <Compile Include="UI\FlatButton.cs">
       <SubType>Component</SubType>

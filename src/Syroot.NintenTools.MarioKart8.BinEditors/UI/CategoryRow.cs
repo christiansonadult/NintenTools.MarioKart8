@@ -65,7 +65,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.UI
         /// <summary>
         /// Raised when another category has been selected.
         /// </summary>
-        public event EventHandler SelectedCategoryChanged;
+        internal event EventHandler<CategoryChangedEventArgs> SelectedCategoryChanged;
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
@@ -147,8 +147,9 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.UI
             }
             set
             {
+                CategoryChangedEventArgs e = new CategoryChangedEventArgs(_selectedCategory, value);
                 _selectedCategory = value;
-                SelectedCategoryChanged?.Invoke(this, EventArgs.Empty);
+                SelectedCategoryChanged?.Invoke(this, e);
                 Refresh();
             }
         }
@@ -170,15 +171,16 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.UI
         }
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
-        
+
         /// <summary>
-        /// Adds a category with the given display <paramref name="text"/>.
+        /// Adds a category with the given display <paramref name="text"/> and optionally disables it.
         /// </summary>
         /// <param name="text">The text to display for the category.</param>
-        public void AddCategory(string text)
+        /// <param name="enabled"><c>true</c> to enable the category; otherwise <c>false</c>.</param>
+        public void AddCategory(string text, bool enabled = true)
         {
             _categoryTexts.Add(text);
-            _categoryStates.Add(true);
+            _categoryStates.Add(enabled);
             Refresh();
         }
 
@@ -201,6 +203,16 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.UI
         {
             _categoryTexts.RemoveAt(index);
             _categoryStates.RemoveAt(index);
+            Refresh();
+        }
+
+        /// <summary>
+        /// Removes all categories which were added to this control.
+        /// </summary>
+        public void ClearCategories()
+        {
+            _categoryTexts.Clear();
+            _categoryStates.Clear();
             Refresh();
         }
 

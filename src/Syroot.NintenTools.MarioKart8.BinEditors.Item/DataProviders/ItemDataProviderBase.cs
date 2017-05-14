@@ -47,7 +47,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Item
                 yield return new TextImagePair("3 Bananas", Program.R.GetBitmap("Items.Banana3.png"));
                 yield return new TextImagePair("3 Green Shells", Program.R.GetBitmap("Items.ShellGreen3.png"));
                 yield return new TextImagePair("3 Red Shells", Program.R.GetBitmap("Items.ShellRed3.png"));
-                if (Program.IsMarioKart8Deluxe)
+                if (Program.Editor.IsMK8Deluxe)
                 {
                     yield return new TextImagePair("Crazy Eight", Program.R.GetBitmap("Items.EightDeluxe.png"));
                     yield return new TextImagePair("Boo", Program.R.GetBitmap("Items.Boo.png"));
@@ -67,7 +67,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Item
 
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)_section][_set]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)_section][_set]; }
         }
     }
 }

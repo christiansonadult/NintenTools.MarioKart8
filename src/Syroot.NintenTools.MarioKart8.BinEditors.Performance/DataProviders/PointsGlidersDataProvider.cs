@@ -32,7 +32,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
 
         protected override DwordArrayGroup DataGroup
         {
-            get { return (DwordArrayGroup)Program.File[(int)Section.GliderPoints][0]; }
+            get { return (DwordArrayGroup)Program.Editor.BinFile[(int)Section.GliderPoints][0]; }
         }
         
         protected override IEnumerable<TextImagePair> Rows

@@ -1,12 +1,12 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Mario Kart 8 Performance Editor")]
-[assembly: AssemblyDescription("Mario Kart 8 Performance Editor")]
+[assembly: AssemblyTitle("MK8 Performance Editor")]
+[assembly: AssemblyDescription("MK8 Performance Editor")]
 [assembly: AssemblyCompany("(c) Syroot")]
-[assembly: AssemblyProduct("Mario Kart 8 Performance Editor")]
+[assembly: AssemblyProduct("MK8 Performance Editor")]
 [assembly: AssemblyCopyright("MIT")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.5.0.0")]
+[assembly: AssemblyFileVersion("1.5.0.0")]
 [assembly: ComVisible(false)]
 [assembly: Guid("488ca917-96cd-4a76-98eb-ac799a6bd263")]
