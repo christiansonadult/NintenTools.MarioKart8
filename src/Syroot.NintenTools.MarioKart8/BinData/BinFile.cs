@@ -19,7 +19,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData
     /// section, the size of the elements can be computed by this class to provide at least untyped byte arrays.
     /// </remarks>
     [DebuggerDisplay(nameof(BinFile) + " {Identifier}, {Count} sections")]
-    public class BinFile : IList<SectionBase>
+    public class BinFile : IList<SectionBase>, ILoadableFile, ISaveableFile
     {
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
         
@@ -32,24 +32,21 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinFile"/> class from the file with the given name.
-        /// </summary>
-        /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
-        public BinFile(string fileName)
-        {
-            using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                Load(stream);
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BinFile"/> class from the given stream.
         /// </summary>
         /// <param name="stream">The stream from which the instance will be loaded.</param>
         public BinFile(Stream stream)
         {
             Load(stream);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinFile"/> class from the file with the given name.
+        /// </summary>
+        /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
+        public BinFile(string fileName)
+        {
+            Load(fileName);
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -131,6 +128,119 @@ namespace Syroot.NintenTools.MarioKart8.BinData
         }
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Loads the data from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> to load the data from.</param>
+        public void Load(Stream stream)
+        {
+            using (BinaryDataReader reader = new BinaryDataReader(stream, Encoding.ASCII, true))
+            {
+                // Detect the byte order with the version number.
+                using (reader.TemporarySeek(12))
+                {
+                    int version = reader.ReadInt32();
+                    ByteOrder = version == 0x000003E8 ? ByteOrder.LittleEndian : ByteOrder.BigEndian;
+                }
+                reader.ByteOrder = ByteOrder;
+
+                // Read the file header providing information about the section count and offsets.
+                Identifier = reader.ReadString(4);
+                int fileSize = reader.ReadInt32(); // Slightly off at times. Not stored in the class.
+                int sectionCount = reader.ReadInt16();
+                Unknown = reader.ReadInt16();
+                Version = reader.ReadInt32();
+                int[] sectionOffsets = reader.ReadInt32s(sectionCount);
+
+                // Read in all the sections.
+                _list = new List<SectionBase>();
+                int fileHeaderSize = (int)reader.Position;
+                for (int i = 0; i < sectionCount; i++)
+                {
+                    // Compute the length of the section data (without its header) and instantiate it.
+                    int dataStart = fileHeaderSize + sectionOffsets[i] + _sectionHeaderSize;
+                    int dataEnd;
+                    if (i < sectionCount - 1)
+                    {
+                        dataEnd = fileHeaderSize + sectionOffsets[i + 1];
+                    }
+                    else
+                    {
+                        dataEnd = (int)reader.Length;
+                    }
+                    int sectionLength = dataEnd - dataStart;
+                    Add(SectionBase.Create(reader, sectionLength));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads the data from the given file.
+        /// </summary>
+        /// <param name="fileName">The name of the file to load the data from.</param>
+        public void Load(string fileName)
+        {
+            Load(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read));
+        }
+
+        /// <summary>
+        /// Saves the data into the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> to save the data to.</param>
+        public void Save(Stream stream)
+        {
+            using (BinaryDataWriter writer = new BinaryDataWriter(stream, Encoding.ASCII, true))
+            {
+                writer.ByteOrder = ByteOrder;
+
+                // Write the file header.
+                writer.Write(Identifier, BinaryStringFormat.NoPrefixOrTermination);
+                Offset fileSizeOffset = writer.ReserveOffset();
+                writer.Write((short)Count);
+                writer.Write(Unknown);
+                writer.Write(Version);
+                Offset[] sectionOffsets = writer.ReserveOffset(Count);
+                int headerLength = (int)writer.Position;
+
+                // Write all the sections.
+                int sectionIndex = 0;
+                foreach (SectionBase section in this)
+                {
+                    // Fill in the offset to this section.
+                    sectionOffsets[sectionIndex].Satisfy((int)writer.Position - headerLength);
+
+                    // Write the section header.
+                    writer.Write(section.Name, BinaryStringFormat.NoPrefixOrTermination);
+                    writer.Write(section.ElementCount);
+                    writer.Write((short)section.Count);
+                    writer.Write(section.SectionType, false);
+
+                    // Write the section groups, each of them is 4-byte aligned.
+                    foreach (GroupBase group in section)
+                    {
+                        group.Save(writer);
+                        writer.Align(4);
+                    }
+
+                    sectionIndex++;
+                }
+
+                fileSizeOffset.Satisfy();
+            }
+        }
+
+        /// <summary>
+        /// Saves the data in the given file.
+        /// </summary>
+        /// <param name="fileName">The name of the file to save the data in.</param>
+        public void Save(string fileName)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                Save(stream);
+            }
+        }
 
         /// <summary>
         /// Adds a <see cref="SectionBase"/> to the BIN file.
@@ -243,107 +353,7 @@ namespace Syroot.NintenTools.MarioKart8.BinData
             _list.RemoveAt(index);
         }
 
-        /// <summary>
-        /// Saves the data into the file with the given name.
-        /// </summary>
-        /// <param name="fileName">The name of the file in which the data will be stored.</param>
-        public void Save(string fileName)
-        {
-            using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                Save(stream);
-            }
-        }
-
-        /// <summary>
-        /// Saves the data into the the given stream.
-        /// </summary>
-        /// <param name="stream">The stream in which the data will be stored.</param>
-        public void Save(Stream stream)
-        {
-            using (BinaryDataWriter writer = new BinaryDataWriter(stream, Encoding.ASCII, true))
-            {
-                writer.ByteOrder = ByteOrder;
-
-                // Write the file header.
-                writer.Write(Identifier, BinaryStringFormat.NoPrefixOrTermination);
-                Offset fileSizeOffset = writer.ReserveOffset();
-                writer.Write((short)Count);
-                writer.Write(Unknown);
-                writer.Write(Version);
-                Offset[] sectionOffsets = writer.ReserveOffset(Count);
-                int headerLength = (int)writer.Position;
-
-                // Write all the sections.
-                int sectionIndex = 0;
-                foreach (SectionBase section in this)
-                {
-                    // Fill in the offset to this section.
-                    sectionOffsets[sectionIndex].Satisfy((int)writer.Position - headerLength);
-
-                    // Write the section header.
-                    writer.Write(section.Name, BinaryStringFormat.NoPrefixOrTermination);
-                    writer.Write(section.ElementCount);
-                    writer.Write((short)section.Count);
-                    writer.Write(section.SectionType, false);
-
-                    // Write the section groups, each of them is 4-byte aligned.
-                    foreach (GroupBase group in section)
-                    {
-                        group.Save(writer);
-                        writer.Align(4);
-                    }
-
-                    sectionIndex++;
-                }
-                
-                fileSizeOffset.Satisfy();
-            }
-        }
-        
         // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
-
-        private void Load(Stream stream)
-        {
-            using (BinaryDataReader reader = new BinaryDataReader(stream, Encoding.ASCII, true))
-            {
-                // Detect the byte order with the version number.
-                using (reader.TemporarySeek(12))
-                {
-                    int version = reader.ReadInt32();
-                    ByteOrder = version == 0x000003E8 ? ByteOrder.LittleEndian : ByteOrder.BigEndian;
-                }
-                reader.ByteOrder = ByteOrder;
-
-                // Read the file header providing information about the section count and offsets.
-                Identifier = reader.ReadString(4);
-                int fileSize = reader.ReadInt32(); // Slightly off at times. Not stored in the class.
-                int sectionCount = reader.ReadInt16();
-                Unknown = reader.ReadInt16();
-                Version = reader.ReadInt32();
-                int[] sectionOffsets = reader.ReadInt32s(sectionCount);
-
-                // Read in all the sections.
-                _list = new List<SectionBase>();
-                int fileHeaderSize = (int)reader.Position;
-                for (int i = 0; i < sectionCount; i++)
-                {
-                    // Compute the length of the section data (without its header) and instantiate it.
-                    int dataStart = fileHeaderSize + sectionOffsets[i] + _sectionHeaderSize;
-                    int dataEnd;
-                    if (i < sectionCount - 1)
-                    {
-                        dataEnd = fileHeaderSize + sectionOffsets[i + 1];
-                    }
-                    else
-                    {
-                        dataEnd = (int)reader.Length;
-                    }
-                    int sectionLength = dataEnd - dataStart;
-                    Add(SectionBase.Create(reader, sectionLength));
-                }
-            }
-        }
         
         private SectionBase GetSectionByName(string name)
         {

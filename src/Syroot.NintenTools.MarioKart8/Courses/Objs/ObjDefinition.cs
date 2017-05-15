@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Syroot.NintenTools.Byaml.Serialization;
-using Syroot.NintenTools.MarioKart8.Courses;
 
-namespace Syroot.NintenTools.MarioKart8.Objs
+namespace Syroot.NintenTools.MarioKart8.Courses.Objs
 {
     /// <summary>
     /// Represents an entry of the objflow.byaml file, describing how an Obj is loaded and behaves in-game.

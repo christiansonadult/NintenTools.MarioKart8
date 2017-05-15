@@ -62,12 +62,13 @@ struct ModelOctreeNode;
 struct ModelOctreeNode(uint parentPosition)
 {
     uint key <format=hex>;
-    local uint offset <hidden=true>; offset = key & 0x3FFFFFFF; // Offset in bytes relative to parent node start.
-    local uint currentPos <hidden=true>; currentPos = FTell();
+    local uint offset <hidden=true>; offset = parentPosition + key & 0x3FFFFFFF; // Offset in bytes relative to parent node start.
+    local uint oldPos <hidden=true>; oldPos = FTell();
+    FSeek(offset);
     if (key >> 31)
     {
         // Node is a leaf and key points to triangle list starting with a separator.
-        FSeek(parentPosition + offset + 2);
+        FSeek(FTell() + 2);
         local ushort lastIndex <hidden=true>;
         while (lastIndex != 0xFFFF)
         {
@@ -78,10 +79,9 @@ struct ModelOctreeNode(uint parentPosition)
     else
     {
         // Node is a branch and points to 8 child nodes.
-        FSeek(parentPosition + offset);
-        ModelOctreeNode children(parentPosition + offset)[8] <optimize=false>;
+        ModelOctreeNode children(offset)[8] <optimize=false>;
     }
-    FSeek(currentPos);
+    FSeek(oldPos);
 };
 
 struct Triangle

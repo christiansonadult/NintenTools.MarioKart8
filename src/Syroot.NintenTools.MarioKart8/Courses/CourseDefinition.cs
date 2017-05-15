@@ -9,21 +9,9 @@ namespace Syroot.NintenTools.MarioKart8.Courses
     /// a course.
     /// </summary>
     [ByamlObject]
-    public class CourseDefinition : IByamlSerializable
+    public class CourseDefinition : IByamlSerializable, ILoadableFile, ISaveableFile
     {
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CourseDefinition"/> class from the file with the given name.
-        /// </summary>
-        /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
-        public CourseDefinition(string fileName)
-        {
-            using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                Load(stream);
-            }
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CourseDefinition"/> class from the given stream.
@@ -32,6 +20,15 @@ namespace Syroot.NintenTools.MarioKart8.Courses
         public CourseDefinition(Stream stream)
         {
             Load(stream);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CourseDefinition"/> class from the file with the given name.
+        /// </summary>
+        /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
+        public CourseDefinition(string fileName)
+        {
+            Load(fileName);
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -236,21 +233,51 @@ namespace Syroot.NintenTools.MarioKart8.Courses
         // ---- METHODS(PUBLIC) ---------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Saves the definition into the file with the given name.
+        /// Loads the data from the given <paramref name="stream"/>.
         /// </summary>
-        /// <param name="fileName">The name of the file in which the definitions will be stored.</param>
-        public void Save(string fileName)
+        /// <param name="stream">The <see cref="Stream"/> to load the data from.</param>
+        public void Load(Stream stream)
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+            // Load all the values from the stream.
+            ByamlSerializer serializer = new ByamlSerializer(new ByamlSerializerSettings()
             {
-                Save(stream);
-            }
+                SupportPaths = true,
+                Version = ByamlVersion.Version1
+            });
+            serializer.Deserialize(stream, this);
+
+            // After loading all the instances, allow references to be resolved.
+            Areas?.ForEach(x => x.DeserializeReferences(this));
+
+            EnemyPaths?.ForEach(x => x.DeserializeReferences(this));
+            GCameraPaths?.ForEach(x => x.DeserializeReferences(this));
+            GlidePaths?.ForEach(x => x.DeserializeReferences(this));
+            GravityPaths?.ForEach(x => x.DeserializeReferences(this));
+            ItemPaths?.ForEach(x => x.DeserializeReferences(this));
+            JugemPaths?.ForEach(x => x.DeserializeReferences(this));
+            LapPaths?.ForEach(x => x.DeserializeReferences(this));
+            ObjPaths?.ForEach(x => x.DeserializeReferences(this));
+            Paths?.ForEach(x => x.DeserializeReferences(this));
+            PullPaths?.ForEach(x => x.DeserializeReferences(this));
+
+            Objs.ForEach(x => x.DeserializeReferences(this));
+
+            ReplayCameras?.ForEach(x => x.DeserializeReferences(this));
         }
 
         /// <summary>
-        /// Saves the definition into the the given stream.
+        /// Loads the data from the given file.
         /// </summary>
-        /// <param name="stream">The stream in which the definitions will be stored.</param>
+        /// <param name="fileName">The name of the file to load the data from.</param>
+        public void Load(string fileName)
+        {
+            Load(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read));
+        }
+        
+        /// <summary>
+        /// Saves the data into the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> to save the data to.</param>
         public void Save(Stream stream)
         {
             // Before saving all the instances, allow references to be resolved.
@@ -276,6 +303,18 @@ namespace Syroot.NintenTools.MarioKart8.Courses
                 Version = ByamlVersion.Version1
             });
             serializer.Serialize(stream, this);
+        }
+
+        /// <summary>
+        /// Saves the data in the given file.
+        /// </summary>
+        /// <param name="fileName">The name of the file to save the data in.</param>
+        public void Save(string fileName)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                Save(stream);
+            }
         }
 
         /// <summary>
@@ -306,37 +345,6 @@ namespace Syroot.NintenTools.MarioKart8.Courses
             {
                 dictionary["OBJPrm" + i.ToString()] = ObjParams[i - 1];
             }
-        }
-
-        // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
-
-        private void Load(Stream stream)
-        {
-            // Load all the values from the stream.
-            ByamlSerializer serializer = new ByamlSerializer(new ByamlSerializerSettings()
-            {
-                SupportPaths = true,
-                Version = ByamlVersion.Version1
-            });
-            serializer.Deserialize(stream, this);
-
-            // After loading all the instances, allow references to be resolved.
-            Areas?.ForEach(x => x.DeserializeReferences(this));
-
-            EnemyPaths?.ForEach(x => x.DeserializeReferences(this));
-            GCameraPaths?.ForEach(x => x.DeserializeReferences(this));
-            GlidePaths?.ForEach(x => x.DeserializeReferences(this));
-            GravityPaths?.ForEach(x => x.DeserializeReferences(this));
-            ItemPaths?.ForEach(x => x.DeserializeReferences(this));
-            JugemPaths?.ForEach(x => x.DeserializeReferences(this));
-            LapPaths?.ForEach(x => x.DeserializeReferences(this));
-            ObjPaths?.ForEach(x => x.DeserializeReferences(this));
-            Paths?.ForEach(x => x.DeserializeReferences(this));
-            PullPaths?.ForEach(x => x.DeserializeReferences(this));
-
-            Objs.ForEach(x => x.DeserializeReferences(this));
-
-            ReplayCameras?.ForEach(x => x.DeserializeReferences(this));
         }
     }
 

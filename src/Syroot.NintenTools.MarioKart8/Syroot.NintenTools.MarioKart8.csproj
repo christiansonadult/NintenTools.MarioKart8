@@ -6,11 +6,11 @@
 		<AssemblyName>Syroot.NintenTools.MarioKart8</AssemblyName>
 		<AssemblyTitle>NintenTools.MarioKart8</AssemblyTitle>
 		<Authors>Syroot</Authors>
-		<VersionPrefix>0.3.1-alpha1</VersionPrefix>
+		<VersionPrefix>0.4.0-alpha1</VersionPrefix>
 
 		<PackageId>Syroot.NintenTools.MarioKart8</PackageId>
 		<PackageTags>mk8;mario kart 8;nintendo</PackageTags>
-		<PackageReleaseNotes>Relicensed under MIT, update tooling.</PackageReleaseNotes>
+		<PackageReleaseNotes>Add support for loading KCL files.</PackageReleaseNotes>
 		<PackageIconUrl>https://raw.githubusercontent.com/Syroot/NintenTools.MarioKart8/master/res/Logo.png</PackageIconUrl>
 		<PackageProjectUrl>https://github.com/Syroot/NintenTools.MarioKart8</PackageProjectUrl>
 		<PackageLicenseUrl>https://raw.githubusercontent.com/Syroot/NintenTools.MarioKart8/master/LICENSE</PackageLicenseUrl>
@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Syroot.IO.BinaryData" Version="2.0.0-rc1" />
+		<PackageReference Include="Syroot.Maths" Version="1.4.1-alpha1" />
 		<PackageReference Include="Syroot.NintenTools.Byaml" Version="2.*" />
 	</ItemGroup>
 
