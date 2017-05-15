@@ -4,9 +4,6 @@ This is a collection of .NET libraries and tools to handle typical Mario Kart 8 
 
 The library is available as a [NuGet package](https://www.nuget.org/packages/Syroot.NintenTools.MarioKart8).
 
-Usage
-=====
-
 Right now, the following file formats and files are supported:
 
 | Description             | File Name(s)     | Load   | Save | Notes                                                                |
