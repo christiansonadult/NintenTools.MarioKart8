@@ -1,6 +1,6 @@
 # NintenTools.MarioKart8
 
-This is a collection of .NET libraries and tools to handle typical Mario Kart 8 (Deluxe) file formats, wrapping them in object oriented libraries and programs to handle them, closely trying to resemble what the original game developer tools might have provided to create the files.
+The goal of this .NET library is to provide managed access to data stored in Mario Kart 8 (Deluxe) specific file formats. A collection of tools, based on the library, is offered aswell.
 
 The library is available as a [NuGet package](https://www.nuget.org/packages/Syroot.NintenTools.MarioKart8).
 
