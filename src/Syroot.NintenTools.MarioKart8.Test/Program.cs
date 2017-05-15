@@ -28,13 +28,12 @@ namespace Syroot.NintenTools.MarioKart8.Test
             {
                 foreach (string fileName in Directory.GetFiles(searchPath, searchPattern, SearchOption.AllDirectories))
                 {
-                    Console.Write($"Loading {fileName}... ");
+                    Console.Write($"Loading {fileName}...");
                     T file = new T();
                     _stopwatch.Restart();
                     file.Load(fileName);
                     _stopwatch.Stop();
-                    Console.WriteLine($"{_stopwatch.ElapsedMilliseconds}ms");
-
+                    Console.WriteLine($" {_stopwatch.ElapsedMilliseconds}ms");
                 }
             }
         }

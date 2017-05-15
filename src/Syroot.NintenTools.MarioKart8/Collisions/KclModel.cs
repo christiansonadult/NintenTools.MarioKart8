@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Syroot.BinaryData;
@@ -7,6 +6,9 @@ using Syroot.NintenTools.MarioKart8.IO;
 
 namespace Syroot.NintenTools.MarioKart8.Collisions
 {
+    /// <summary>
+    /// Represents a model referenced in a <see cref="KclFile"/> which can hold up to 65535 triangles.
+    /// </summary>
     public class KclModel : ILoadableFile, ISaveableFile
     {
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
@@ -32,23 +34,29 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets or sets an unknown value.
+        /// Gets an unknown value.
         /// </summary>
-        public float Unknown1 { get; set; }
+        public float Unknown1 { get; private set; }
 
         /// <summary>
         /// Gets or sets the smallest coordinate of the cube spanned by the model.
         /// </summary>
-        public Vector3F MinCoordinate { get; set; }
-
-        public Vector3 CoordinateMask { get; set; }
-
-        public Vector3 CoordinateShift { get; set; }
+        public Vector3F MinCoordinate { get; private set; }
 
         /// <summary>
-        /// Gets or sets an unknown value.
+        /// Gets the coordinate mask required to compute indices into the octree.
         /// </summary>
-        public float Unknown2 { get; set; }
+        public Vector3 CoordinateMask { get; private set; }
+
+        /// <summary>
+        /// Gets the coordinate shift required to compute indices into the octree.
+        /// </summary>
+        public Vector3 CoordinateShift { get; private set; }
+
+        /// <summary>
+        /// Gets an unknown value.
+        /// </summary>
+        public float Unknown2 { get; private set; }
 
         /// <summary>
         /// Gets the array of vertex positions.
@@ -118,8 +126,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 ModelOctreeRoots = new ModelOctreeNode[nodeCount];
                 for (int i = 0; i < nodeCount; i++)
                 {
-                    ModelOctreeRoots[i] = new ModelOctreeNode(null, modelPosition + octreeOffset, reader.ReadUInt32(),
-                        reader);
+                    ModelOctreeRoots[i] = new ModelOctreeNode(null, reader, modelPosition + octreeOffset);
                 }
 
                 // Reader is now behind the last octree key, not at the end of the model / behind the last separator.

@@ -26,6 +26,7 @@ namespace Syroot.NintenTools.MarioKart8.IO
         /// Reads <see cref="Triangle"/> instances from the current stream and returns them.
         /// </summary>
         /// <param name="self">The extended <see cref="BinaryDataReader"/>.</param>
+        /// <param name="count">The number of instances to read.</param>
         /// <returns>The <see cref="Triangle"/> instances.</returns>
         internal static Triangle[] ReadTriangles(this BinaryDataReader self, int count)
         {
@@ -51,6 +52,7 @@ namespace Syroot.NintenTools.MarioKart8.IO
         /// Reads <see cref="Vector3"/> instances from the current stream and returns them.
         /// </summary>
         /// <param name="self">The extended <see cref="BinaryDataReader"/>.</param>
+        /// <param name="count">The number of instances to read.</param>
         /// <returns>The <see cref="Vector3"/> instances.</returns>
         internal static Vector3[] ReadVector3s(this BinaryDataReader self, int count)
         {
@@ -76,6 +78,7 @@ namespace Syroot.NintenTools.MarioKart8.IO
         /// Reads <see cref="Vector3F"/> instances from the current stream and returns them.
         /// </summary>
         /// <param name="self">The extended <see cref="BinaryDataReader"/>.</param>
+        /// <param name="count">The number of instances to read.</param>
         /// <returns>The <see cref="Vector3F"/> instances.</returns>
         internal static Vector3F[] ReadVector3Fs(this BinaryDataReader self, int count)
         {

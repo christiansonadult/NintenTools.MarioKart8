@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Syroot.BinaryData;
 using Syroot.Maths;
 using Syroot.NintenTools.MarioKart8.IO;
@@ -17,7 +16,10 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         private const int _signature = 0x02020000;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KclFile"/> class.
+        /// </summary>
         public KclFile()
         {
         }
@@ -43,21 +45,24 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets or sets the smallest coordinate spanned by the octree in this file.
+        /// Gets the smallest coordinate spanned by the octree in this file.
         /// </summary>
-        public Vector3F MinCoordinate { get; set; }
+        public Vector3F MinCoordinate { get; private set; }
 
         /// <summary>
-        /// Gets or sets the biggest coordinate spanned by the octree in this file.
+        /// Gets the biggest coordinate spanned by the octree in this file.
         /// </summary>
-        public Vector3F MaxCoordinate { get; set; }
-        
-        public Vector3 CoordinateShift { get; set; }
+        public Vector3F MaxCoordinate { get; private set; }
 
         /// <summary>
-        /// Gets or sets an unknown value.
+        /// Gets the coordinate shift required to compute indices into the octree.
         /// </summary>
-        public int Unknown { get; set; }
+        public Vector3 CoordinateShift { get; private set; }
+
+        /// <summary>
+        /// Gets an unknown value.
+        /// </summary>
+        public int Unknown { get; private set; }
 
         /// <summary>
         /// Gets the root node of the course model octree.
@@ -96,7 +101,11 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
 
                 // Read the model octree.
                 reader.Position = octreeOffset; // Mostly unrequired, data is successive.
-                CourseOctreeRoot = new CourseOctreeNode(null, 0x00000008, reader);
+                CourseOctreeRoot = new CourseOctreeNode();
+                for (int i = 0; i < CourseOctreeRoot.Children.Length; i++)
+                {
+                    CourseOctreeRoot.Children[i] = new CourseOctreeNode(CourseOctreeRoot, reader);
+                }
 
                 // Read the model offsets.
                 reader.Position = modelOffsetArrayOffset; // Mostly unrequired, data is successive.
