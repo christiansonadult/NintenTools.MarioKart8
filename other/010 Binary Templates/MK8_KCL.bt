@@ -50,7 +50,7 @@ struct CourseOctreeNode
         case 0:
             CourseOctreeNode children[8] <optimize=false>;
             break;
-        case 1:
+        case 2:
             local uint modelIndex = key & 0x00FFFFFF;
             break;
         case 3:
