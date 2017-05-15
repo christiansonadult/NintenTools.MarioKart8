@@ -8,7 +8,7 @@
 //  Category: Software
 // File Mask: *.kcl
 //  ID Bytes: 20 20 00 00
-//   History: 
+//   History:
 //   0.5.0  2017-05-15  Parse octrees.
 //   0.1.0  2016-06-20  Initial version.
 //------------------------------------------------
@@ -45,15 +45,15 @@ struct CourseOctreeNode;
 struct CourseOctreeNode
 {
     uint key <format=hex>;
-    switch (key >> 24)
+    switch (key >> 30)
     {
-        case 0x00:
+        case 0:
             CourseOctreeNode children[8] <optimize=false>;
             break;
-        case 0x80:
+        case 1:
             local uint modelIndex = key & 0x00FFFFFF;
             break;
-        case 0xC0:
+        case 3:
             break;
     }
 };
@@ -126,11 +126,10 @@ struct Model
 
     // Read the octree.
     FSeek(modelPosition + octreeOffset);
-    local int nodeCount = (int)(
-        ((~coordinateMask.x >> (int)coordinateShift.x) + 1) *
-        ((~coordinateMask.y >> (int)coordinateShift.x) + 1) *
-        ((~coordinateMask.z >> (int)coordinateShift.x) + 1));
-    Printf("Loading octree at 0x%08X with %d nodes...", modelPosition + octreeOffset, nodeCount);
+    local int nodeCount <hidden=true>; nodeCount
+        = ((~coordinateMask.x >> coordinateShift.x) + 1)
+        * ((~coordinateMask.y >> coordinateShift.x) + 1)
+        * ((~coordinateMask.z >> coordinateShift.x) + 1);
     ModelOctreeNode octree(modelPosition + octreeOffset)[nodeCount] <fgcolor=0xFF0000, optimize=false>;
 };
 
