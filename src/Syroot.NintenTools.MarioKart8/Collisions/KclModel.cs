@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Syroot.BinaryData;
@@ -109,9 +109,8 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
         public void Load(Stream stream, bool loadOctree)
         {
-            using (BinaryDataReader reader = new BinaryDataReader(stream, true))
+            using (BinaryDataReader reader = new BinaryDataReader(stream, true) { ByteOrder = ByteOrder.BigEndian })
             {
-                reader.ByteOrder = ByteOrder.BigEndian;
                 long modelPosition = reader.Position;
 
                 // Read the header.
@@ -177,8 +176,87 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <param name="stream">The <see cref="Stream"/> to save the data to.</param>
         public void Save(Stream stream)
         {
-        }
+            using (BinaryDataWriter writer = new BinaryDataWriter(stream, true) { ByteOrder = ByteOrder.BigEndian })
+            {
+                long modelPosition = writer.Position;
 
+                // Write the header.
+                Offset positionArrayOffset = writer.ReserveOffset();
+                Offset normalArrayOffset = writer.ReserveOffset();
+                Offset triangleArrayOffset = writer.ReserveOffset();
+                Offset octreeOffset = writer.ReserveOffset();
+                writer.Write(Unknown1);
+                writer.Write(MinCoordinate);
+                writer.Write(CoordinateMask);
+                writer.Write(CoordinateShift);
+                writer.Write(Unknown2);
+
+                // Write the positions.
+                positionArrayOffset.Satisfy((int)(writer.Position - modelPosition));
+                writer.Write(Positions);
+
+                // Write the normals.
+                normalArrayOffset.Satisfy((int)(writer.Position - modelPosition));
+                writer.Write(Normals);
+
+                // Write the triangles.
+                triangleArrayOffset.Satisfy((int)(writer.Position - modelPosition));
+                writer.Write(Triangles);
+
+                // Write the octree.
+                int octreeOffsetValue = (int)(writer.Position - modelPosition);
+                octreeOffset.Satisfy(octreeOffsetValue);
+                // Write the nodes first, and compute the correct offsets into the triangle lists or to child nodes.
+                // Nintendo writes child nodes behind the current node, so they need to be queued.
+                // TODO: Combine empty lists into a single 0xFFFF separator.
+                int triangleListsPosition = GetNodeCount(ModelOctreeRoots) * sizeof(uint);
+                Queue<ModelOctreeNode[]> queuedNodes = new Queue<ModelOctreeNode[]>();
+                queuedNodes.Enqueue(ModelOctreeRoots);
+                while (queuedNodes.Count > 0)
+                {
+                    ModelOctreeNode[] nodes = queuedNodes.Dequeue();
+                    long offset = writer.Position - modelPosition - octreeOffsetValue;
+                    foreach (ModelOctreeNode node in nodes)
+                    {
+                        if (node.Children == null)
+                        {
+                            // Node is a leaf and points to triangle index list.
+                            long triangleListOffset = triangleListsPosition - offset - sizeof(ushort);
+                            node.Key = (uint)ModelOctreeNode.Flags.Values | (uint)triangleListOffset;
+                            triangleListsPosition += (node.TriangleIndices.Count + 1) * sizeof(ushort);
+                        }
+                        else
+                        {
+                            // Node is a branch and points to 8 children.
+                            node.Key = (uint)(nodes.Length + queuedNodes.Count * 8) * sizeof(uint);
+                            queuedNodes.Enqueue(node.Children);
+                        }
+                        writer.Write(node.Key);
+                    }
+                }
+                // Iterate through the nodes again and write their triangle lists now.
+                queuedNodes.Enqueue(ModelOctreeRoots);
+                while (queuedNodes.Count > 0)
+                {
+                    ModelOctreeNode[] nodes = queuedNodes.Dequeue();
+                    foreach (ModelOctreeNode node in nodes)
+                    {
+                        if (node.Children == null)
+                        {
+                            // Node is a leaf and points to triangle index list.
+                            writer.Write(node.TriangleIndices);
+                            writer.Write((ushort)0xFFFF);
+                        }
+                        else
+                        {
+                            // Node is a branch and points to 8 children.
+                            queuedNodes.Enqueue(node.Children);
+                        }
+                    }
+                }
+            }
+        }
+        
         /// <summary>
         /// Saves the data in the given file.
         /// </summary>
@@ -189,6 +267,21 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
             {
                 Save(stream);
             }
+        }
+
+        // ---- METHODS (PRIVATE) --------------------------------------------------------------------------------------
+
+        private int GetNodeCount(ModelOctreeNode[] nodes)
+        {
+            int count = nodes.Length;
+            foreach (ModelOctreeNode node in nodes)
+            {
+                if (node.Children != null)
+                {
+                    count += GetNodeCount(node.Children);
+                }
+            }
+            return count;
         }
     }
 }

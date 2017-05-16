@@ -1,5 +1,3 @@
-using System;
-
 namespace Syroot.NintenTools.MarioKart8
 {
     /// <summary>

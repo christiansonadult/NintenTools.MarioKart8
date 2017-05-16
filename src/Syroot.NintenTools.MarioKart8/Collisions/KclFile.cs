@@ -178,10 +178,11 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 octreeOffset.Satisfy();
                 foreach (CourseOctreeNode rootChild in CourseOctreeRoot)
                 {
-                    CourseOctreeRoot.Save(writer);
+                    rootChild.Save(writer);
                 }
 
                 // Write the model offsets.
+                modelOffsetArrayOffset.Satisfy();
                 Offset[] modelOffsets = writer.ReserveOffset(Models.Count);
 
                 // Write the models.
@@ -189,7 +190,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 foreach (KclModel model in Models)
                 {
                     modelOffsets[i++].Satisfy();
-                    //model.Save(stream);
+                    model.Save(stream);
                     writer.Align(4);
                 }
             }

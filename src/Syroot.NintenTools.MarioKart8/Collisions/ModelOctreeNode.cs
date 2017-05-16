@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,9 +9,9 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
     /// <summary>
     /// Represents a node in a model triangle octree.
     /// </summary>
-    [DebuggerDisplay(nameof(ModelOctreeNode) + " {TriangleIndices?.Length} Triangles")]
+    [DebuggerDisplay(nameof(ModelOctreeNode) + " {TriangleIndices?.Count} Triangles")]
     public class ModelOctreeNode : OctreeNodeBase<ModelOctreeNode>
-    {
+    {   
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
@@ -24,19 +25,18 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
             : base(parent, reader.ReadUInt32())
         {
             // Get and seek to the data offset in bytes relative to the parent node's start.
-            long offset = parentOffset + Key & 0b00111111_11111111_11111111_11111111;
-            if (Key >> 31 == 1)
+            long offset = parentOffset + Key & ~_flagMask;
+            if ((Flags)(Key & _flagMask) == Flags.Values)
             {
-                // Node is a leaf and key points to triangle list starting with a separator.
+                // Node is a leaf and key points to triangle list starting 2 bytes later.
                 using (reader.TemporarySeek(offset + sizeof(ushort), SeekOrigin.Begin))
                 {
-                    List<ushort> indices = new List<ushort>();
+                    TriangleIndices = new List<ushort>();
                     ushort index;
                     while ((index = reader.ReadUInt16()) != 0xFFFF)
                     {
-                        indices.Add(index);
+                        TriangleIndices.Add(index);
                     }
-                    TriangleIndices = indices.ToArray();
                 }
             }
             else
@@ -57,8 +57,15 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets the indices to triangles of the model to check in this cube.
+        /// Gets the indices to triangles of the model available in this cube.
         /// </summary>
-        public ushort[] TriangleIndices { get; }
+        public List<ushort> TriangleIndices { get; }
+
+        // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
+
+        internal void Save(int parentOffset)
+        {
+            
+        }
     }
 }

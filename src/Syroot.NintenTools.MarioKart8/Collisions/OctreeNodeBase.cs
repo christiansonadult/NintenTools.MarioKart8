@@ -18,6 +18,8 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// The number of children of an octree node.
         /// </summary>
         public const int ChildCount = 8;
+        
+        internal const uint _flagMask = 0b11000000_00000000_00000000_00000000;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
@@ -44,7 +46,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <summary>
         /// Gets the octree key used to reference this node.
         /// </summary>
-        public uint Key { get; }
+        public uint Key { get; internal set; }
 
         /// <summary>
         /// Gets the eight children of this node.
@@ -69,6 +71,15 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Children?.GetEnumerator();
+        }
+        
+        // ---- ENUMERATIONS -------------------------------------------------------------------------------------------
+
+        internal enum Flags : uint
+        {
+            Divide = 0b00000000_00000000_00000000_00000000,
+            Values = 0b10000000_00000000_00000000_00000000,
+            NoData = 0b11000000_00000000_00000000_00000000
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.Collisions
@@ -29,57 +28,58 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         internal CourseOctreeNode(CourseOctreeNode parent, BinaryDataReader reader)
             : base(parent, reader.ReadUInt32())
         {
-            // If this is a branch, it is subdivided into 8 child nodes.
-            if ((Flags)(Key >> 30) == Flags.Divide)
+            switch ((Flags)(Key & _flagMask))
             {
-                CourseOctreeNode[] children = new CourseOctreeNode[ChildCount];
-                for (int i = 0; i < ChildCount; i++)
-                {
-                    children[i] = new CourseOctreeNode(this, reader);
-                }
-                Children = children;
+                case Flags.Divide:
+                    // Node is a branch subdivided into 8 children.
+                    Children = new CourseOctreeNode[ChildCount];
+                    for (int i = 0; i < ChildCount; i++)
+                    {
+                        Children[i] = new CourseOctreeNode(this, reader);
+                    }
+                    break;
+                case Flags.Values:
+                    // Node points to a model in the file's model array.
+                    ModelIndex = Key & ~_flagMask;
+                    break;
             }
         }
-        
-        // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
+
+        // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets the index of the model this node points to if it is a leaf node.
+        /// Gets the index to the model referenced by this node in the model array of the file this node belongs to.
         /// </summary>
-        /// <returns>The index of the model if this is a leaf node.</returns>
-        public int GetModelIndex()
-        {
-            if ((Flags)(Key >> 30) == Flags.Index)
-            {
-                return (int)(Key & 0b00111111_11111111_11111111_11111111);
-            }
-            throw new InvalidOperationException("This node does not represent a model index.");
-        }
+        public uint? ModelIndex { get; }
 
         // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
 
         internal void Save(BinaryDataWriter writer)
         {
-            // Write the key.
-            writer.Write(Key);
-
-            // If this is a branch, write the children.
-            if ((Flags)(Key >> 30) == Flags.Divide)
+            if (Children == null)
             {
+                if (ModelIndex.HasValue)
+                {
+                    // Node points to a model in the file's model array.
+                    Key = (uint)Flags.Values | ModelIndex.Value;
+                }
+                else
+                {
+                    // Node is an empty cube.
+                    Key = (uint)Flags.NoData;
+                }
+                writer.Write(Key);
+            }
+            else
+            {
+                // Node is a branch subdivided into 8 children.
+                Key = 8;
+                writer.Write(Key);
                 foreach (CourseOctreeNode child in Children)
                 {
                     child.Save(writer);
                 }
             }
-        }
-
-        // ---- ENUMERATIONS -------------------------------------------------------------------------------------------
-
-        private enum Flags
-        {
-            Divide = 0b00,
-            Index = 0b10,
-            NoData = 0b11
         }
     }
 }
