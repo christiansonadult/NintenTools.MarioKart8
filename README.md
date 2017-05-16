@@ -15,7 +15,7 @@ Right now, the following file formats and files are supported:
 | Course Definitions      | \*_muunt\*.byaml | Yes    | Yes  | Strongly typed via `Courses.CourseDefinition`                        |
 | Other BYAML Files       | \*.byaml         | Yes    | Yes  | Use [NintenTools.Byaml](https://github.com/Syroot/NintenTools.Byaml) |
 | Visual Models           | *.bfres          | Partly | No   | Use [NintenTools.Bfres](https://github.com/Syroot/NintenTools.Bfres) |
-| KCL Collision Models    | course.kcl       | Yes    | No   |                                                                      |
+| KCL Collision Models    | course.kcl       | Yes    | Yes  | Creating octrees from new models is currently being added.           |
 | Yaz0 Compressed Data    | \*.szs / others  | Yes    | No   | Use [NintenTools.Yaz0](https://github.com/Syroot/NintenTools.Yazo)   |
 
 Tools
