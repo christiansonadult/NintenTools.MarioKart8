@@ -19,9 +19,8 @@ namespace Syroot.NintenTools.MarioKart8.Test
 
         private static void Main(string[] args)
         {
-            KclFile menuKcl = new KclFile(@"D:\Archive\Wii U\Roms\MK8\content\course\Gu_Menu\course.kcl");
-            //KclFile menuKcl = new KclFile(@"D:\Archive\Wii U\Roms\MK8\aoc0005000c1010ed00\0013\course\Dgc_YoshiCircuit\course.kcl");
-            menuKcl.Save(@"D:\Pictures\test.kcl");
+            KclFile kcl = new KclFile(@"D:\Archive\Wii U\Roms\MK8\content\course\Gu_FirstCircuit\course.kcl");
+            kcl.Save(@"D:\Archive\Wii U\Roms\MK8\content\course\Gu_FirstCircuit\course.kcl.new");
 
             //LoadFiles<KclFile>("course.kcl");
         }

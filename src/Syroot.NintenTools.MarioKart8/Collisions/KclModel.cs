@@ -206,10 +206,12 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 // Write the octree.
                 int octreeOffsetValue = (int)(writer.Position - modelPosition);
                 octreeOffset.Satisfy(octreeOffsetValue);
-                // Write the nodes first, and compute the correct offsets into the triangle lists or to child nodes.
-                // Nintendo writes child nodes behind the current node, so they need to be queued.
-                // TODO: Combine empty lists into a single 0xFFFF separator.
-                int triangleListsPosition = GetNodeCount(ModelOctreeRoots) * sizeof(uint);
+                // Write the node keys, and compute the correct offsets into the triangle lists or to child nodes.
+                // Nintendo writes child nodes behind the current node, so the children need to be queued.
+                // In this implementation, empty triangle lists point to the same terminator behind the last node.
+                // This could be further optimized by reusing equal parts of lists as Nintendo apparently did it.
+                int emptyListPos = GetNodeCount(ModelOctreeRoots) * sizeof(uint);
+                int triangleListPos = emptyListPos + sizeof(ushort);
                 Queue<ModelOctreeNode[]> queuedNodes = new Queue<ModelOctreeNode[]>();
                 queuedNodes.Enqueue(ModelOctreeRoots);
                 while (queuedNodes.Count > 0)
@@ -221,9 +223,17 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                         if (node.Children == null)
                         {
                             // Node is a leaf and points to triangle index list.
-                            long triangleListOffset = triangleListsPosition - offset - sizeof(ushort);
-                            node.Key = (uint)ModelOctreeNode.Flags.Values | (uint)triangleListOffset;
-                            triangleListsPosition += (node.TriangleIndices.Count + 1) * sizeof(ushort);
+                            int listPos;
+                            if (node.TriangleIndices.Count == 0)
+                            {
+                                listPos = emptyListPos;
+                            }
+                            else
+                            {
+                                listPos = triangleListPos;
+                                triangleListPos += (node.TriangleIndices.Count + 1) * sizeof(ushort);
+                            }
+                            node.Key = (uint)ModelOctreeNode.Flags.Values | (uint)(listPos - offset - sizeof(ushort));
                         }
                         else
                         {
@@ -235,6 +245,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                     }
                 }
                 // Iterate through the nodes again and write their triangle lists now.
+                writer.Write((ushort)0xFFFF); // Terminator for all empty lists.
                 queuedNodes.Enqueue(ModelOctreeRoots);
                 while (queuedNodes.Count > 0)
                 {
@@ -243,9 +254,12 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                     {
                         if (node.Children == null)
                         {
-                            // Node is a leaf and points to triangle index list.
-                            writer.Write(node.TriangleIndices);
-                            writer.Write((ushort)0xFFFF);
+                            if (node.TriangleIndices.Count > 0)
+                            {
+                                // Node is a leaf and points to triangle index list.
+                                writer.Write(node.TriangleIndices);
+                                writer.Write((ushort)0xFFFF);
+                            }
                         }
                         else
                         {
@@ -256,7 +270,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 }
             }
         }
-        
+
         /// <summary>
         /// Saves the data in the given file.
         /// </summary>
