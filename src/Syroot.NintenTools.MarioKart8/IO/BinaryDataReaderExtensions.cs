@@ -10,18 +10,7 @@ namespace Syroot.NintenTools.MarioKart8.IO
     internal static class BinaryDataReaderExtensions
     {
         // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Reads a <see cref="Triangle"/> instance from the current stream and returns it.
-        /// </summary>
-        /// <param name="self">The extended <see cref="BinaryDataReader"/>.</param>
-        /// <returns>The <see cref="Triangle"/> instance.</returns>
-        internal static Triangle ReadTriangle(this BinaryDataReader self)
-        {
-            return new Triangle(self.ReadSingle(), self.ReadUInt16(), self.ReadUInt16(), self.ReadUInt16(),
-                self.ReadUInt16(), self.ReadUInt16(), self.ReadUInt16(), self.ReadUInt32());
-        }
-
+        
         /// <summary>
         /// Reads <see cref="Triangle"/> instances from the current stream and returns them.
         /// </summary>
@@ -33,7 +22,8 @@ namespace Syroot.NintenTools.MarioKart8.IO
             Triangle[] values = new Triangle[count];
             for (int i = 0; i < count; i++)
             {
-                values[i] = ReadTriangle(self);
+                values[i] = new Triangle(self.ReadSingle(), self.ReadUInt16(), self.ReadUInt16(), self.ReadUInt16(),
+                    self.ReadUInt16(), self.ReadUInt16(), self.ReadUInt16(), self.ReadUInt32());
             }
             return values;
         }

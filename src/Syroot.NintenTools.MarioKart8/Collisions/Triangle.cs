@@ -43,9 +43,9 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         public ushort CollisionFlags;
 
         /// <summary>
-        /// The 0-based index of the triangle in the triangle array of the model this triangle belongs to.
+        /// The 0-based index of the triangle in the KCL file this triangle belongs to.
         /// </summary>
-        public uint TriangleIndex;
+        public uint GlobalIndex;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
@@ -65,10 +65,10 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// triangle belongs to.</param>
         /// <param name="collisionFlags">The collision flags determining in-game behavior when colliding with this
         /// polygon.</param>
-        /// <param name="triangleIndex">The 0-based index of the triangle in the triangle array of the model this
+        /// <param name="globalIndex">The 0-based index of the triangle in the triangle array of the model this
         /// triangle belongs to.</param>
         internal Triangle(float length, ushort positionIndex, ushort directionIndex, ushort normalIndex1,
-            ushort normalIndex2, ushort normalIndex3, ushort collisionFlags, uint triangleIndex)
+            ushort normalIndex2, ushort normalIndex3, ushort collisionFlags, uint globalIndex)
         {
             Length = length;
             PositionIndex = positionIndex;
@@ -77,7 +77,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
             NormalIndex2 = normalIndex2;
             NormalIndex3 = normalIndex3;
             CollisionFlags = collisionFlags;
-            TriangleIndex = triangleIndex;
+            GlobalIndex = globalIndex;
         }
     }
 }

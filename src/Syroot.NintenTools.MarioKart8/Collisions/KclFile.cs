@@ -28,18 +28,20 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// Initializes a new instance of the <see cref="KclFile"/> class from the given stream.
         /// </summary>
         /// <param name="stream">The stream from which the instance will be loaded.</param>
-        public KclFile(Stream stream)
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
+        public KclFile(Stream stream, bool loadOctree = true)
         {
-            Load(stream);
+            Load(stream, loadOctree);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KclFile"/> class from the file with the given name.
         /// </summary>
         /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
-        public KclFile(string fileName)
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
+        public KclFile(string fileName, bool loadOctree = true)
         {
-            Load(fileName);
+            Load(fileName, loadOctree);
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -65,7 +67,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         public int Unknown { get; private set; }
 
         /// <summary>
-        /// Gets the root node of the course model octree.
+        /// Gets the root node of the course model octree. Can be <c>null</c> if no octree was loaded or created yet.
         /// </summary>
         public CourseOctreeNode CourseOctreeRoot { get; private set; }
 
@@ -77,15 +79,32 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Loads the data from the given <paramref name="stream"/>.
+        /// Loads the data from the given <paramref name="stream"/>, including the octree.
         /// </summary>
         /// <param name="stream">The <see cref="Stream"/> to load the data from.</param>
         public void Load(Stream stream)
         {
-            using (BinaryDataReader reader = new BinaryDataReader(stream, true))
-            {
-                reader.ByteOrder = ByteOrder.BigEndian;
+            Load(stream, true);
+        }
 
+        /// <summary>
+        /// Loads the data from the given file, including the octree.
+        /// </summary>
+        /// <param name="fileName">The name of the file to load the data from.</param>
+        public void Load(string fileName)
+        {
+            Load(fileName, true);
+        }
+
+        /// <summary>
+        /// Loads the data from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> to load the data from.</param>
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing models.</param>
+        public void Load(Stream stream, bool loadOctree)
+        {
+            using (BinaryDataReader reader = new BinaryDataReader(stream, true) { ByteOrder = ByteOrder.BigEndian })
+            {
                 // Read the header.
                 if (reader.ReadInt32() != _signature)
                 {
@@ -100,11 +119,14 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 Unknown = reader.ReadInt32();
 
                 // Read the model octree.
-                reader.Position = octreeOffset; // Mostly unrequired, data is successive.
-                CourseOctreeRoot = new CourseOctreeNode();
-                for (int i = 0; i < CourseOctreeRoot.Children.Length; i++)
+                if (loadOctree)
                 {
-                    CourseOctreeRoot.Children[i] = new CourseOctreeNode(CourseOctreeRoot, reader);
+                    reader.Position = octreeOffset; // Mostly unrequired, data is successive.
+                    CourseOctreeRoot = new CourseOctreeNode();
+                    for (int i = 0; i < CourseOctreeNode.ChildCount; i++)
+                    {
+                        CourseOctreeRoot.Children[i] = new CourseOctreeNode(CourseOctreeRoot, reader);
+                    }
                 }
 
                 // Read the model offsets.
@@ -116,7 +138,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 foreach (int modelOffset in modelOffsets)
                 {
                     reader.Position = modelOffset; // Required as loading a model does not position reader at its end.
-                    Models.Add(new KclModel(stream));
+                    Models.Add(new KclModel(stream, loadOctree));
                 }
             }
         }
@@ -125,9 +147,13 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// Loads the data from the given file.
         /// </summary>
         /// <param name="fileName">The name of the file to load the data from.</param>
-        public void Load(string fileName)
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing models.</param>
+        public void Load(string fileName, bool loadOctree)
         {
-            Load(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read));
+            using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                Load(stream, loadOctree);
+            }
         }
 
         /// <summary>
@@ -136,6 +162,37 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <param name="stream">The <see cref="Stream"/> to save the data to.</param>
         public void Save(Stream stream)
         {
+            using (BinaryDataWriter writer = new BinaryDataWriter(stream, true) { ByteOrder = ByteOrder.BigEndian })
+            {
+                // Write the header.
+                writer.Write(_signature);
+                Offset octreeOffset = writer.ReserveOffset();
+                Offset modelOffsetArrayOffset = writer.ReserveOffset();
+                writer.Write(Models.Count);
+                writer.Write(MinCoordinate);
+                writer.Write(MaxCoordinate);
+                writer.Write(CoordinateShift);
+                writer.Write(Unknown);
+
+                // Write the model octree.
+                octreeOffset.Satisfy();
+                foreach (CourseOctreeNode rootChild in CourseOctreeRoot)
+                {
+                    CourseOctreeRoot.Save(writer);
+                }
+
+                // Write the model offsets.
+                Offset[] modelOffsets = writer.ReserveOffset(Models.Count);
+
+                // Write the models.
+                int i = 0;
+                foreach (KclModel model in Models)
+                {
+                    modelOffsets[i++].Satisfy();
+                    //model.Save(stream);
+                    writer.Align(4);
+                }
+            }
         }
 
         /// <summary>

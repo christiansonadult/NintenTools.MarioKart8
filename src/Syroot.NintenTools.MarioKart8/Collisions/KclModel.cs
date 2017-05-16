@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Syroot.BinaryData;
@@ -17,18 +19,20 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// Initializes a new instance of the <see cref="KclModel"/> class from the given stream.
         /// </summary>
         /// <param name="stream">The stream from which the instance will be loaded.</param>
-        public KclModel(Stream stream)
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
+        public KclModel(Stream stream, bool loadOctree = true)
         {
-            Load(stream);
+            Load(stream, loadOctree);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KclModel"/> class from the file with the given name.
         /// </summary>
         /// <param name="fileName">The name of the file from which the instance will be loaded.</param>
-        public KclModel(string fileName)
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
+        public KclModel(string fileName, bool loadOctree = true)
         {
-            Load(fileName);
+            Load(fileName, loadOctree);
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -74,17 +78,36 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         public Triangle[] Triangles { get; private set; }
 
         /// <summary>
-        /// Gets the root nodes of the model triangle octree.
+        /// Gets the root nodes of the model triangle octree. Can be <c>null</c> if no octree was loaded or created yet.
         /// </summary>
         public ModelOctreeNode[] ModelOctreeRoots { get; private set; }
 
         // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Loads the data from the given <paramref name="stream"/>.
+        /// Loads the data from the given <paramref name="stream"/>, including the octree.
         /// </summary>
         /// <param name="stream">The <see cref="Stream"/> to load the data from.</param>
         public void Load(Stream stream)
+        {
+            Load(stream, true);
+        }
+
+        /// <summary>
+        /// Loads the data from the given file, including the octree.
+        /// </summary>
+        /// <param name="fileName">The name of the file to load the data from.</param>
+        public void Load(string fileName)
+        {
+            Load(fileName, true);
+        }
+
+        /// <summary>
+        /// Loads the data from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream"/> to load the data from.</param>
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
+        public void Load(Stream stream, bool loadOctree)
         {
             using (BinaryDataReader reader = new BinaryDataReader(stream, true))
             {
@@ -118,18 +141,20 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
                 Triangles = reader.ReadTriangles(triangleCount);
 
                 // Read the octree.
-                reader.Position = modelPosition + octreeOffset; // Mostly unrequired, data is successive.
-                int nodeCount
-                     = ((~CoordinateMask.X >> CoordinateShift.X) + 1)
-                     * ((~CoordinateMask.Y >> CoordinateShift.X) + 1)
-                     * ((~CoordinateMask.Z >> CoordinateShift.X) + 1);
-                ModelOctreeRoots = new ModelOctreeNode[nodeCount];
-                for (int i = 0; i < nodeCount; i++)
+                if (loadOctree)
                 {
-                    ModelOctreeRoots[i] = new ModelOctreeNode(null, reader, modelPosition + octreeOffset);
+                    reader.Position = modelPosition + octreeOffset; // Mostly unrequired, data is successive.
+                    int nodeCount
+                         = ((~CoordinateMask.X >> CoordinateShift.X) + 1)
+                         * ((~CoordinateMask.Y >> CoordinateShift.X) + 1)
+                         * ((~CoordinateMask.Z >> CoordinateShift.X) + 1);
+                    ModelOctreeRoots = new ModelOctreeNode[nodeCount];
+                    for (int i = 0; i < nodeCount; i++)
+                    {
+                        ModelOctreeRoots[i] = new ModelOctreeNode(null, reader, modelPosition + octreeOffset);
+                    }
+                    // Reader is now behind the last octree key, not at end of the model / behind the last separator.
                 }
-
-                // Reader is now behind the last octree key, not at the end of the model / behind the last separator.
             }
         }
 
@@ -137,9 +162,13 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// Loads the data from the given file.
         /// </summary>
         /// <param name="fileName">The name of the file to load the data from.</param>
-        public void Load(string fileName)
+        /// <param name="loadOctree"><c>true</c> to also load the octree referencing triangles.</param>
+        public void Load(string fileName, bool loadOctree)
         {
-            Load(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read));
+            using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                Load(stream, loadOctree);
+            }
         }
 
         /// <summary>

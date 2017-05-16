@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Syroot.NintenTools.MarioKart8.Collisions
 {
@@ -7,12 +8,16 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
     /// Represents the base for an octree node.
     /// </summary>
     /// <typeparam name="T">The type of the octree node.</typeparam>
+    [DebuggerDisplay(nameof(OctreeNodeBase<T>) + " Key=0x{Key.ToString(\"X8\"),nq}")]
     public abstract class OctreeNodeBase<T> : IEnumerable<T>
         where T : OctreeNodeBase<T>
     {
         // ---- CONSTANTS ----------------------------------------------------------------------------------------------
 
-        private const int _childCount = 8;
+        /// <summary>
+        /// The number of children of an octree node.
+        /// </summary>
+        public const int ChildCount = 8;
 
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
@@ -26,7 +31,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         {
             Parent = parent;
             Key = key;
-            Children = new T[_childCount];
+            // Do not create child array here as it might not be required.
         }
 
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -34,7 +39,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <summary>
         /// Gets the parent node containing this instance, or <c>null</c> if this is a root node.
         /// </summary>
-        public T Parent { get; protected set; }
+        public T Parent { get; }
 
         /// <summary>
         /// Gets the octree key used to reference this node.
@@ -54,7 +59,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IEnumerable<T>)Children).GetEnumerator();
+            return Children == null ? null : ((IEnumerable<T>)Children).GetEnumerator();
         }
 
         /// <summary>
@@ -63,7 +68,7 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         /// <returns>An <see cref="IEnumerator"/> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Children.GetEnumerator();
+            return Children?.GetEnumerator();
         }
     }
 }

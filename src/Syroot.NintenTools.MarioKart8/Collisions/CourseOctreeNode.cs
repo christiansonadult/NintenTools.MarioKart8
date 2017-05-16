@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Syroot.BinaryData;
 
 namespace Syroot.NintenTools.MarioKart8.Collisions
@@ -7,21 +6,18 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
     /// <summary>
     /// Represents a node in a course model octree.
     /// </summary>
-    [DebuggerDisplay(nameof(CourseOctreeNode) + " ModelIndex={ModelIndex}")]
     public class CourseOctreeNode : OctreeNodeBase<CourseOctreeNode>
     {
-        // ---- CONSTANTS ----------------------------------------------------------------------------------------------
-
-        private const int _childCount = 8;
-
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CourseOctreeNode"/> class with no parent and empty key.
+        /// Initializes a new instance of the <see cref="CourseOctreeNode"/> class with no parent, an initialized child
+        /// array and empty key.
         /// </summary>
         internal CourseOctreeNode()
             : base(null, 0)
         {
+            Children = new CourseOctreeNode[ChildCount];
         }
 
         /// <summary>
@@ -33,39 +29,57 @@ namespace Syroot.NintenTools.MarioKart8.Collisions
         internal CourseOctreeNode(CourseOctreeNode parent, BinaryDataReader reader)
             : base(parent, reader.ReadUInt32())
         {
-            Flags flags = (Flags)(Key >> 30);
-            switch (flags)
+            // If this is a branch, it is subdivided into 8 child nodes.
+            if ((Flags)(Key >> 30) == Flags.Divide)
             {
-                case Flags.Divide:
-                    for (int i = 0; i < _childCount; i++)
-                    {
-                        Children[i] = new CourseOctreeNode(this, reader);
-                    }
-                    break;
-                case Flags.Index:
-                    ModelIndex = (int)(Key & 0b00111111_11111111_11111111_11111111);
-                    break;
-                case Flags.NoData:
-                    break;
-                default:
-                    throw new ArgumentException($"Course octree node key has invalid flags {flags}.", nameof(Key));
+                CourseOctreeNode[] children = new CourseOctreeNode[ChildCount];
+                for (int i = 0; i < ChildCount; i++)
+                {
+                    children[i] = new CourseOctreeNode(this, reader);
+                }
+                Children = children;
+            }
+        }
+        
+        // ---- METHODS (PUBLIC) ---------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Gets the index of the model this node points to if it is a leaf node.
+        /// </summary>
+        /// <returns>The index of the model if this is a leaf node.</returns>
+        public int GetModelIndex()
+        {
+            if ((Flags)(Key >> 30) == Flags.Index)
+            {
+                return (int)(Key & 0b00111111_11111111_11111111_11111111);
+            }
+            throw new InvalidOperationException("This node does not represent a model index.");
+        }
+
+        // ---- METHODS (INTERNAL) -------------------------------------------------------------------------------------
+
+        internal void Save(BinaryDataWriter writer)
+        {
+            // Write the key.
+            writer.Write(Key);
+
+            // If this is a branch, write the children.
+            if ((Flags)(Key >> 30) == Flags.Divide)
+            {
+                foreach (CourseOctreeNode child in Children)
+                {
+                    child.Save(writer);
+                }
             }
         }
 
-        // ---- PROPERTIES ---------------------------------------------------------------------------------------------
-        
-        /// <summary>
-        /// Gets the index of the model to check in this cube.
-        /// </summary>
-        public int? ModelIndex { get; }
-        
         // ---- ENUMERATIONS -------------------------------------------------------------------------------------------
-        
+
         private enum Flags
         {
-            Divide = 0,
-            Index = 2,
-            NoData = 3
+            Divide = 0b00,
+            Index = 0b10,
+            NoData = 0b11
         }
     }
 }
