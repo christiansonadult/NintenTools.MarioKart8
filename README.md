@@ -10,7 +10,7 @@ Right now, the following file formats and files are supported:
 |-------------------------|:----------------:|:------:|:----:|----------------------------------------------------------------------|
 | Item Probability Tables | Item.bin         | Yes    | Yes  | Strongly typed, tool exists (Item Editor)                            |
 | Physics & Engine Stats  | Performance.bin  | Yes    | Yes  | Strongly typed, tool exists (Performance Editor)                     |
-| Other BIN Files         | \*.bin           | Yes    | Yes  |                                                                      |
+| Other BIN Files         | \*.bin           | Yes    | Yes  | Only dword and string groups are strongly typed.                     |
 | Obj Definition Database | objflow.byaml    | Yes    | Yes  | Strongly typed via `Courses.Objs.ObjDefinitionDb`                    |
 | Course Definitions      | \*_muunt\*.byaml | Yes    | Yes  | Strongly typed via `Courses.CourseDefinition`                        |
 | Other BYAML Files       | \*.byaml         | Yes    | Yes  | Use [NintenTools.Byaml](https://github.com/Syroot/NintenTools.Byaml) |
