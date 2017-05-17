@@ -97,18 +97,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Item
         
         private int _itemSet;
         private int _playerType;
-
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ItemEditor"/> class with the given command line
-        /// <paramref name="args"/>.
-        /// </summary>
-        /// <param name="args">The command line arguments.</param>
-        internal ItemEditor(string[] args) : base(args)
-        {
-        }
-
+        
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>

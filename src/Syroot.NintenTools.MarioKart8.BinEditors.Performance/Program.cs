@@ -35,7 +35,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            using (Editor = new PerformanceEditor(args))
+            using (Editor = new PerformanceEditor())
             {
                 Application.Run(Editor);
             }

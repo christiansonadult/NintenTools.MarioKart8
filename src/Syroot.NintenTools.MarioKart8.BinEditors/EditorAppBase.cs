@@ -16,7 +16,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors
     public abstract class EditorAppBase : Form
     {
         // ---- FIELDS -------------------------------------------------------------------------------------------------
-
+        
         private string _fileName;
         private CategoryRow[] _categoryRows;
         private TableLayoutPanel _tlpFile;
@@ -29,20 +29,11 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors
         // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="EditorAppBase"/> class with the given command line
-        /// <paramref name="args"/>.
+        /// Initializes a new instance of the <see cref="EditorAppBase"/> class.
         /// </summary>
-        /// <param name="args">The command line arguments.</param>
-        protected EditorAppBase(string[] args)
+        protected EditorAppBase()
         {
             InitializeUI();
-
-            // Open a file passed as command line argument.
-            string file = args.Length == 1 ? args[0] : null;
-            if (!String.IsNullOrEmpty(file) && File.Exists(file))
-            {
-                OpenFile(file);
-            }
         }
         
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
@@ -84,6 +75,18 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors
         protected abstract int CategoryRowCount { get; }
 
         // ---- METHODS (PROTECTED) ------------------------------------------------------------------------------------
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+
+            // Open a file passed as command line argument.
+            string file = args.Length == 2 ? args[1] : null;
+            if (!String.IsNullOrEmpty(file) && File.Exists(file))
+            {
+                OpenFile(file);
+            }
+        }
 
         /// <summary>
         /// Raised when a drag &amp; drop operation enters this window's bounds.

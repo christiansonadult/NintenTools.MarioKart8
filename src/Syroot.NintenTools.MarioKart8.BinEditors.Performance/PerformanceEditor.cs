@@ -52,18 +52,7 @@ namespace Syroot.NintenTools.MarioKart8.BinEditors.Performance
         private int _categoryPoints;
         private int _categoryPhysics;
         private int _categorySpeedHandling;
-
-        // ---- CONSTRUCTORS & DESTRUCTOR ------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PerformanceEditor"/> class with the given command line
-        /// <paramref name="args"/>.
-        /// </summary>
-        /// <param name="args">The command line arguments.</param>
-        internal PerformanceEditor(string[] args) : base(args)
-        {
-        }
-
+        
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         /// <summary>
