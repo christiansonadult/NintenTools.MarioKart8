@@ -3,12 +3,13 @@
 //
 //      File: MK8_KCL.bt
 //   Authors: Syroot
-//   Version: 1.0.0
+//   Version: 1.1.0
 //   Purpose: Nintendo KCL collision model (Mario Kart 8)
 //  Category: Software
 // File Mask: *.kcl
 //  ID Bytes: 02 02 00 00
 //   History:
+//   1.1.0  2017-05-18  Fix reading global octree child nodes.
 //   1.0.0  2017-05-17  Fix ID bytes, clean-up.
 //   0.5.0  2017-05-15  Parse octrees.
 //   0.1.0  2016-06-20  Initial version.
@@ -43,15 +44,21 @@ string Vector3F_Read(Vector3F& vector3f)
 }
 
 struct CourseOctreeNode;
-struct CourseOctreeNode
+struct CourseOctreeNode(uint parentPosition)
 {
     uint key <format=hex>;
     switch (key >> 30)
     {
         case 0:
-            CourseOctreeNode children[8] <optimize=false>;
+            // Node is a branch and key contains dword offset pointing to child nodes.
+            local uint offset <hidden=true>; offset = parentPosition + (key & 0x3FFFFFFF) * sizeof(uint); // Offset in bytes relative to parent node start.
+            local uint oldPos <hidden=true>; oldPos = FTell();
+            FSeek(offset);
+            CourseOctreeNode children(offset)[8] <optimize=false>;
+            FSeek(oldPos);
             break;
         case 2:
+            // Node is a leaf and key contains index of referenced model in model array.
             local uint modelIndex = key & 0x00FFFFFF;
             break;
         case 3:
@@ -150,7 +157,7 @@ uint unknown <bgcolor=0xAAFFFF>;
 
 // Read the model octree.
 FSeek(octreeOffset);
-CourseOctreeNode globalOctree[8] <bgcolor=0xFFEECC, optimize=false>;
+CourseOctreeNode globalOctree(octreeOffset)[8] <bgcolor=0xFFEECC, optimize=false>;
 
 // Read the model offsets.
 FSeek(modelOffsetArrayOffset);
