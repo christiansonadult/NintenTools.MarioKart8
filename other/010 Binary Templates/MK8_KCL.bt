@@ -3,12 +3,13 @@
 //
 //      File: MK8_KCL.bt
 //   Authors: Syroot
-//   Version: 0.5.0
+//   Version: 1.0.0
 //   Purpose: Nintendo KCL collision model (Mario Kart 8)
 //  Category: Software
 // File Mask: *.kcl
-//  ID Bytes: 20 20 00 00
+//  ID Bytes: 02 02 00 00
 //   History:
+//   1.0.0  2017-05-17  Fix ID bytes, clean-up.
 //   0.5.0  2017-05-15  Parse octrees.
 //   0.1.0  2016-06-20  Initial version.
 //------------------------------------------------
