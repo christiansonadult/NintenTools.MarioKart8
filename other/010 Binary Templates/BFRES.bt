@@ -443,7 +443,7 @@ typedef struct // Fmat
 	ushort arrayIndex;
 	ushort renderInfoParamCount;
 	byte texSelectorCount;
-	byte texAttributeSelectorCount;
+	byte texAttribSelectorCount;
 	ushort materialParamCount;
 	uint materialParamsDataLength;
 	uint shadowParamCount;
@@ -464,11 +464,17 @@ typedef struct // Fmat
 	FSeek(renderInfoParamDictOffset.target);
 	Dict renderInfoParams(DT_FMAT_RENDER_INFO_PARAM);
 	// Read the texture selectors.
-	FSeek(texSelectorArrayOffset.target);
-	FmatTexSelector texSelector[texSelectorCount] <optimize=false>;
+	if (texSelectorCount > 0)
+	{
+		FSeek(texSelectorArrayOffset.target);
+		FmatTexSelector texSelector[texSelectorCount] <optimize=false>;
+	}
 	// Read the texture attribute selectors.
-	FSeek(texAttribSelectorDictOffset.target);
-	Dict texAttribSelectors(DT_FMAT_TEX_ATTRIB_SELECTOR);
+	if (texAttribSelectorCount > 0)
+	{
+		FSeek(texAttribSelectorDictOffset.target);
+		Dict texAttribSelectors(DT_FMAT_TEX_ATTRIB_SELECTOR);
+	}
 	// Read the material parameter data chunk.
 	FSeek(materialParamsDataOffset.target);
 	byte materialParamsData[materialParamsDataLength];
@@ -713,9 +719,11 @@ string Matrix4x3Read(Matrix4x3 &matrix4x3)
 }
 void Matrix4x3Write(Matrix4x3 &matrix4x3, string s)
 {
-	SScanf(s, "((%f, %f, %f, %f), (%f, %f, %f, %f), (%f, %f, %f, %f))",
-		matrix4x3[0], matrix4x3[1], matrix4x3[2], matrix4x3[3], matrix4x3[4], matrix4x3[5],
-		matrix4x3[6], matrix4x3[7], matrix4x3[8], matrix4x3[9], matrix4x3[10], matrix4x3[11]);
+	SScanf(s, "((%f, %f, %f), (%f, %f, %f), (%f, %f, %f), (%f, %f, %f))",
+		matrix4x3.m11, matrix4x3.m12, matrix4x3.m13,
+		matrix4x3.m21, matrix4x3.m22, matrix4x3.m23,
+		matrix4x3.m31, matrix4x3.m32, matrix4x3.m33,
+		matrix4x3.m41, matrix4x3.m42, matrix4x3.m43);
 }
 
 string FmatMaterialParamRead(FmatMaterialParam &fmatMaterialParam)
@@ -837,32 +845,32 @@ string OffsetRead(Offset &offset)
 string Vector2FRead(Vector2F &vector2f)
 {
 	string s;
-	SPrintf(s, "(%f, %f)", vector2f[0], vector2f[1]);
+	SPrintf(s, "(%f, %f)", vector2f.x, vector2f.y);
 	return s;
 }
 void Vector2FWrite(Vector2F &vector2f, string s)
 {
-	SScanf(s, "(%f, %f)", vector2f[0], vector2f[1]);
+	SScanf(s, "(%f, %f)", vector2f.x, vector2f.y);
 }
 
 string Vector3FRead(Vector3F &vector3f)
 {
 	string s;
-	SPrintf(s, "(%f, %f, %f)", vector3f[0], vector3f[1], vector3f[2]);
+	SPrintf(s, "(%f, %f, %f)", vector3f.x, vector3f.y, vector3f.z);
 	return s;
 }
 void Vector3FWrite(Vector3F &vector3f, string s)
 {
-	SScanf(s, "(%f, %f, %f)", vector3f[0], vector3f[1], vector3f[2]);
+	SScanf(s, "(%f, %f, %f)", vector3f.x, vector3f,y, vector3f.z);
 }
 
 string Vector4FRead(Vector4F &vector4f)
 {
 	string s;
-	SPrintf(s, "(%f, %f, %f, %f)", vector4f[0], vector4f[1], vector4f[2], vector4f[3]);
+	SPrintf(s, "(%f, %f, %f, %f)", vector4f.x, vector4f.y, vector4f.z, vector4f.w);
 	return s;
 }
 void Vector4FWrite(Vector3F &vector4f, string s)
 {
-	SScanf(s, "(%f, %f, %f, %f)", vector4f[0], vector4f[1], vector4f[2], vector4f[3]);
+	SScanf(s, "(%f, %f, %f, %f)", vector4f.x, vector4f.y, vector4f.z, vector4f.w);
 }
