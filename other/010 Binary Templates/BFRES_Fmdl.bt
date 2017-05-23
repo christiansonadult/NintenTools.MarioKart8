@@ -242,8 +242,8 @@ typedef struct // FshpVisGroupNode
 
 typedef struct // FshpVisGroupRange
 {
-	Vector3F min;
-	Vector3F max;
+	Vector3F center;
+	Vector3F extent;
 } FshpVisGroupRange <bgcolor=0xAA8A8A>;
 
 // ---- FMAT ----

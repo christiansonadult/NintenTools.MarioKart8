@@ -49,7 +49,7 @@ struct Fmdl; struct FmdlParam;
 	struct Fmat; struct FmatRenderInfoParam; struct FmatTexSelector; struct FmatTexAttribSelector;
 		struct FmatMaterialParam; struct FmatMaterialStruct; struct FmatShaderControl; struct FmatShadowParam;
 struct Ftex;
-struct Fska; struct FskaEntry; struct FskaBase; struct FskaTrack; struct FskaKey;
+struct Fska; struct FskaBone; struct FskaBase; struct FskaTrack; struct FskaKey;
 struct Fshu;
 struct Ftxp; struct FtxpMaterial; struct FtxpTarget; struct FtxpAnimation;
 struct Fvis;

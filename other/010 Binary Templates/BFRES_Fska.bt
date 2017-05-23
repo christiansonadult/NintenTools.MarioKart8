@@ -9,27 +9,27 @@ typedef struct // Fska
 	if (file.version >= 0x03040000)
 	{
 		uint frameCount;
-		ushort entryCount;
+		ushort boneCount;
 		ushort unknown0x16; // Padding?
 	}
 	else
 	{
 		ushort frameCount;
-		ushort entryCount;
+		ushort boneCount;
 		uint unknown0x14; // Padding?
 	}
 	uint unknown0x18;
 	Offset unknownOffset;
-	Offset entryArrayOffset;
-	ushort unknown0x24[42] <optimize=true>;
+	Offset boneArrayOffset;
+	ushort unknown0x24[38] <optimize=true>; // Length unclear
 	local uint pos <hidden=true> = FTell();
-	// Read the entries.
-	FSeek(entryArrayOffset.target);
-	FskaEntry entries[entryCount] <optimize=false>;
+	// Read the bones.
+	FSeek(boneArrayOffset.target);
+	FskaBone bones[boneCount] <optimize=false>;
 	FSeek(pos); // Seek back to header end.
 } Fska <bgcolor=0xFFCDCD, read=FskaRead>;
 
-typedef struct // FskaEntry
+typedef struct // FskaBone
 {
 	ushort unknown0x00;
 	byte trackFlag;
@@ -54,7 +54,7 @@ typedef struct // FskaEntry
 		FskaTrack tracks[trackCount] <optimize=false>;
 	}
 	FSeek(pos); // Seek back to header end.	
-} FskaEntry <bgcolor=0xEBBDBD, read=FskaEntryRead>;
+} FskaBone <bgcolor=0xEBBDBD, read=FskaBoneRead>;
 
 typedef struct // FskaBase
 {
@@ -65,11 +65,11 @@ typedef struct // FskaBase
 
 typedef struct // FskaTrack
 {
-	ushort type;
+	ushort dataType;
 	ushort keyCount;
-	uint flags <format=binary>;
+	uint animType;
 	uint unknown0x08;
-	float frameCount;
+	float frames;
 	float scale;
 	float init;
 	if (file.version >= 0x03040000)
@@ -81,24 +81,24 @@ typedef struct // FskaTrack
 	local uint pos <hidden=true> = FTell();
 	// Read the key frames.
 	FSeek(keyFramesOffset.target);
-	if (type == 0x0001 || type == 0x0005 || type == 0x0009)
+	if (dataType == 0x0001 || dataType == 0x0005 || dataType == 0x0009)
 	{
-		ushort frames[keyCount]; // Shift right by 5 to get frame.
+		ushort keyFrames[keyCount]; // Shift right by 5 to get frame.
 	}
 	else
 	{
-		byte frames[keyCount];
+		byte keyFrames[keyCount];
 	}
 	FAlign(4);
 	// Read the keys.
 	FSeek(keysOffset.target);
-	FskaKey keys(type)[keyCount] <optimize=false>;
+	FskaKey keys(dataType)[keyCount] <optimize=false>;
 	FSeek(pos); // Seek back to header end.	
 } FskaTrack <bgcolor=0xC8A1A1>;
 
-typedef struct(ushort type) // FskaKey
+typedef struct(ushort dataType) // FskaKey
 {
-	switch (type)
+	switch (dataType)
 	{
 		case 0x0002:
 			float data[4] <optimize=true>;
@@ -123,7 +123,7 @@ string FskaRead(Fska &fska)
 	return fska.nameOffset.name;
 }
 
-string FskaEntryRead(FskaEntry &fskaEntry)
+string FskaBoneRead(FskaBone &fskaBone)
 {
-	return fskaEntry.nameOffset.name;
+	return fskaBone.nameOffset.name;
 }
