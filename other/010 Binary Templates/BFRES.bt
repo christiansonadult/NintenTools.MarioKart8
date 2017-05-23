@@ -3,31 +3,50 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 0.3.0
+//   Version: 0.4.0
 //   Purpose: Parse NintendoWare for Wii U (NW4F) model format files.
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
-//   0.3.0  2017-05-22  Parse remaining FMDL sections and the FTEX section.
-//   0.1.0  2017-05-21  Initial version, read FMDL (FVTX and FMAT) and embedded files.
+// 		0.4.0	2017-05-23	Parse FTXP section, add stubs for other sections.
+// 		0.3.0	2017-05-22	Parse remaining FMDL sections and the FTEX section.
+// 		0.1.0	2017-05-21	Initial version, read FMDL (FVTX and FMAT) and embedded files.
+//
+// This binary template mostly mirrors the documented formats on the Custom Mario Kart 8 Wiki.
+// A noticeable difference is that "Index Groups" are simply called "Dicts" (Dictionaries) here.
+//
+// For simplicity, all structures are forward declared at the start, then the common and specific structures follow,
+// and then Read or Write methods making the tree created by 010 Editor more useful.
+// Since BFRES offsets are relative to themselves, Offset and NameOffset structures simplify seeking to their target.
+// Dict entries can be read by passing the corresponding DictEntryType to the Dict structure upon declaration.
+// It is required to seek back to header ends for structures read in an array at a higher level.
+// The color key used for highlighting (groups of) structures is available at:
+// 	https://github.com/Syroot/NintenTools.MarioKart8/blob/master/other/010 Binary Templates/bfres_color_key.png
 //
 // More information available at:
-//  http://mk8.tockdom.com/wiki/BFRES_(File_Format)
+// 	http://mk8.tockdom.com/wiki/BFRES_(File_Format)
 //------------------------------------------------
 
 // ==== Forward Declarations ===========================================================================================
 
 struct Vector2F; struct Vector3F; struct Vector4F; struct Matrix2x3; struct Matrix4x3;
 struct Bfres; struct Offset; struct NameOffset; struct Dict; struct DictEntry;
+struct UserData;
 struct Fmdl; struct FmdlParam;
 	struct Fskl; struct FsklBone;
 	struct Fvtx; struct FvtxAttribute; struct FvtxBuffer;
-	struct Fshp; struct FshpLodModel; struct FshpVisGroup; struct FshpIndexBuffer; struct FshpVisGroupNode;
+	struct Fshp; struct FshpLodModel; struct FshpIndexBuffer; struct FshpVisGroup; struct FshpVisGroupNode;
 	struct FshpVisGroupRange;
 	struct Fmat; struct FmatRenderInfoParam; struct FmatTexSelector; struct FmatTexAttribSelector;
 	struct FmatMaterialParam; struct FmatMaterialStruct; struct FmatShaderControl; struct FmatShadowParam;
 struct Ftex;
+struct Fska;
+struct Fshu;
+struct Ftxp; struct FtxpMaterial; struct FtxpTarget; struct FtxpAnimation;
+struct Fvis;
+struct Fsha;
+struct Fscn;
 struct EmbeddedFile;
 enum DictEntryType
 {
@@ -39,7 +58,8 @@ enum DictEntryType
 	DT_FSKL_BONE,
 	DT_FVTX_ATTRIB,
 	DT_FSHP,
-	DT_FMAT, DT_FMAT_RENDER_INFO_PARAM, DT_FMAT_TEX_ATTRIB_SELECTOR, DT_FMAT_SHADOW_PARAM
+	DT_FMAT, DT_FMAT_RENDER_INFO_PARAM, DT_FMAT_TEX_ATTRIB_SELECTOR, DT_FMAT_SHADOW_PARAM,
+	DT_USER_DATA
 };
 
 BigEndian();
@@ -51,49 +71,30 @@ Bfres file <open=true>;
 
 typedef struct // Vector2F
 {
-	float x;
-	float y;
+	float x; float y;
 } Vector2F <read=Vector2FRead, write=Vector2FWrite>;
 
 typedef struct // Vector3F
 {
-	float x;
-	float y;
-	float z;
+	float x; float y; float z;
 } Vector3F <read=Vector3FRead, write=Vector3FWrite>;
 
 typedef struct // Vector4F
 {
-	float x;
-	float y;
-	float z;
-	float w;
+	float x; float y; float z; float w;
 } Vector4F <read=Vector4FRead, write=Vector4FWrite>;
 
 typedef struct // Matrix2x3
 {
-	float m11;
-	float m21;
-	float m12;
-	float m22;
-	float m13;
-	float m23;
+	float m11; float m21; float m12;
+	float m22; float m13; float m23;
 } Matrix2x3 <read=Matrix2x3Read, write=Matrix2x3Write>;
 
 typedef struct // Matrix4x3
 {
-	float m11;
-	float m21;
-	float m31;
-	float m41;
-	float m12;
-	float m22;
-	float m32;
-	float m42;
-	float m13;
-	float m23;
-	float m33;
-	float m43;
+	float m11; float m21; float m31; float m41;
+	float m12; float m22; float m32; float m42;
+	float m13; float m23; float m33; float m43;
 } Matrix4x3 <read=Matrix4x3Read, write=Matrix4x3Write>;
 
 // ---- BFRES Common Structures ----------------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ typedef struct // Bfres
 	local int i <hidden=true>;
 	for (i = 0; i < 12; i++)
 	{
-		if (dictOffsets[i].value != 0)
+		if (dictOffsets[i].value)
 		{
 			FSeek(dictOffsets[i].target);
 			Dict dict(i) <bgcolor=0xC5FFFF>;
@@ -170,7 +171,14 @@ typedef struct(DictEntryType entryType) // Dict
 			case DT_FMAT_TEX_ATTRIB_SELECTOR: FmatTexAttribSelector fmatTexAttribSelector <fgcolor=cNone>; break;
 			case DT_FMAT_SHADOW_PARAM: FmatShadowParam shadowParam <fgcolor=cNone>; break;
 			case DT_FTEX: Ftex ftex <fgcolor=cNone>; break;
+			case DT_FSKA: Fska fska <fgcolor=cNone>; break;
+			case DT_FSHU1: case DT_FSHU2: case DT_FSHU3: Fshu fshu <fgcolor=cNone>; break;
+			case DT_FTXP: Ftxp ftxp <fgcolor=cNone>; break;
+			case DT_FVIS1: case DT_FVIS2: Fvis fvis <fgcolor=cNone>; break;
+			case DT_FSHA: Fsha fsha <fgcolor=cNone>; break;
+			case DT_FSCN: Fscn fscn <fgcolor=cNone>; break;
 			case DT_EMBED: EmbeddedFile embeddedFile <fgcolor=cNone>; break;
+			case DT_USER_DATA: UserData userData <fgcolor=cNone>; break;
 		}
 	}
 	FSeek(pos); // Seek back to dict end.
@@ -184,6 +192,15 @@ typedef struct // DictEntry
 	NameOffset nameOffset;
 	Offset dataOffset;
 } DictEntry <read=DictEntryRead>;
+
+typedef struct // UserData
+{
+	NameOffset nameOffset;
+	ushort entryCount;
+	byte type;
+	byte unknown0x07; // Padding?
+	// TODO: Read values.
+} UserData <fgcolor=0x009900, read=UserDataRead>;
 
 // ---- FMDL Structures ------------------------------------------------------------------------------------------------
 
@@ -217,7 +234,7 @@ typedef struct // Fmdl
 	FSeek(fmatDictOffset.target);
 	Dict fmats(DT_FMAT);
 	// Read the parameters.
-	if (paramDictOffset.value != 0)
+	if (paramDictOffset.value)
 	{
 		FSeek(paramDictOffset.target);
 		Dict params(DT_FMAT_PARAM);
@@ -254,21 +271,21 @@ typedef struct // Fskl
 	Dict bones(DT_FSKL_BONE);
 	// Read the inverse index and matrix arrays.
 	FSeek(inverseIndexArrayOffset.target);
-	if (inverseIndexCount > 0)
+	if (inverseIndexCount)
 	{
 		ushort inverseIndices[inverseIndexCount];
 	}
-	if (extraIndexCount > 0)
+	if (extraIndexCount)
 	{
 		ushort extraIndices[extraIndexCount];
 	}
-	if (inverseIndexCount > 0)
+	if (inverseIndexCount)
 	{
 		FSeek(inverseMatrixArrayOffset.target);
 		Matrix4x3 inverseMatrices[inverseIndexCount];
 	}
 	// Read the inverse matrix array.
-} Fskl <bgcolor=0xFFCDEF>;
+} Fskl <bgcolor=0xAEC4D9>;
 
 typedef struct // FsklBone
 {
@@ -282,7 +299,7 @@ typedef struct // FsklBone
 	Vector4F rotation;
 	Vector3F translation;
 	uint padding; // Always 0
-} FsklBone <bgcolor=0xEBBDDC, read=FsklBoneRead>;
+} FsklBone <bgcolor=0xA1B5C8, read=FsklBoneRead>;
 
 // ---- FVTX ----
 
@@ -306,14 +323,14 @@ typedef struct // Fvtx
 	FSeek(bufferArrayOffset.target);
 	FvtxBuffer buffer[bufferCount] <optimize=false>;
 	FSeek(pos); // Seek back to header end.
-} Fvtx <bgcolor=0xCDCDFF>;
+} Fvtx <bgcolor=0x95A7B8>;
 
 typedef struct // FvtxAttribute
 {
 	NameOffset nameOffset;
 	uint bufferIndexAndOffset <format=hex>; // XXYYYY
 	uint format <format=hex>;
-} FvtxAttribute <bgcolor=0xBDBDEB, read=FvtxAttributeRead>;
+} FvtxAttribute <bgcolor=0x8A9AAA, read=FvtxAttributeRead>;
 
 typedef struct // FvtxBuffer
 {
@@ -329,7 +346,7 @@ typedef struct // FvtxBuffer
 	FSeek(dataOffset.target);
 	byte data[length];
 	FSeek(pos); // Seek back to header end.
-} FvtxBuffer <bgcolor=0xAEAED9>;
+} FvtxBuffer <bgcolor=0x7F8E9D>;
 
 // ---- FSHP ----
 
@@ -360,7 +377,7 @@ typedef struct // Fshp
 	FSeek(lodModelArrayOffset.target);
 	FshpLodModel lodModels[lodModelCount] <optimize=false>;
 	// Read the FSKL index array.
-	if (fsklIndexCount > 0)
+	if (fsklIndexCount)
 	{
 		FSeek(fsklIndexArrayOffset.target);
 		ushort fsklIndices[fsklIndexCount];
@@ -373,9 +390,9 @@ typedef struct // Fshp
 	FshpVisGroupRange visGroupRanges[visGroupNodeCount];
 	// Read the visibility group indices.
 	FSeek(visGroupIndicesOffset.target);
-	ushort visGroupIndices[visGroupNodeCount];
+	ushort visGroupIndices[visGroupNodeCount] <bgcolor=0x7F7F9D>;
 	FSeek(pos); // Seek back to header end.
-} Fshp <bgcolor=0xFFCDCD, read=FshpRead>;
+} Fshp <bgcolor=0xCDCDFF, read=FshpRead>;
 
 typedef struct // FshpLodModel
 {
@@ -395,13 +412,7 @@ typedef struct // FshpLodModel
 	FSeek(indexBufferOffset.target);
 	FshpIndexBuffer indexBuffer;
 	FSeek(pos); // Seek back to header end.
-} FshpLodModel <bgcolor=0xEBBDBD>;
-
-typedef struct // FshpVisGroup
-{
-	uint offsetInIndexBuffer; // in bytes (e.g. divide by 2 to get ushort offset)
-	uint vertexCount;
-} FshpVisGroup <bgcolor=0xD9AEAE>;
+} FshpLodModel <bgcolor=0xBDBDEB>;
 
 typedef struct // FshpIndexBuffer
 {
@@ -415,7 +426,13 @@ typedef struct // FshpIndexBuffer
 	// Read the data.
 	FSeek(dataOffset.target);
 	ushort indices[length / 2];
-} FshpIndexBuffer <bgcolor=0xC8A1A1>;
+} FshpIndexBuffer <bgcolor=0xAEAED9>;
+
+typedef struct // FshpVisGroup
+{
+	uint offsetInIndexBuffer; // in bytes (e.g. divide by 2 to get ushort offset)
+	uint vertexCount;
+} FshpVisGroup <bgcolor=0xA1A1C8>;
 
 typedef struct // FshpVisGroupNode
 {
@@ -425,12 +442,12 @@ typedef struct // FshpVisGroupNode
 	ushort nextSibling;
 	ushort visGroupIndex;
 	ushort visGroupCount;
-} FshpVisGroupNode <bgcolor=0xB89595>;
+} FshpVisGroupNode <bgcolor=0x9595B8>;
 
 typedef struct // FshpVisGroupRange
 {
-	Vector3F unknown0x00;
-	Vector3F unknown0x0C;
+	Vector3F min;
+	Vector3F max;
 } FshpVisGroupRange <bgcolor=0xAA8A8A>;
 
 // ---- FMAT ----
@@ -464,13 +481,13 @@ typedef struct // Fmat
 	FSeek(renderInfoParamDictOffset.target);
 	Dict renderInfoParams(DT_FMAT_RENDER_INFO_PARAM);
 	// Read the texture selectors.
-	if (texSelectorCount > 0)
+	if (texSelectorCount)
 	{
 		FSeek(texSelectorArrayOffset.target);
 		FmatTexSelector texSelector[texSelectorCount] <optimize=false>;
 	}
 	// Read the texture attribute selectors.
-	if (texAttribSelectorCount > 0)
+	if (texAttribSelectorCount)
 	{
 		FSeek(texAttribSelectorDictOffset.target);
 		Dict texAttribSelectors(DT_FMAT_TEX_ATTRIB_SELECTOR);
@@ -491,7 +508,7 @@ typedef struct // Fmat
 	FSeek(shaderControlOffset.target);
 	FmatShaderControl shaderControl;
 	// Read the shadow parameters, if any.
-	if (shadowParamDictOffset.value != 0)
+	if (shadowParamDictOffset.value)
 	{
 		FSeek(shadowParamDictOffset.target);
 		Dict shadowParams(DT_FMAT_SHADOW_PARAM);
@@ -533,7 +550,7 @@ typedef struct // FmatTexAttribSelector
 	byte arrayIndex;
 	byte unknown0x15; // Always 0
 	ushort unknown0x16; // Always 0
-} FmatTexAttribSelector <bgcolor=0xBBA1C8, read=FmatTexAttribSelectorRead>;
+} FmatTexAttribSelector <bgcolor=0xCBAED9, read=FmatTexAttribSelectorRead>;
 
 typedef struct(Fmat &fmat) // FmatMaterialParam
 {
@@ -547,7 +564,7 @@ typedef struct(Fmat &fmat) // FmatMaterialParam
 	NameOffset nameOffset;
 	local uint pos <hidden=true> = FTell();
 	// Read the value.
-	FSeek(materialParamsDataOffset.target + dataOffset);
+	FSeek(fmat.materialParamsDataOffset.target + dataOffset);
 	switch (type)
 	{
 		case 0x04: int value; break;
@@ -644,7 +661,7 @@ typedef struct // Ftex
 	Offset endOfStringTable;
 	Offset dataOffset;
 	Offset mipmapDataOffset;
-	Offset userDataOffset;
+	Offset userDataDictOffset;
 	ushort userDataCount;
 	ushort unknown0xBE; // Padding?
 	local uint pos <hidden=true> = FTell();
@@ -652,19 +669,140 @@ typedef struct // Ftex
 	FSeek(dataOffset.target);
 	byte data[dataLength] <bgcolor=0xEBDCBD>;
 	// Read the mipmap data.
-	if (mipmapDataLength > 0)
+	if (mipmapDataLength)
 	{
 		FSeek(mipmapDataOffset.target);
 		byte mipmapData[mipmapDataLength] <bgcolor=0xD9CBAE>;
 	}
 	// Read the user data.
-	if (userDataOffset.value != 0)
+	if (userDataDictOffset.value)
 	{
-		FSeek(userDataOffset.target);
-		
+		FSeek(userDataDictOffset.target);
+		Dict userData(DT_USER_DATA);
 	}
 	FSeek(pos); // Seek back to header end.
-} Ftex <bgcolor=0xFFEFCD, read=FtexRead>;
+} Ftex <bgcolor=0xEFCDFF, read=FtexRead>;
+
+// ---- FSKA Structures ------------------------------------------------------------------------------------------------
+
+typedef struct // Fska
+{
+	char signature[4]; // FSKA
+} Fska <bgcolor=0xFFCDCD>;
+
+// ---- FSHU Structures ------------------------------------------------------------------------------------------------
+
+typedef struct // Fshu
+{
+	char signature[4]; // FSHU
+} Fshu <bgcolor=0xFFD6CD>;
+
+// ---- FTXP Structures ------------------------------------------------------------------------------------------------
+
+typedef struct // Ftxp
+{
+	char signature[4]; // FTXP
+	NameOffset nameOffset;
+	Offset endOfStringTable;
+	ushort flags <format=binary>;
+	ushort userDataCount;
+	uint frameCount;
+	ushort textureCount;
+	ushort materialCount;
+	uint unknown0x18;
+	uint unknown0x1C;
+	uint unknown0x20;
+	uint unknown0x24;
+	uint unknown0x28;
+	Offset materialArrayOffset;
+	Offset textureDictOffset;
+	Offset userDataDictOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the material array.
+	FSeek(materialArrayOffset.target);
+	FtxpMaterial materials[materialCount] <optimize=false>;
+	// Read the texture dict, pointing to FTEX instances.
+	FSeek(textureDictOffset.target);
+	Dict textures(DT_NONE); // Do not read them again.
+	// Read the user data.
+	if (userDataDictOffset.value)
+	{
+		FSeek(userDataDictOffset.target);
+		Dict userData(DT_USER_DATA);
+	}
+	FSeek(pos); // Seek back to header end.
+} Ftxp <bgcolor=0xCDFFCD, read=FtxpRead>;
+
+typedef struct // FtxpMaterial
+{
+	ushort targetCount;
+	ushort animationCount;
+	uint unknown0x04;
+	uint unknown0x08;
+	NameOffset nameOffset;
+	Offset targetArrayOffset;
+	Offset animationArrayOffset;
+	uint unknown0x18;
+	local uint pos <hidden=true> = FTell();
+	// Read the target array.
+	FSeek(targetArrayOffset.target);
+	FtxpTarget targets[targetCount] <optimize=false>;
+	// Read the animation array.
+	FSeek(animationArrayOffset.target);
+	FtxpAnimation animations[animationCount] <optimize=false>;
+	FSeek(pos); // Seek back to header end.
+} FtxpMaterial <bgcolor=0xEBDCBD, read=FtxpMaterialRead>;
+
+typedef struct // FtxpTarget
+{
+	byte unknown0x00;
+	byte unknown0x01;
+	ushort unknown0x02;
+	NameOffset texTypeNameOffset;
+} FtxpTarget <bgcolor=0xD9CBAE, read=FtxpTargetRead>;
+
+typedef struct // FtxpAnimation
+{
+	ushort flags <format=binary>;
+	ushort keyFrameCount;
+	uint unknown0x04;
+	float minKey;
+	float maxKey;
+	uint unknown0x10;
+	uint unknown0x14;
+	float maxValue;
+	Offset keyFrameDataOffset;
+	Offset valueDataOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the key data.
+	FSeek(keyFrameDataOffset.target);
+	ushort keyFrames[keyFrameCount] <bgcolor=0xB8AD95, optimize=true>;
+	// Read the value data.
+	FSeek(valueDataOffset.target);
+	byte values[keyFrameCount] <bgcolor=0xAAA08A, optimize=true>;
+	FSeek(pos); // Seek back to header end.
+} FtxpAnimation <bgcolor=0xC8BBA1>;
+
+// ---- FVIS Structures ------------------------------------------------------------------------------------------------
+
+typedef struct // Fvis
+{
+	char signature[4]; // FVIS
+} Fvis <bgcolor=0xEFFFCD>;
+
+// ---- FSHA Structures ------------------------------------------------------------------------------------------------
+
+typedef struct // Fsha
+{
+	char signature[4]; // FSHA
+} Fsha <bgcolor=0xE9E9E9>;
+
+// ---- FSCN Structures ------------------------------------------------------------------------------------------------
+
+typedef struct // Fscn
+{
+	char signature[4]; // FSCN
+} Fscn <bgcolor=0xCDFFCD>;
 
 // ---- Embedded File Structures ---------------------------------------------------------------------------------------
 
@@ -674,19 +812,28 @@ typedef struct // EmbeddedFile
 	uint length;
 	FSeek(dataOffset.target);
 	byte data[length];
-} EmbeddedFile <bgcolor=0xCDFFCD>;
+} EmbeddedFile <bgcolor=0xE9E9E9>;
 
 // ==== Template Methods ===============================================================================================
 
 string DictEntryRead(DictEntry &dictEntry)
 {
-	return dictEntry.dataOffset.value ? dictEntry.nameOffset.name : "<root>";
+	if (dictEntry.dataOffset.value)
+	{
+		string s;
+		SPrintf(s, "<\"%s\">", dictEntry.nameOffset.name);
+		return s;
+	}
+	else
+	{
+		return "<root>";
+	}
 }
 
 void FAlign(byte alignment)
 {
 	local int bytesToSkip <hidden=true> = (-FTell() % alignment + alignment) % alignment;
-	if (bytesToSkip > 0)
+	if (bytesToSkip)
 	{
 		byte padding[bytesToSkip] <hidden=true>;
 	}
@@ -816,6 +963,21 @@ string FtexRead(Ftex &ftex)
 	return ftex.nameOffset.name;
 }
 
+string FtxpRead(Ftxp &ftxp)
+{
+	return ftxp.nameOffset.name;
+}
+
+string FtxpMaterialRead(FtxpMaterial &ftxpMaterial)
+{
+	return ftxpMaterial.nameOffset.name;
+}
+
+string FtxpTargetRead(FtxpTarget &ftxpTarget)
+{
+	return ftxpTarget.texTypeNameOffset.name;
+}
+
 string FvtxAttributeRead(FvtxAttribute &fvtxAttribute)
 {
 	return fvtxAttribute.nameOffset.name;
@@ -840,6 +1002,11 @@ string OffsetRead(Offset &offset)
 		SPrintf(s, "%d -> N/A", offset.value);
 	}
 	return s;
+}
+
+string UserDataRead(UserData &userData)
+{
+	return userData.nameOffset.name;
 }
 
 string Vector2FRead(Vector2F &vector2f)
