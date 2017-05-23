@@ -1,0 +1,38 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Fvis
+{
+	char signature[4]; // FVIS
+	NameOffset nameOffset;
+	Offset endOfStringTable;
+	ushort flags <format=binary>;
+	ushort userDataCount;
+	uint frameCount;
+	ushort materialOrBoneTargetCount;
+	ushort unknown0x16;
+	uint unknown0x18;
+	uint unknown0x1C;
+	Offset unknownArrayOffset;
+	Offset stringOffsetArrayOffset;
+	Offset animationDataArrayOffset;
+	Offset unknownStructOffset;
+	Offset userDataDictOffset;
+	local uint pos <hidden=true> = FTell();
+	// TODO: Read unknown array.
+	// TODO: Read string offset array.
+	// TODO: Read animation data array.
+	// TODO: Read unknown struct.
+	if (userDataDictOffset.value)
+	{
+		FSeek(userDataDictOffset.target);
+		Dict userData(DT_USER_DATA);
+	}
+	FSeek(pos); // Seek back to header end.
+} Fvis <bgcolor=0xEFFFCD, read=FvisRead>;
+
+// ==== Template Methods ===============================================================================================
+
+string FvisRead(Fvis &fvis)
+{
+	return fvis.nameOffset.name;
+}

@@ -1,0 +1,105 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Ftxp
+{
+	char signature[4]; // FTXP
+	NameOffset nameOffset;
+	Offset endOfStringTable;
+	ushort flags <format=binary>;
+	ushort userDataCount;
+	uint frameCount;
+	ushort textureCount;
+	ushort materialCount;
+	uint unknown0x18;
+	uint unknown0x1C;
+	uint unknown0x20;
+	uint unknown0x24;
+	uint unknown0x28;
+	Offset materialArrayOffset;
+	Offset textureDictOffset;
+	Offset userDataDictOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the material array.
+	FSeek(materialArrayOffset.target);
+	FtxpMaterial materials[materialCount] <optimize=false>;
+	// Read the texture dict, pointing to FTEX instances.
+	FSeek(textureDictOffset.target);
+	Dict textures(DT_NONE); // Do not read them again.
+	// Read the user data.
+	if (userDataDictOffset.value)
+	{
+		FSeek(userDataDictOffset.target);
+		Dict userData(DT_USER_DATA);
+	}
+	FSeek(pos); // Seek back to header end.
+} Ftxp <bgcolor=0xCDFFCD, read=FtxpRead>;
+
+typedef struct // FtxpMaterial
+{
+	ushort targetCount;
+	ushort animationCount;
+	uint unknown0x04;
+	uint unknown0x08;
+	NameOffset nameOffset;
+	Offset targetArrayOffset;
+	Offset animationArrayOffset;
+	uint unknown0x18;
+	local uint pos <hidden=true> = FTell();
+	// Read the target array.
+	FSeek(targetArrayOffset.target);
+	FtxpTarget targets[targetCount] <optimize=false>;
+	// Read the animation array.
+	if (animationCount)
+	{
+		FSeek(animationArrayOffset.target);
+		FtxpAnimation animations[animationCount] <optimize=false>;
+	}
+	FSeek(pos); // Seek back to header end.
+} FtxpMaterial <bgcolor=0xEBDCBD, read=FtxpMaterialRead>;
+
+typedef struct // FtxpTarget
+{
+	byte unknown0x00;
+	byte unknown0x01;
+	ushort unknown0x02;
+	NameOffset texTypeNameOffset;
+} FtxpTarget <bgcolor=0xD9CBAE, read=FtxpTargetRead>;
+
+typedef struct // FtxpAnimation
+{
+	ushort flags <format=binary>;
+	ushort keyFrameCount;
+	uint unknown0x04;
+	float minKey;
+	float maxKey;
+	uint unknown0x10;
+	uint unknown0x14;
+	float maxValue;
+	Offset keyFrameDataOffset;
+	Offset valueDataOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the key data.
+	FSeek(keyFrameDataOffset.target);
+	ushort keyFrames[keyFrameCount] <bgcolor=0xB8AD95, optimize=true>;
+	// Read the value data.
+	FSeek(valueDataOffset.target);
+	byte values[keyFrameCount] <bgcolor=0xAAA08A, optimize=true>;
+	FSeek(pos); // Seek back to header end.
+} FtxpAnimation <bgcolor=0xC8BBA1>;
+
+// ==== Template Methods ===============================================================================================
+
+string FtxpRead(Ftxp &ftxp)
+{
+	return ftxp.nameOffset.name;
+}
+
+string FtxpMaterialRead(FtxpMaterial &ftxpMaterial)
+{
+	return ftxpMaterial.nameOffset.name;
+}
+
+string FtxpTargetRead(FtxpTarget &ftxpTarget)
+{
+	return ftxpTarget.texTypeNameOffset.name;
+}

@@ -1,0 +1,9 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // EmbeddedFile
+{
+	Offset dataOffset;
+	uint length;
+	FSeek(dataOffset.target);
+	byte data[length];
+} EmbeddedFile <bgcolor=0xE9E9E9>;

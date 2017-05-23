@@ -1,0 +1,59 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Ftex
+{
+	char signature[4]; // FTEX
+	uint surfaceDim; // GX2SurfaceDim
+	uint width;
+	uint height;
+	uint depth;
+	uint mipmapCount;
+	uint surfaceFormat; // GX2SurfaceFormat
+	uint aaMode; // GX2AAMode
+	uint surfaceUse; // GX2SurfaceUse
+	uint dataLength;
+	Offset possibleDataOffset;
+	uint mipmapDataLength;
+	Offset possibleMipmapDataOffset;
+	uint tileMode; // GX2TileMode
+	uint swizzle <format=binary>;
+	uint alignment <format=hex>; // 512 * bpp
+	uint pitch;
+	uint unknown0x44[14];
+	uint mipmapCount2;
+	uint unknown0x80; // Always 0
+	uint unknown0x84; // Always 1
+	uint unknown0x88;
+	uint unknown0x8C[7];
+	NameOffset nameOffset;
+	Offset endOfStringTable;
+	Offset dataOffset;
+	Offset mipmapDataOffset;
+	Offset userDataDictOffset;
+	ushort userDataCount;
+	ushort unknown0xBE; // Padding?
+	local uint pos <hidden=true> = FTell();
+	// Read the texture data.
+	FSeek(dataOffset.target);
+	byte data[dataLength] <bgcolor=0xEBDCBD>;
+	// Read the mipmap data.
+	if (mipmapDataLength)
+	{
+		FSeek(mipmapDataOffset.target);
+		byte mipmapData[mipmapDataLength] <bgcolor=0xD9CBAE>;
+	}
+	// Read the user data.
+	if (userDataDictOffset.value)
+	{
+		FSeek(userDataDictOffset.target);
+		Dict userData(DT_USER_DATA);
+	}
+	FSeek(pos); // Seek back to header end.
+} Ftex <bgcolor=0xEFCDFF, read=FtexRead>;
+
+// ==== Template Methods ===============================================================================================
+
+string FtexRead(Ftex &ftex)
+{
+	return ftex.nameOffset.name;
+}

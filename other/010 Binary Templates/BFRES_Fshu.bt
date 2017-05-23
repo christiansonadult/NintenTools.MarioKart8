@@ -1,0 +1,6 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Fshu
+{
+	char signature[4]; // FSHU
+} Fshu <bgcolor=0xFFD6CD>;

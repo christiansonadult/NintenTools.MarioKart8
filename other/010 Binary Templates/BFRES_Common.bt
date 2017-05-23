@@ -1,0 +1,146 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Bfres
+{
+	char signature[4]; // FRES
+	uint version <format=hex>;
+	ushort byteOrder <format=hex>;
+	ushort unknown0x0A <format=hex>;
+	uint fileLength;
+	uint fileAlignment <format=hex>;
+	uint fileNameOffset <format=hex>;
+	uint stringTableLength;
+	uint stringTableOffset;
+	Offset dictOffsets[12] <optimize=false>;
+	ushort dictCounts[12];
+	uint unknown0x68 <format=hex>;
+	// Read root dicts.
+	local int i <hidden=true>;
+	for (i = 0; i < 12; i++)
+	{
+		if (dictOffsets[i].value)
+		{
+			FSeek(dictOffsets[i].target);
+			Dict dict(i) <bgcolor=0xC5FFFF>;
+		}
+		else
+		{
+			byte dict <hidden=true>; // To get correct dict indices.
+		}
+	}
+} Bfres <bgcolor=0xCDFFFF>;
+
+typedef struct // Offset
+{
+	local uint origin <format=hex> = FTell();
+	uint value <format=hex>;
+	local uint target <format=hex> = origin + value;
+} Offset <read=OffsetRead>;
+
+typedef struct // NameOffset
+{
+	local uint origin <format=hex> = FTell();
+	uint value <format=hex>;
+	local uint target <format=hex> = origin + value;
+	FSeek(target - sizeof(uint));
+	uint nameLength;
+	string name;
+	FAlign(4);
+	FSeek(origin + sizeof(uint));
+} NameOffset <read=NameOffsetRead>;
+
+typedef struct(DictEntryType entryType) // Dict
+{
+	uint length <format=hex>;
+	uint entryCount;
+	DictEntry entries[entryCount + 1] <optimize=false>; // Include root entry.
+	local uint pos <hidden=true> = FTell();			  
+	// Read the entries.
+	local int i <hidden=true>;
+	for (i = 0; i < entryCount; i++)
+	{
+		FSeek(entries[i + 1].dataOffset.target);
+		switch (entryType)
+		{
+			case DT_FMDL: Fmdl fmdl <fgcolor=cNone>; break;
+			case DT_FMDL_PARAM: FmdlParam fmdlParam <fgcolor=cNone>; break;
+			case DT_FSKL_BONE: FsklBone fsklBone <fgcolor=cNone>; break;
+			case DT_FVTX_ATTRIB: FvtxAttribute attribute <fgcolor=cNone>; break;
+			case DT_FSHP: Fshp fshp <fgcolor=cNone>; break;
+			case DT_FMAT: Fmat fmat <fgcolor=cNone>; break;
+			case DT_FMAT_RENDER_INFO_PARAM: FmatRenderInfoParam fmatRenderInfoParam <fgcolor=cNone>; break;
+			case DT_FMAT_TEX_ATTRIB_SELECTOR: FmatTexAttribSelector fmatTexAttribSelector <fgcolor=cNone>; break;
+			case DT_FMAT_SHADOW_PARAM: FmatShadowParam shadowParam <fgcolor=cNone>; break;
+			case DT_FTEX: Ftex ftex <fgcolor=cNone>; break;
+			case DT_FSKA: Fska fska <fgcolor=cNone>; break;
+			case DT_FSHU1: case DT_FSHU2: case DT_FSHU3: Fshu fshu <fgcolor=cNone>; break;
+			case DT_FTXP: Ftxp ftxp <fgcolor=cNone>; break;
+			case DT_FVIS1: case DT_FVIS2: Fvis fvis <fgcolor=cNone>; break;
+			case DT_FSHA: Fsha fsha <fgcolor=cNone>; break;
+			case DT_FSCN: Fscn fscn <fgcolor=cNone>; break;
+			case DT_EMBED: EmbeddedFile embeddedFile <fgcolor=cNone>; break;
+			case DT_USER_DATA: UserData userData <fgcolor=cNone>; break;
+		}
+	}
+	FSeek(pos); // Seek back to dict end.
+} Dict <fgcolor=0x000099>;
+
+typedef struct // DictEntry
+{
+	uint key <format=hex>;
+	ushort leftIndex;
+	ushort rightIndex;
+	NameOffset nameOffset;
+	Offset dataOffset;
+} DictEntry <read=DictEntryRead>;
+
+typedef struct // UserData
+{
+	NameOffset nameOffset;
+	ushort entryCount;
+	byte type;
+	byte unknown0x07; // Padding?
+	// TODO: Read values.
+} UserData <fgcolor=0x009900, read=UserDataRead>;
+
+// ==== Template Methods ===============================================================================================
+
+string DictEntryRead(DictEntry &dictEntry)
+{
+	if (dictEntry.dataOffset.value)
+	{
+		string s;
+		SPrintf(s, "<\"%s\">", dictEntry.nameOffset.name);
+		return s;
+	}
+	else
+	{
+		return "<root>";
+	}
+}
+
+string NameOffsetRead(NameOffset &nameOffset)
+{
+	string s;
+		SPrintf(s, "%d -> %Xh = %s", nameOffset.value, nameOffset.target, nameOffset.name);
+	return s;
+}
+
+string OffsetRead(Offset &offset)
+{
+	string s;
+	if (offset.value)
+	{
+		SPrintf(s, "%d -> %Xh", offset.value, offset.target);
+	}
+	else
+	{
+		SPrintf(s, "%d -> N/A", offset.value);
+	}
+	return s;
+}
+
+string UserDataRead(UserData &userData)
+{
+	return userData.nameOffset.name;
+}

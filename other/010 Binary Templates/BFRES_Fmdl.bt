@@ -1,0 +1,519 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Fmdl
+{
+	char signature[4]; // FMDL
+	NameOffset nameOffset;
+	Offset endOfStringTable;
+	Offset fsklOffset;
+	Offset fvtxArrayOffset;
+	Offset fshpDictOffset;
+	Offset fmatDictOffset;
+	Offset paramDictOffset;
+	ushort fvtxCount;
+	ushort fshpCount;
+	ushort fmatCount;
+	ushort paramCount;
+	uint unknown0x28;
+	uint padding; // Always 0
+	local uint pos <hidden=true> = FTell();
+	// Read FSKL skeleton.
+	FSeek(fsklOffset.target);
+	Fskl fskl;
+	// Read FVTX vertex buffers.
+	FSeek(fvtxArrayOffset.target);
+	Fvtx fvtx[fvtxCount] <optimize=false>;
+	// Read FSHP polygons.
+	FSeek(fshpDictOffset.target);
+	Dict fshps(DT_FSHP);
+	// Read FMAT materials.
+	FSeek(fmatDictOffset.target);
+	Dict fmats(DT_FMAT);
+	// Read the parameters.
+	if (paramDictOffset.value)
+	{
+		FSeek(paramDictOffset.target);
+		Dict params(DT_FMAT_PARAM);
+	}
+	FSeek(pos); // Seek back to header end.
+} Fmdl <bgcolor=0xCDE6FF, read=FmdlRead>;
+
+typedef struct // FmdlParam
+{
+	NameOffset nameOffset;
+	ushort unknown0x04; // Always 1
+	ushort unknown0x06; // Always 0
+	float value;
+} FmdlParam <bgcolor=0xBDD4EB, read=FmdlParamRead>;
+
+// ---- FSKL ----
+
+typedef struct // Fskl
+{
+	char signature[4]; // FSKL
+	ushort unknown0x04; // Always 0
+	ushort unknown0x06 <format=hex>; // Always 0x1100 or 0x1200
+	ushort boneCount;
+	ushort inverseIndexCount;
+	ushort extraIndexCount;
+	ushort unknown0x0E; // Always 0
+	Offset boneDictOffset;
+	Offset boneArrayOffset;
+	Offset inverseIndexArrayOffset;
+	Offset inverseMatrixArrayOffset;
+	uint padding; // Always 0
+	// Read the bones.
+	FSeek(boneDictOffset.target);
+	Dict bones(DT_FSKL_BONE);
+	// Read the inverse index and matrix arrays.
+	FSeek(inverseIndexArrayOffset.target);
+	if (inverseIndexCount)
+	{
+		ushort inverseIndices[inverseIndexCount];
+	}
+	if (extraIndexCount)
+	{
+		ushort extraIndices[extraIndexCount];
+	}
+	if (inverseIndexCount)
+	{
+		FSeek(inverseMatrixArrayOffset.target);
+		Matrix4x3 inverseMatrices[inverseIndexCount];
+	}
+	// Read the inverse matrix array.
+} Fskl <bgcolor=0xAEC4D9>;
+
+typedef struct // FsklBone
+{
+	NameOffset nameOffset;
+	ushort arrayIndex;
+	short childIndices[4]; // -1 for no parent
+	ushort unknown0x0E; // Always 0
+	ushort flags <format=hex>;
+	ushort unknown0x12 <format=hex>; // Always 0x1001
+	Vector3F scale;
+	Vector4F rotation;
+	Vector3F translation;
+	uint padding; // Always 0
+} FsklBone <bgcolor=0xA1B5C8, read=FsklBoneRead>;
+
+// ---- FVTX ----
+
+typedef struct // Fvtx
+{
+	char signature[4]; // FVTX
+	byte attributeCount;
+	byte bufferCount;
+	ushort arrayIndex;
+	uint vertexCount;
+	uint unknown0x0C; // Mostly 0, between 0-4
+	Offset attributeArrayOffset;
+	Offset attributeDictOffset;
+	Offset bufferArrayOffset;
+	uint padding; // Always 0
+	local uint pos <hidden=true> = FTell();
+	// Read the attributes.
+	FSeek(attributeDictOffset.target);
+	Dict attributes(DT_FVTX_ATTRIB);
+	// Read the buffers.
+	FSeek(bufferArrayOffset.target);
+	FvtxBuffer buffer[bufferCount] <optimize=false>;
+	FSeek(pos); // Seek back to header end.
+} Fvtx <bgcolor=0x95A7B8>;
+
+typedef struct // FvtxAttribute
+{
+	NameOffset nameOffset;
+	uint bufferIndexAndOffset <format=hex>; // XXYYYY
+	uint format <format=hex>;
+} FvtxAttribute <bgcolor=0x8A9AAA, read=FvtxAttributeRead>;
+
+typedef struct // FvtxBuffer
+{
+	uint unknown0x00; // Always 0
+	uint length;
+	uint unknown0x08; // Always 0
+	ushort stride;
+	ushort unknown0x0E; // Always 1
+	uint unknown0x10; // Always 0
+	Offset dataOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the buffer data.
+	FSeek(dataOffset.target);
+	byte data[length];
+	FSeek(pos); // Seek back to header end.
+} FvtxBuffer <bgcolor=0x7F8E9D>;
+
+// ---- FSHP ----
+
+typedef struct // Fshp
+{
+	char signature[4]; // FSHP
+	NameOffset nameOffset;
+	uint unknown0x08; // Always 2
+	ushort arrayIndex;
+	ushort fmatIndex;
+	ushort fsklIndex;
+	ushort fvtxIndex; // In MK8 the same as array index.
+	ushort fsklIndexCount; // Unknown purpose
+	byte unknown0x16; // If fsklIndexArrayCount > 0 this is non-zero.
+	byte lodModelCount;
+	uint visGroupNodeCount;
+	float unknown0x1C;
+	Offset fvtxOffset;
+	Offset lodModelArrayOffset;
+	Offset fsklIndexArrayOffset;
+	uint unknown0x2C; // Always 0
+	Offset visGroupNodesOffset;
+	Offset visGroupRangesOffset;
+	Offset visGroupIndicesOffset;
+	uint padding; // Always 0
+	local uint pos <hidden=true> = FTell();
+	// Read the LoD models.
+	FSeek(lodModelArrayOffset.target);
+	FshpLodModel lodModels[lodModelCount] <optimize=false>;
+	// Read the FSKL index array.
+	if (fsklIndexCount)
+	{
+		FSeek(fsklIndexArrayOffset.target);
+		ushort fsklIndices[fsklIndexCount];
+	}
+	// Read the visibility group nodes.
+	FSeek(visGroupNodesOffset.target);
+	FshpVisGroupNode visGroupNodes[visGroupNodeCount];
+	// Read the visibility group ranges.
+	FSeek(visGroupRangesOffset.target);
+	FshpVisGroupRange visGroupRanges[visGroupNodeCount];
+	// Read the visibility group indices.
+	FSeek(visGroupIndicesOffset.target);
+	ushort visGroupIndices[visGroupNodeCount] <bgcolor=0x7F7F9D>;
+	FSeek(pos); // Seek back to header end.
+} Fshp <bgcolor=0xCDCDFF, read=FshpRead>;
+
+typedef struct // FshpLodModel
+{
+	uint unknown0x00; // Always 4
+	uint unknown0x04; // Always 4
+	uint vertexCount;
+	ushort visGroupCount;
+	ushort unknown0x0E;
+	Offset visGroupArrayOffset;
+	Offset indexBufferOffset;
+	uint skipVertices;
+	local uint pos <hidden=true> = FTell();
+	// Read the visibility groups.
+	FSeek(visGroupArrayOffset.target);
+	FshpVisGroup visGroups[visGroupCount] <optimize=false>;
+	// Read the index buffer.
+	FSeek(indexBufferOffset.target);
+	FshpIndexBuffer indexBuffer;
+	FSeek(pos); // Seek back to header end.
+} FshpLodModel <bgcolor=0xBDBDEB>;
+
+typedef struct // FshpIndexBuffer
+{
+	uint unknown0x00; // Always 0
+	uint length;
+	uint unknown0x08; // Always 0
+	ushort unknown0x0C; // Always 0
+	ushort unknown0x0E; // Always 1
+	uint unknown0x10; // Always 0
+	Offset dataOffset;
+	// Read the data.
+	FSeek(dataOffset.target);
+	ushort indices[length / 2];
+} FshpIndexBuffer <bgcolor=0xAEAED9>;
+
+typedef struct // FshpVisGroup
+{
+	uint offsetInIndexBuffer; // in bytes (e.g. divide by 2 to get ushort offset)
+	uint vertexCount;
+} FshpVisGroup <bgcolor=0xA1A1C8>;
+
+typedef struct // FshpVisGroupNode
+{
+	ushort leftIndex;
+	ushort rightIndex;
+	ushort unknown0x04; // Same as leftIndex
+	ushort nextSibling;
+	ushort visGroupIndex;
+	ushort visGroupCount;
+} FshpVisGroupNode <bgcolor=0x9595B8>;
+
+typedef struct // FshpVisGroupRange
+{
+	Vector3F min;
+	Vector3F max;
+} FshpVisGroupRange <bgcolor=0xAA8A8A>;
+
+// ---- FMAT ----
+
+typedef struct // Fmat
+{
+	char signature[4]; // FMAT
+	NameOffset nameOffset;
+	uint visible;
+	ushort arrayIndex;
+	ushort renderInfoParamCount;
+	byte texSelectorCount;
+	byte texAttribSelectorCount;
+	ushort materialParamCount;
+	uint materialParamsDataLength;
+	uint shadowParamCount;
+	Offset renderInfoParamDictOffset;
+	Offset materialStructOffset;
+	Offset shaderControlOffset;
+	Offset texSelectorArrayOffset;
+	Offset texAttribSelectorArrayOffset;
+	Offset texAttribSelectorDictOffset;
+	Offset materialParamArrayOffset;
+	Offset materialParamDictOffset;
+	Offset materialParamsDataOffset;
+	Offset shadowParamDictOffset;
+	Offset unknown0x40; // Points to 12 0-bytes if not 0
+	uint padding; // Always 0
+	local uint pos <hidden=true> = FTell();
+	// Read the render info parameters.
+	FSeek(renderInfoParamDictOffset.target);
+	Dict renderInfoParams(DT_FMAT_RENDER_INFO_PARAM);
+	// Read the texture selectors.
+	if (texSelectorCount)
+	{
+		FSeek(texSelectorArrayOffset.target);
+		FmatTexSelector texSelector[texSelectorCount] <optimize=false>;
+	}
+	// Read the texture attribute selectors.
+	if (texAttribSelectorCount)
+	{
+		FSeek(texAttribSelectorDictOffset.target);
+		Dict texAttribSelectors(DT_FMAT_TEX_ATTRIB_SELECTOR);
+	}
+	// Read the material parameter data chunk.
+	FSeek(materialParamsDataOffset.target);
+	byte materialParamsData[materialParamsDataLength];
+	// Read the material parameters array (with values).
+	FSeek(materialParamArrayOffset.target);
+	FmatMaterialParam materialParam(this)[materialParamCount] <optimize=false>;
+	// Read the material parameters dict (entries only).
+	FSeek(materialParamDictOffset.target);
+	Dict materialParams(DT_NONE);
+	// Read the unknown material structure.
+	FSeek(materialStructOffset.target);
+	FmatMaterialStruct materialStruct;
+	// Read the shader control.
+	FSeek(shaderControlOffset.target);
+	FmatShaderControl shaderControl;
+	// Read the shadow parameters, if any.
+	if (shadowParamDictOffset.value)
+	{
+		FSeek(shadowParamDictOffset.target);
+		Dict shadowParams(DT_FMAT_SHADOW_PARAM);
+	}
+	FSeek(pos); // Seek back to header end.
+} Fmat <bgcolor=0xEFCDFF, read=FmatRead>;
+
+typedef struct // FmatRenderInfoParam
+{
+	ushort unknown0x00; // Always 0 or 1
+	ushort type;
+	NameOffset nameOffset;
+	switch (type)
+	{
+		case 0x0000: uint64 value; break; // Always 0?
+		case 0x0100: Vector2F value; break;
+		case 0x0200: NameOffset value; break;
+	}
+} FmatRenderInfoParam <bgcolor=0xDCBDEB, read=FmatRenderInfoParamRead>;
+
+typedef struct // FmatTexSelector
+{
+	NameOffset nameOffset;
+	Offset ftexOffset;
+} FmatTexSelector <bgcolor=0xCBAED9, read=FmatTexSelectorRead>;
+
+typedef struct // FmatTexAttribSelector
+{
+	byte unknown0x00; // Always 2
+	byte unknown0x01; // Always 0, 2, 4 or 18
+	byte unknown0x02; // Always 0, 16, 18 or 90
+	byte unknown0x03; // Always 0 or near 0x80
+	byte unknown0x04; // Signed close to 0
+	byte unknown0x05; // Small value
+	ushort unknown0x06;
+	uint unknown0x08 <format=hex>; // Always 0x80000000
+	uint unknown0x0C; // Always 0
+	NameOffset nameOffset;
+	byte arrayIndex;
+	byte unknown0x15; // Always 0
+	ushort unknown0x16; // Always 0
+} FmatTexAttribSelector <bgcolor=0xCBAED9, read=FmatTexAttribSelectorRead>;
+
+typedef struct(Fmat &fmat) // FmatMaterialParam
+{
+	byte type;
+	byte length;
+	ushort dataOffset;
+	int unknown0x04; // Always -1
+	uint unknown0x08; // Always 0
+	ushort arrayIndex;
+	ushort arrayIndex2;
+	NameOffset nameOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the value.
+	FSeek(fmat.materialParamsDataOffset.target + dataOffset);
+	switch (type)
+	{
+		case 0x04: int value; break;
+		case 0x0C: float value; break;
+		case 0x0D: Vector2F value; break;
+		case 0x0E: Vector3F value; break;
+		case 0x0F: Vector4F value; break;
+		case 0x1E: Matrix2x3 value; break;
+	}
+	FSeek(pos); // Seek back to header end.
+} FmatMaterialParam <bgcolor=0xAD95B8, read=FmatMaterialParamRead>;
+
+typedef struct // FmatMaterialStruct
+{
+	uint unknown0x00; // Always less than 20
+	ushort unknown0x04; // Always 40
+	ushort unknown0x06; // Always 576, 578 or 579
+	uint unknown0x08 <format=hex>; // Always 0x49749732 or 0x49749736
+	uint unknown0x0C; // Always less than 15
+	float unknown0x10; // Always less than 1.0f
+	ushort unknown0x14; // Always 204
+	ushort unknown0x16; // Always 0 or 1
+	uint unknown0x18; // Always 0
+	ushort unknown0x1C <format=hex>; // Always 0x2001
+	byte unknown0x1E; // Always 1 or 5
+	byte unknown0x1F; // Always 1 or 4
+	uint unknown0x20; // Always 0
+	uint unknown0x24; // Always 0
+	uint unknown0x28; // Always 0
+	uint unknown0x2C; // Always 0
+} FmatMaterialStruct <bgcolor=0xA08AAA>;
+
+typedef struct // FmatShaderControl
+{
+	NameOffset shaderName1;
+	NameOffset shaderName2;
+	uint unknown0x08; // Always 0 or 1
+	byte vertexShaderInputCount;
+	byte pixelShaderInputCount;
+	ushort parameterCount;
+	Offset vertexShaderInputDictOffset;
+	Offset pixelShaderInputDictOffset;
+	Offset parameterDictOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the vertex shader inputs.
+	FSeek(vertexShaderInputDictOffset.target);
+	Dict vertexShaderInputs(DT_NONE);
+	// Read the pixel shader inputs.
+	FSeek(pixelShaderInputDictOffset.target);
+	Dict pixelShaderInputs(DT_NONE);
+	// Read the parameters.
+	FSeek(parameterDictOffset.target);
+	Dict parameters(DT_NONE);
+	FSeek(pos); // Seek back to header end.
+} FmatShaderControl <bgcolor=0x947F9D>;
+
+typedef struct // FmatShadowParam
+{
+	NameOffset nameOffset;
+	ushort unknown0x04; // Always 1
+	byte typeOrIndex;
+	byte unknown0x07; // Always 0
+	uint value;
+} FmatShadowParam <bgcolor=0x897591, read=FmatShadowParamRead>;
+
+// ==== Template Methods ===============================================================================================
+
+string FmatMaterialParamRead(FmatMaterialParam &fmatMaterialParam)
+{
+	string s;
+	switch (fmatMaterialParam.type)
+	{
+		case 0x04:
+			SPrintf(s, "%s = %d", fmatMaterialParam.nameOffset.name, fmatMaterialParam.value);
+			break;
+		case 0x0C:
+			SPrintf(s, "%s = %f", fmatMaterialParam.nameOffset.name, fmatMaterialParam.value);
+			break;
+		case 0x0D:
+			SPrintf(s, "%s = %s", fmatMaterialParam.nameOffset.name, Vector2FRead(fmatMaterialParam.value));
+			break;
+		case 0x0E:
+			SPrintf(s, "%s = %s", fmatMaterialParam.nameOffset.name, Vector3FRead(fmatMaterialParam.value));
+			break;
+		case 0x0F:
+			SPrintf(s, "%s = %s", fmatMaterialParam.nameOffset.name, Vector4FRead(fmatMaterialParam.value));
+			break;
+		case 0x1E:
+			SPrintf(s, "%s = %s", fmatMaterialParam.nameOffset.name, Matrix2x3Read(fmatMaterialParam.value));
+			break;
+	}
+	return s;
+}
+
+string FmatRead(Fmat &fmat)
+{
+	return fmat.nameOffset.name;
+}
+
+string FmatShadowParamRead(FmatShadowParam &fmatShadowParam)
+{
+	return fmatShadowParam.nameOffset.name;
+}
+
+string FmatTexAttribSelectorRead(FmatTexAttribSelector &fmatTexAttribSelector)
+{
+	return fmatTexAttribSelector.nameOffset.name;
+}
+
+string FmatTexSelectorRead(FmatTexSelector &fmatTexSelector)
+{
+	return fmatTexSelector.nameOffset.name;
+}
+
+string FmatRenderInfoParamRead(FmatRenderInfoParam &fmatRenderInfoParam)
+{
+	string s;
+	switch (fmatRenderInfoParam.type)
+	{
+		case 0x0000:
+			SPrintf(s, "%s = %d", fmatRenderInfoParam.nameOffset.name, fmatRenderInfoParam.value);
+			break;
+		case 0x0100:
+			SPrintf(s, "%s = %s", fmatRenderInfoParam.nameOffset.name, Vector2FRead(fmatRenderInfoParam.value));
+			break;
+		case 0x0200:
+			SPrintf(s, "%s = %s", fmatRenderInfoParam.nameOffset.name, fmatRenderInfoParam.value.name);
+			break;
+	}
+	return s;
+}
+
+string FmdlRead(Fmdl &fmdl)
+{
+	return fmdl.nameOffset.name;
+}
+
+string FmdlParamRead(FmdlParam &fmdlParam)
+{
+	return fmdlParam.nameOffset.name;
+}
+
+string FshpRead(Fshp &fshp)
+{
+	return fshp.nameOffset.name;
+}
+
+string FsklBoneRead(FsklBone &fsklBone)
+{
+	return fsklBone.nameOffset.name;
+}
+
+string FvtxAttributeRead(FvtxAttribute &fvtxAttribute)
+{
+	return fvtxAttribute.nameOffset.name;
+}

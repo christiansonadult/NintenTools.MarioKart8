@@ -1,0 +1,107 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Vector2F
+{
+	float x; float y;
+} Vector2F <read=Vector2FRead, write=Vector2FWrite>;
+
+typedef struct // Vector3F
+{
+	float x; float y; float z;
+} Vector3F <read=Vector3FRead, write=Vector3FWrite>;
+
+typedef struct // Vector4F
+{
+	float x; float y; float z; float w;
+} Vector4F <read=Vector4FRead, write=Vector4FWrite>;
+
+typedef struct // Matrix2x3
+{
+	float m11; float m21; float m12;
+	float m22; float m13; float m23;
+} Matrix2x3 <read=Matrix2x3Read, write=Matrix2x3Write>;
+
+typedef struct // Matrix4x3
+{
+	float m11; float m21; float m31; float m41;
+	float m12; float m22; float m32; float m42;
+	float m13; float m23; float m33; float m43;
+} Matrix4x3 <read=Matrix4x3Read, write=Matrix4x3Write>;
+
+// ==== Template Methods ===============================================================================================
+
+void FAlign(byte alignment)
+{
+	local int bytesToSkip <hidden=true> = (-FTell() % alignment + alignment) % alignment;
+	if (bytesToSkip)
+	{
+		byte padding[bytesToSkip] <hidden=true>;
+	}
+}
+
+string Matrix2x3Read(Matrix2x3 &matrix2x3)
+{
+	string s;
+	SPrintf(s, "((%f, %f, %f), (%f, %f, %f))",
+		matrix2x3.m11, matrix2x3.m12, matrix2x3.m13,
+		matrix2x3.m21, matrix2x3.m22, matrix2x3.m23);
+	return s;
+}
+void Matrix2x3Write(Matrix2x3 &matrix2x3, string s)
+{
+	SScanf(s, "((%f, %f, %f), (%f, %f, %f))",
+		matrix2x3.m11, matrix2x3.m12, matrix2x3.m13,
+		matrix2x3.m21, matrix2x3.m22, matrix2x3.m23);
+}
+
+string Matrix4x3Read(Matrix4x3 &matrix4x3)
+{
+	string s;
+	SPrintf(s, "((%f, %f, %f), (%f, %f, %f), (%f, %f, %f), (%f, %f, %f))",
+		matrix4x3.m11, matrix4x3.m12, matrix4x3.m13,
+		matrix4x3.m21, matrix4x3.m22, matrix4x3.m23,
+		matrix4x3.m31, matrix4x3.m32, matrix4x3.m33,
+		matrix4x3.m41, matrix4x3.m42, matrix4x3.m43);
+	return s;
+}
+void Matrix4x3Write(Matrix4x3 &matrix4x3, string s)
+{
+	SScanf(s, "((%f, %f, %f), (%f, %f, %f), (%f, %f, %f), (%f, %f, %f))",
+		matrix4x3.m11, matrix4x3.m12, matrix4x3.m13,
+		matrix4x3.m21, matrix4x3.m22, matrix4x3.m23,
+		matrix4x3.m31, matrix4x3.m32, matrix4x3.m33,
+		matrix4x3.m41, matrix4x3.m42, matrix4x3.m43);
+}
+
+string Vector2FRead(Vector2F &vector2f)
+{
+	string s;
+	SPrintf(s, "(%f, %f)", vector2f.x, vector2f.y);
+	return s;
+}
+void Vector2FWrite(Vector2F &vector2f, string s)
+{
+	SScanf(s, "(%f, %f)", vector2f.x, vector2f.y);
+}
+
+string Vector3FRead(Vector3F &vector3f)
+{
+	string s;
+	SPrintf(s, "(%f, %f, %f)", vector3f.x, vector3f.y, vector3f.z);
+	return s;
+}
+void Vector3FWrite(Vector3F &vector3f, string s)
+{
+	SScanf(s, "(%f, %f, %f)", vector3f.x, vector3f,y, vector3f.z);
+}
+
+string Vector4FRead(Vector4F &vector4f)
+{
+	string s;
+	SPrintf(s, "(%f, %f, %f, %f)", vector4f.x, vector4f.y, vector4f.z, vector4f.w);
+	return s;
+}
+void Vector4FWrite(Vector3F &vector4f, string s)
+{
+	SScanf(s, "(%f, %f, %f, %f)", vector4f.x, vector4f.y, vector4f.z, vector4f.w);
+}

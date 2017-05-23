@@ -1,0 +1,128 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // Fska
+{
+	char signature[4]; // FSKA
+	NameOffset nameOffset;
+	Offset endOfStringTable;
+	uint unknown0x0C; // Possibly always 0x00001200?
+	if (file.version >= 0x03040000)
+	{
+		uint frameCount;
+		ushort entryCount;
+		ushort unknown0x16; // Padding?
+	}
+	else
+	{
+		ushort frameCount;
+		ushort entryCount;
+		uint unknown0x14; // Padding?
+	}
+	uint unknown0x18;
+	Offset unknownOffset;
+	Offset entryArrayOffset;
+	ushort unknown0x24[42] <optimize=true>;
+	local uint pos <hidden=true> = FTell();
+	// Read the entries.
+	FSeek(entryArrayOffset.target);
+	FskaEntry entries[entryCount] <optimize=false>;
+	FSeek(pos); // Seek back to header end.
+} Fska <bgcolor=0xFFCDCD, read=FskaRead>;
+
+typedef struct // FskaEntry
+{
+	ushort unknown0x00;
+	byte trackFlag;
+	byte unknown0x03; // Padding?
+	NameOffset nameOffset;
+	ushort unknown0x08;
+	byte trackCount;
+	byte unknown0x0B; // Padding?
+	byte stride;
+	byte unknown0x0D; // Padding?
+	short unknown0x0E; // Padding?
+	Offset trackOffset;
+	Offset baseOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the base settings.
+	FSeek(baseOffset.target);
+	FskaBase base;
+	// Read the tracks.
+	if (trackCount)
+	{
+		FSeek(trackOffset.target);
+		FskaTrack tracks[trackCount] <optimize=false>;
+	}
+	FSeek(pos); // Seek back to header end.	
+} FskaEntry <bgcolor=0xEBBDBD, read=FskaEntryRead>;
+
+typedef struct // FskaBase
+{
+	Vector3F scaling;
+	Vector4F rotation;
+	Vector3F position;
+} FskaBase <bgcolor=0xD9AEAE>;
+
+typedef struct // FskaTrack
+{
+	ushort type;
+	ushort keyCount;
+	uint flags <format=binary>;
+	uint unknown0x08;
+	float frameCount;
+	float scale;
+	float init;
+	if (file.version >= 0x03040000)
+	{
+		float unknown0x18;
+	}
+	Offset keyFramesOffset;
+	Offset keysOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the key frames.
+	FSeek(keyFramesOffset.target);
+	if (type == 0x0001 || type == 0x0005 || type == 0x0009)
+	{
+		ushort frames[keyCount]; // Shift right by 5 to get frame.
+	}
+	else
+	{
+		byte frames[keyCount];
+	}
+	// Read the keys.
+	FSeek(keysOffset.target);
+	FskaKey keys(type)[keyCount] <optimize=false>;
+	FSeek(pos); // Seek back to header end.	
+} FskaTrack <bgcolor=0xC8A1A1>;
+
+typedef struct(ushort type) // FskaKey
+{
+	switch (type)
+	{
+		case 0x0002:
+			float data[4] <optimize=true>;
+			break;
+		case 0x0005:
+			short data[4] <optimize=true>;
+			break;
+		case 0x0006:
+			hfloat data[4] <optimize=true>;
+			break;
+		case 0x0009:
+		case 0x000A:
+			byte data[4] <optimize=true>;
+			break;
+	}
+} FskaKey <bgcolor=0xB89595>;
+
+// ==== Template Methods ===============================================================================================
+
+string FskaRead(Fska &fska)
+{
+	return fska.nameOffset.name;
+}
+
+string FskaEntryRead(FskaEntry &fskaEntry)
+{
+	return fskaEntry.nameOffset.name;
+}
