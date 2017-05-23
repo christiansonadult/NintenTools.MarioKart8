@@ -9,7 +9,7 @@
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
-//  0.5.0	2017-05-23	Parse FSKA and FVIS (partly) section. Separated template into multiple files.
+// 	0.5.0	2017-05-23	Parse FSKA and FVIS (partly) section. Separated template into multiple files.
 // 	0.4.0	2017-05-23	Parse FTXP section, add stubs for other sections.
 // 	0.3.0	2017-05-22	Parse remaining FMDL sections and the FTEX section.
 // 	0.1.0	2017-05-21	Initial version, read FMDL (FVTX and FMAT) and embedded files.
