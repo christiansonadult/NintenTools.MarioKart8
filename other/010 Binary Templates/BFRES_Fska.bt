@@ -89,6 +89,7 @@ typedef struct // FskaTrack
 	{
 		byte frames[keyCount];
 	}
+	FAlign(4);
 	// Read the keys.
 	FSeek(keysOffset.target);
 	FskaKey keys(type)[keyCount] <optimize=false>;

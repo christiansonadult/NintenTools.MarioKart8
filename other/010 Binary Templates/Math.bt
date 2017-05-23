@@ -35,7 +35,7 @@ void FAlign(byte alignment)
 	local int bytesToSkip <hidden=true> = (-FTell() % alignment + alignment) % alignment;
 	if (bytesToSkip)
 	{
-		byte padding[bytesToSkip] <hidden=true>;
+		byte padding[bytesToSkip] <fgcolor=0x888888, hidden=true>;
 	}
 }
 
