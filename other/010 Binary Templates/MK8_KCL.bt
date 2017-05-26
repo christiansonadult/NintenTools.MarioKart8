@@ -1,113 +1,37 @@
 //------------------------------------------------
-//--- 010 Editor v8.0.0 Binary Template
+//--- 010 Editor v8.0 Binary Template
 //
 //      File: MK8_KCL.bt
 //   Authors: Syroot
-//   Version: 1.1.0
-//   Purpose: Nintendo KCL collision model (Mario Kart 8)
-//  Category: Software
+//   Version: 1.1.1
+//   Purpose: Parse Nintendo KCL collision models (Mario Kart 8).
+//  Category: Mario Kart 8
 // File Mask: *.kcl
 //  ID Bytes: 02 02 00 00
 //   History:
-//   1.1.0  2017-05-18  Fix reading global octree child nodes.
-//   1.0.0  2017-05-17  Fix ID bytes, clean-up.
-//   0.5.0  2017-05-15  Parse octrees.
-//   0.1.0  2016-06-20  Initial version.
+// 	1.1.1	2017-06-26	Use common Math.bt include, clean-up.
+// 	1.1.0	2017-05-18	Fix reading global octree child nodes.
+// 	1.0.0	2017-05-17	Fix ID bytes, clean-up.
+// 	0.5.0	2017-05-15	Parse octrees.
+// 	0.1.0	2016-06-20	Initial version.
 //------------------------------------------------
 
-// ---- Structures ----
+// ==== Forward Declarations ===========================================================================================
 
-typedef struct
-{
-    uint x;
-    uint y;
-    uint z;
-} Vector3 <read=Vector3_Read>;
-string Vector3_Read(Vector3& vector3)
-{
-    string s;
-    SPrintf(s, "(%d, %d, %d)", vector3.x, vector3.y, vector3.z);
-    return s;
-}
-
-typedef struct
-{
-    float x;
-    float y;
-    float z;
-} Vector3F <read=Vector3F_Read>;
-string Vector3F_Read(Vector3F& vector3f)
-{
-    string s;
-    SPrintf(s, "(%.3f, %.3f, %.3f)", vector3f.x, vector3f.y, vector3f.z);
-    return s;
-}
-
+struct Model;
+struct Triangle;
 struct CourseOctreeNode;
-struct CourseOctreeNode(uint parentPosition)
-{
-    uint key <format=hex>;
-    switch (key >> 30)
-    {
-        case 0:
-            // Node is a branch and key contains dword offset pointing to child nodes.
-            local uint offset <hidden=true>; offset = parentPosition + (key & 0x3FFFFFFF) * sizeof(uint); // Offset in bytes relative to parent node start.
-            local uint oldPos <hidden=true>; oldPos = FTell();
-            FSeek(offset);
-            CourseOctreeNode children(offset)[8] <optimize=false>;
-            FSeek(oldPos);
-            break;
-        case 2:
-            // Node is a leaf and key contains index of referenced model in model array.
-            local uint modelIndex = key & 0x00FFFFFF;
-            break;
-        case 3:
-            break;
-    }
-};
-
 struct ModelOctreeNode;
-struct ModelOctreeNode(uint parentPosition)
-{
-    uint key <format=hex>;
-    local uint offset <hidden=true>; offset = parentPosition + key & 0x3FFFFFFF; // Offset in bytes relative to parent node start.
-    local uint oldPos <hidden=true>; oldPos = FTell();
-    FSeek(offset);
-    if (key >> 31)
-    {
-        // Node is a leaf and key points to triangle list starting with a separator.
-        FSeek(FTell() + 2);
-        local ushort lastIndex <hidden=true>;
-        while (lastIndex != 0xFFFF)
-        {
-            ushort triangleIndex;
-            lastIndex = triangleIndex;
-        }
-    }
-    else
-    {
-        // Node is a branch and points to 8 child nodes.
-        ModelOctreeNode children(offset)[8] <optimize=false>;
-    }
-    FSeek(oldPos);
-};
 
-struct Triangle
-{
-    float length;
-    ushort positionIndex;
-    ushort directionIndex;
-    ushort normalAIndex;
-    ushort normalBIndex;
-    ushort normalCIndex;
-    ushort collisionFlags;
-    uint globalIndex;
-};
+// ==== Includes =======================================================================================================
 
-struct Model
+#include "Math.bt"
+
+// ==== Structures =====================================================================================================
+
+typedef struct // Model
 {
-    local uint modelPosition <hidden=true>;
-    modelPosition = FTell();
+    local uint modelPosition <hidden=true> = FTell();
 
     // Read the header.
     uint positionArrayOffset;
@@ -134,14 +58,73 @@ struct Model
 
     // Read the octree.
     FSeek(modelPosition + octreeOffset);
-    local int nodeCount <hidden=true>; nodeCount
+    local int nodeCount <hidden=true>
         = ((~coordinateMask.x >> coordinateShift.x) + 1)
         * ((~coordinateMask.y >> coordinateShift.x) + 1)
         * ((~coordinateMask.z >> coordinateShift.x) + 1);
     ModelOctreeNode octree(modelPosition + octreeOffset)[nodeCount] <fgcolor=0xFF0000, optimize=false>;
-};
+} Model;
 
-// ---- File Contents ----
+typedef struct // Triangle
+{
+    float length;
+    ushort positionIndex;
+    ushort directionIndex;
+    ushort normalAIndex;
+    ushort normalBIndex;
+    ushort normalCIndex;
+    ushort collisionFlags;
+    uint globalIndex;
+} Triangle;
+
+typedef struct(uint parentPosition) // CourseOctreeNode
+{
+    uint key <format=hex>;
+    switch (key >> 30)
+    {
+        case 0:
+            // Node is a branch and key contains dword offset pointing to child nodes.
+            local uint offset <hidden=true> = parentPosition + (key & 0x3FFFFFFF) * sizeof(uint); // Offset in bytes relative to parent node start.
+            local uint oldPos <hidden=true> = FTell();
+            FSeek(offset);
+            CourseOctreeNode children(offset)[8] <optimize=false>;
+            FSeek(oldPos);
+            break;
+        case 2:
+            // Node is a leaf and key contains index of referenced model in model array.
+            local uint modelIndex = key & 0x00FFFFFF;
+            break;
+        case 3:
+            break;
+    }
+} CourseOctreeNode;
+
+typedef struct(uint parentPosition) // ModelOctreeNode
+{
+    uint key <format=hex>;
+    local uint offset <hidden=true> = parentPosition + key & 0x3FFFFFFF; // Offset in bytes relative to parent node start.
+    local uint oldPos <hidden=true> = FTell();
+    FSeek(offset);
+    if (key >> 31)
+    {
+        // Node is a leaf and key points to triangle list starting with a separator.
+        FSeek(FTell() + 2);
+        local ushort lastIndex <hidden=true>;
+        while (lastIndex != 0xFFFF)
+        {
+            ushort triangleIndex;
+            lastIndex = triangleIndex;
+        }
+    }
+    else
+    {
+        // Node is a branch and points to 8 child nodes.
+        ModelOctreeNode children(offset)[8] <optimize=false>;
+    }
+    FSeek(oldPos);
+} ModelOctreeNode;
+
+// ==== File Contents ==================================================================================================
 
 BigEndian();
 

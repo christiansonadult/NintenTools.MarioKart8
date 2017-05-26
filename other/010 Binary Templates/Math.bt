@@ -1,20 +1,5 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Vector2F
-{
-	float x; float y;
-} Vector2F <read=Vector2FRead, write=Vector2FWrite>;
-
-typedef struct // Vector3F
-{
-	float x; float y; float z;
-} Vector3F <read=Vector3FRead, write=Vector3FWrite>;
-
-typedef struct // Vector4F
-{
-	float x; float y; float z; float w;
-} Vector4F <read=Vector4FRead, write=Vector4FWrite>;
-
 typedef struct // Matrix2x3
 {
 	float m11; float m21; float m12;
@@ -27,6 +12,36 @@ typedef struct // Matrix4x3
 	float m12; float m22; float m32; float m42;
 	float m13; float m23; float m33; float m43;
 } Matrix4x3 <read=Matrix4x3Read, write=Matrix4x3Write>;
+
+typedef struct // Vector2
+{
+	int x; int y;
+} Vector2 <read=Vector2Read, write=Vector2Write>;
+
+typedef struct // Vector2F
+{
+	float x; float y;
+} Vector2F <read=Vector2FRead, write=Vector2FWrite>;
+
+typedef struct // Vector3
+{
+	int x; int y; int z;
+} Vector3 <read=Vector3Read, write=Vector3Write>;
+
+typedef struct // Vector3F
+{
+	float x; float y; float z;
+} Vector3F <read=Vector3FRead, write=Vector3FWrite>;
+
+typedef struct // Vector4
+{
+	int x; int y; int z; int w;
+} Vector4 <read=Vector4Read, write=Vector4Write>;
+
+typedef struct // Vector4F
+{
+	float x; float y; float z; float w;
+} Vector4F <read=Vector4FRead, write=Vector4FWrite>;
 
 // ==== Template Methods ===============================================================================================
 
@@ -73,6 +88,17 @@ void Matrix4x3Write(Matrix4x3 &matrix4x3, string s)
 		matrix4x3.m41, matrix4x3.m42, matrix4x3.m43);
 }
 
+string Vector2Read(Vector2 &vector2)
+{
+	string s;
+	SPrintf(s, "(%d, %d)", vector2.x, vector2.y);
+	return s;
+}
+void Vector2Write(Vector2 &vector2, string s)
+{
+	SScanf(s, "(%d, %d)", vector2.x, vector2.y);
+}
+
 string Vector2FRead(Vector2F &vector2f)
 {
 	string s;
@@ -82,6 +108,17 @@ string Vector2FRead(Vector2F &vector2f)
 void Vector2FWrite(Vector2F &vector2f, string s)
 {
 	SScanf(s, "(%f, %f)", vector2f.x, vector2f.y);
+}
+
+string Vector3Read(Vector3 &vector3)
+{
+	string s;
+	SPrintf(s, "(%d, %d, %d)", vector3.x, vector3.y, vector3.z);
+	return s;
+}
+void Vector3Write(Vector3 &vector3, string s)
+{
+	SScanf(s, "(%d, %d, %d)", vector3.x, vector3,y, vector3.z);
 }
 
 string Vector3FRead(Vector3F &vector3f)
@@ -95,13 +132,24 @@ void Vector3FWrite(Vector3F &vector3f, string s)
 	SScanf(s, "(%f, %f, %f)", vector3f.x, vector3f,y, vector3f.z);
 }
 
+string Vector4Read(Vector4 &vector4)
+{
+	string s;
+	SPrintf(s, "(%d, %d, %d, %d)", vector4.x, vector4.y, vector4.z, vector4.w);
+	return s;
+}
+void Vector4Write(Vector4 &vector4, string s)
+{
+	SScanf(s, "(%d, %d, %d, %d)", vector4.x, vector4.y, vector4.z, vector4.w);
+}
+
 string Vector4FRead(Vector4F &vector4f)
 {
 	string s;
 	SPrintf(s, "(%f, %f, %f, %f)", vector4f.x, vector4f.y, vector4f.z, vector4f.w);
 	return s;
 }
-void Vector4FWrite(Vector3F &vector4f, string s)
+void Vector4FWrite(Vector4F &vector4f, string s)
 {
 	SScanf(s, "(%f, %f, %f, %f)", vector4f.x, vector4f.y, vector4f.z, vector4f.w);
 }

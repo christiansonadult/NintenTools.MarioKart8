@@ -3,12 +3,13 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 0.5.0
-//   Purpose: Parse NintendoWare for Wii U (NW4F) model format files.
+//   Version: 0.5.1
+//   Purpose: Parse NintendoWare for Cafe (NW4F) model format files.
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
+// 	0.5.1	2017-05-26	Better handling of optional structures and very compact BFRES headers.
 // 	0.5.0	2017-05-23	Parse FSKA and FVIS (partly) section. Separated template into multiple files.
 // 	0.4.0	2017-05-23	Parse FTXP section, add stubs for other sections.
 // 	0.3.0	2017-05-22	Parse remaining FMDL sections and the FTEX section.

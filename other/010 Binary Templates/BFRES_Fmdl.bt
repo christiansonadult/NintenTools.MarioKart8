@@ -178,15 +178,18 @@ typedef struct // Fshp
 		FSeek(fsklIndexArrayOffset.target);
 		ushort fsklIndices[fsklIndexCount];
 	}
-	// Read the visibility group nodes.
-	FSeek(visGroupNodesOffset.target);
-	FshpVisGroupNode visGroupNodes[visGroupNodeCount];
-	// Read the visibility group ranges.
-	FSeek(visGroupRangesOffset.target);
-	FshpVisGroupRange visGroupRanges[visGroupNodeCount];
-	// Read the visibility group indices.
-	FSeek(visGroupIndicesOffset.target);
-	ushort visGroupIndices[visGroupNodeCount] <bgcolor=0x7F7F9D>;
+	if (visGroupNodeCount)
+	{
+		// Read the visibility group nodes.
+		FSeek(visGroupNodesOffset.target);
+		FshpVisGroupNode visGroupNodes[visGroupNodeCount];
+		// Read the visibility group ranges.
+		FSeek(visGroupRangesOffset.target);
+		FshpVisGroupRange visGroupRanges[visGroupNodeCount];
+		// Read the visibility group indices.
+		FSeek(visGroupIndicesOffset.target);
+		ushort visGroupIndices[visGroupNodeCount] <bgcolor=0x7F7F9D>;
+	}
 	FSeek(pos); // Seek back to header end.
 } Fshp <bgcolor=0xCDCDFF, read=FshpRead>;
 
@@ -274,8 +277,11 @@ typedef struct // Fmat
 	uint padding; // Always 0
 	local uint pos <hidden=true> = FTell();
 	// Read the render info parameters.
-	FSeek(renderInfoParamDictOffset.target);
-	Dict renderInfoParams(DT_FMAT_RENDER_INFO_PARAM);
+	if (renderInfoParamDictOffset.value)
+	{
+		FSeek(renderInfoParamDictOffset.target);
+		Dict renderInfoParams(DT_FMAT_RENDER_INFO_PARAM);
+	}
 	// Read the texture selectors.
 	if (texSelectorCount)
 	{
@@ -289,21 +295,33 @@ typedef struct // Fmat
 		Dict texAttribSelectors(DT_FMAT_TEX_ATTRIB_SELECTOR);
 	}
 	// Read the material parameter data chunk.
-	FSeek(materialParamsDataOffset.target);
-	byte materialParamsData[materialParamsDataLength];
+	if (materialParamsDataOffset.value)
+	{
+		FSeek(materialParamsDataOffset.target);
+		byte materialParamsData[materialParamsDataLength];
+	}
 	// Read the material parameters array (with values).
-	FSeek(materialParamArrayOffset.target);
-	FmatMaterialParam materialParam(this)[materialParamCount] <optimize=false>;
+	if (materialParamArrayOffset.value)
+	{
+		FSeek(materialParamArrayOffset.target);
+		FmatMaterialParam materialParam(this)[materialParamCount] <optimize=false>;
+	}
 	// Read the material parameters dict (entries only).
-	FSeek(materialParamDictOffset.target);
-	Dict materialParams(DT_NONE);
+	if (materialParamDictOffset.value)
+	{
+		FSeek(materialParamDictOffset.target);
+		Dict materialParams(DT_NONE);
+	}
 	// Read the unknown material structure.
 	FSeek(materialStructOffset.target);
 	FmatMaterialStruct materialStruct;
 	// Read the shader control.
-	FSeek(shaderControlOffset.target);
-	FmatShaderControl shaderControl;
-	// Read the shadow parameters, if any.
+	if (shaderControlOffset.value)
+	{
+		FSeek(shaderControlOffset.target);
+		FmatShaderControl shaderControl;
+	}
+	// Read the shadow parameters.
 	if (shadowParamDictOffset.value)
 	{
 		FSeek(shadowParamDictOffset.target);
@@ -409,11 +427,17 @@ typedef struct // FmatShaderControl
 	FSeek(vertexShaderInputDictOffset.target);
 	Dict vertexShaderInputs(DT_NONE);
 	// Read the pixel shader inputs.
-	FSeek(pixelShaderInputDictOffset.target);
-	Dict pixelShaderInputs(DT_NONE);
+	if (pixelShaderInputCount)
+	{
+		FSeek(pixelShaderInputDictOffset.target);
+		Dict pixelShaderInputs(DT_NONE);
+	}
 	// Read the parameters.
-	FSeek(parameterDictOffset.target);
-	Dict parameters(DT_NONE);
+	if (parameterCount)
+	{
+		FSeek(parameterDictOffset.target);
+		Dict parameters(DT_NONE);
+	}
 	FSeek(pos); // Seek back to header end.
 } FmatShaderControl <bgcolor=0x947F9D>;
 

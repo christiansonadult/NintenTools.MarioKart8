@@ -25,7 +25,7 @@ typedef struct // Bfres
 		}
 		else
 		{
-			byte dict <hidden=true>; // To get correct dict indices.
+			byte dict <bgcolor=cNone, hidden=true>; // To get correct dict indices.
 		}
 	}
 } Bfres <bgcolor=0xCDFFFF>;

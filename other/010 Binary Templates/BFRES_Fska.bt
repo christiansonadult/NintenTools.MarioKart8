@@ -101,6 +101,7 @@ typedef struct(ushort dataType) // FskaKey
 	switch (dataType)
 	{
 		case 0x0002:
+		case 0x0008:
 			float data[4] <optimize=true>;
 			break;
 		case 0x0005:
