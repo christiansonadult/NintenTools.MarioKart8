@@ -64,61 +64,6 @@ typedef struct // BoneAnim
 	FSeek(pos); // Seek back to header end.	
 } BoneAnim <bgcolor=0xEBBDBD, read=BoneAnimRead>;
 
-typedef struct // AnimCurve
-{
-	ushort flags <format=binary>;
-	ushort keyCount;
-	uint targetOffset;
-	float startFrame;
-	float endFrame;
-	float dataScale;
-	int dataOffset;
-	if (file.version >= 0x03040000)
-	{
-		float dataDelta;
-	}
-	Offset frameArrayOffset;
-	Offset keyArrayOffset;
-	local uint pos <hidden=true> = FTell();
-	// Read the frames.
-	FSeek(frameArrayOffset.target);
-	switch (flags & 0x03) // bits 0,1
-	{
-		case 0: float frames[keyCount]; break;
-		case 1: short frames[keyCount]; break;
-		case 2: ubyte frames[keyCount]; break;
-	}
-	FAlign(4);
-	// Read the keys.
-	FSeek(keyArrayOffset.target);
-	AnimCurveKey keys(flags, keyCount)[keyCount] <optimize=true>;
-	FSeek(pos); // Seek back to header end.	
-} AnimCurve <bgcolor=0xD9AEAE>;
-
-typedef struct(ushort flags, ushort keyCount) // AnimCurveKey
-{
-	local uint dataSize <hidden=true>;
-	switch (flags >> 4 & 0x07) // curveType, bits 4-6
-	{
-		case 0: dataSize = 4; break;
-		case 1: dataSize = 2; break;
-		default: dataSize = 1; break;
-	}
-	switch (flags >> 2 & 0x03) // bits 2,3
-	{
-		case 0: float data[dataSize * keyCount] <optimize=true>; break;
-		case 1: short data[dataSize * keyCount] <optimize=true>; break;
-		case 2: ubyte data[dataSize * keyCount] <optimize=true>; break;
-	}
-} AnimCurveKey <bgcolor=0xC8A1A1>;
-
-typedef struct // BaseValue
-{
-	Vector3F scaling;
-	Vector4F rotation;
-	Vector3F position;
-} BaseValue <bgcolor=0xD9AEAE>;
-
 // ==== Template Methods ===============================================================================================
 
 string SkeletalAnimRead(SkeletalAnim &skeletalAnim)

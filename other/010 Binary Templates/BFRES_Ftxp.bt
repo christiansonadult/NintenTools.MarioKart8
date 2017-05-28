@@ -32,7 +32,7 @@ typedef struct // TexPatternAnim
 		FSeek(userDataDictOffset.target);
 		Dict userDataDict(DT_USER_DATA);
 	}
-} TexPatternAnim <bgcolor=0xCDFFCD, read=TexPatternAnimRead>;
+} TexPatternAnim <bgcolor=0xFFEFCD, read=TexPatternAnimRead>;
 
 typedef struct // TexPatternMatAnim
 {
@@ -54,6 +54,10 @@ typedef struct // TexPatternMatAnim
 		FSeek(curveArrayOffset.target);
 		AnimCurve animCurve[curveCount] <optimize=false>;
 	}
+	// Read base values.
+	FSeek(baseValueArrayOffset.target);
+	ushort baseValues[patAnimCount] <bgcolor=0xC8BBA1, optimize=true>;
+	FAlign(4);
 	FSeek(pos); // Seek back to header end.
 } TexPatternMatAnim <bgcolor=0xEBDCBD, read=TexPatternMatAnimRead>;
 

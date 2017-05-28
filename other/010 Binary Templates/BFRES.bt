@@ -9,7 +9,7 @@
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
-// 	0.7.0	2017-05-28	Better FTXP support.
+// 	0.7.0	2017-05-28	Complete FTXP support.
 // 	0.6.0	2017-05-28	Meaningful names for most structures and fields, countless layout fixes.
 // 	0.5.1	2017-05-26	Better handling of optional structures and very compact BFRES headers.
 // 	0.5.0	2017-05-23	Parse FSKA and FVIS (partly) section. Separated template into multiple files.
@@ -30,10 +30,15 @@
 
 // ==== Forward Declarations ===========================================================================================
 
-struct ResFile; struct Offset; struct NameOffset; struct UserData; struct Dict; struct DictNode;
+// ---- Common ----
+
+struct ResFile;
+struct Offset; struct NameOffset;
+struct Dict; struct DictNode;
 enum DictType
 {
 	DT_NONE,
+	DT_USER_DATA, DT_TEXTURE_REF,
 	DT_MODEL,
 		DT_BONE,
 		DT_VERTEX_ATTRIB,
@@ -43,21 +48,24 @@ enum DictType
 	DT_SKELETAL_ANIM,
 	DT_SHADER_PARAM_ANIM,
 	DT_TEX_PATTERN_ANIM,
-		DT_TEXTURE_REF,
 	DT_VISIBILITY_ANIM,
 	DT_SHAPE_ANIM,
 	DT_SCENE_ANIM,
 	DT_EXTERNAL_FILE,
-	DT_USER_DATA,
 };
+struct TextureRef;
+struct AnimCurve; struct AnimCurveKey; struct BaseValue;
+struct UserData;
+
+// ---- Section Specific ----
+
 struct Model; struct Buffer;
 	struct Skeleton; struct Bone;
 	struct Vertex; struct VertexAttrib; 
 	struct Shape; struct Mesh; struct SubMesh; struct KeyShape; struct VisibilityNode; struct Bounding;
-	struct Material; struct RenderInfo; struct RenderState; struct Sampler; struct TextureRef; struct ShaderParam;
-		struct ShaderAssign;
+	struct Material; struct RenderInfo; struct RenderState; struct Sampler; struct ShaderParam; struct ShaderAssign;
 struct Texture;
-struct SkeletalAnim; struct BoneAnim; struct AnimCurve; struct AnimCurveKey; struct BaseValue;
+struct SkeletalAnim; struct BoneAnim;
 struct ShaderParamAnim;
 struct TexPatternAnim; struct TexPatternMatAnim; struct PatAnimInfo;
 struct VisibilityAnim;

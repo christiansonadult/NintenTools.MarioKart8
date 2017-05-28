@@ -382,12 +382,6 @@ typedef struct // RenderState
 	Vector4F gx2BlendConstantColor;
 } RenderState <bgcolor=0xCBAED9>;
 
-typedef struct // TextureRef
-{
-	NameOffset nameOffset;
-	Offset textureOffset; // FTEX pointer
-} TextureRef <bgcolor=0xBBA1C8, read=TextureRefRead>;
-
 typedef struct // Sampler
 {
 	uint gx2SamplerRegs[3];
@@ -549,11 +543,6 @@ string ShaderParamRead(ShaderParam &shaderParam)
 string ShapeRead(Shape &shape)
 {
 	return shape.nameOffset.name;
-}
-
-string TextureRefRead(TextureRef &textureRef)
-{
-	return textureRef.nameOffset.name;
 }
 
 string VertexAttribRead(VertexAttrib &vertexAttrib)
