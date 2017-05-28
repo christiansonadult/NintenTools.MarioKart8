@@ -18,8 +18,10 @@ typedef struct // TexPatternAnim
 	Offset matAnimArrayOffset;
 	Offset textureRefDictOffset;
 	Offset userDataDictOffset;
-	ushort unknown; // 0xFFFF
-	ushort unknown; // 0x0000
+	// Read bind indices.
+	FSeek(bindIndexArrayOffset.target);
+	ushort bindIndices[matAnimCount] <optimize=true>;
+	FAlign(4);
 	// Read material animations.
 	FSeek(matAnimArrayOffset.target);
 	TexPatternMatAnim matAnims[matAnimCount] <optimize=false>;
@@ -52,7 +54,7 @@ typedef struct // TexPatternMatAnim
 	if (curveCount)
 	{
 		FSeek(curveArrayOffset.target);
-		AnimCurve animCurve[curveCount] <optimize=false>;
+		AnimCurve animCurves[curveCount] <optimize=false>;
 	}
 	// Read base values.
 	FSeek(baseValueArrayOffset.target);
@@ -71,6 +73,11 @@ typedef struct // PatAnimInfo
 
 // ==== Template Methods ===============================================================================================
 
+string PatAnimInfoRead(PatAnimInfo &patAnimInfo)
+{
+	return patAnimInfo.nameOffset.name;
+}
+
 string TexPatternAnimRead(TexPatternAnim &texPatternAnim)
 {
 	return texPatternAnim.nameOffset.name;
@@ -79,9 +86,4 @@ string TexPatternAnimRead(TexPatternAnim &texPatternAnim)
 string TexPatternMatAnimRead(TexPatternMatAnim &texPatternMatAnim)
 {
 	return texPatternMatAnim.nameOffset.name;
-}
-
-string PatAnimInfoRead(PatAnimInfo &patAnimInfo)
-{
-	return patAnimInfo.nameOffset.name;
 }

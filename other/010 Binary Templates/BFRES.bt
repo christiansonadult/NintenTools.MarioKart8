@@ -3,12 +3,13 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 0.7.0
+//   Version: 0.8.0
 //   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files (minimum version 3.0.0.0).
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
+// 	0.8.0	2017-05-29	Complete FTSHU support.
 // 	0.7.0	2017-05-28	Complete FTXP support.
 // 	0.6.0	2017-05-28	Meaningful names for most structures and fields, countless layout fixes.
 // 	0.5.1	2017-05-26	Better handling of optional structures and very compact BFRES headers.
@@ -66,7 +67,7 @@ struct Model; struct Buffer;
 	struct Material; struct RenderInfo; struct RenderState; struct Sampler; struct ShaderParam; struct ShaderAssign;
 struct Texture;
 struct SkeletalAnim; struct BoneAnim;
-struct ShaderParamAnim;
+struct ShaderParamAnim; struct ShaderParamMatAnim; struct ParamAnimInfo; struct AnimConstant;
 struct TexPatternAnim; struct TexPatternMatAnim; struct PatAnimInfo;
 struct VisibilityAnim;
 struct ShapeAnim;
