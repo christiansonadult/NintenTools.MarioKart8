@@ -1,9 +1,9 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // EmbeddedFile
+typedef struct // ExternalFile
 {
 	Offset dataOffset;
 	uint length;
 	FSeek(dataOffset.target);
 	byte data[length];
-} EmbeddedFile <bgcolor=0xE9E9E9>;
+} ExternalFile <bgcolor=0xE9E9E9>;

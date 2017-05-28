@@ -4,7 +4,7 @@
 //      File: BFRES.bt
 //   Authors: Syroot
 //   Version: 0.6.0
-//   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files.
+//   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files (min. version 3.0.0.0).
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
@@ -56,26 +56,26 @@ struct Model; struct Buffer;
 		struct ShaderAssign;
 struct Texture;
 struct SkeletalAnim; struct BoneAnim; struct AnimCurve; struct AnimCurveKey; struct BaseValue;
-struct Fshu;
-struct Ftxp; struct FtxpMaterial; struct FtxpTarget; struct FtxpAnimation;
-struct Fvis;
-struct Fsha;
-struct Fscn;
-struct EmbeddedFile;
+struct ShaderParamAnim;
+struct TexPatternAnim; struct FtxpMaterial; struct FtxpTarget; struct FtxpAnimation;
+struct VisibilityAnim;
+struct ShapeAnim;
+struct SceneAnim;
+struct ExternalFile;
 
 // ==== Includes =======================================================================================================
 
 #include "Math.bt"
 #include "BFRES_Common.bt"
-#include "BFRES_Fmdl.bt"
-#include "BFRES_Ftex.bt"
-#include "BFRES_Fska.bt"
-#include "BFRES_Fshu.bt"
-#include "BFRES_Ftxp.bt"
-#include "BFRES_Fvis.bt"
-#include "BFRES_Fsha.bt"
-#include "BFRES_Fscn.bt"
-#include "BFRES_Embedded.bt"
+#include "BFRES_FMDL.bt"
+#include "BFRES_FTEX.bt"
+#include "BFRES_FSKA.bt"
+#include "BFRES_FSHU.bt"
+#include "BFRES_FTXP.bt"
+#include "BFRES_FVIS.bt"
+#include "BFRES_FSHA.bt"
+#include "BFRES_FSCN.bt"
+#include "BFRES_External.bt"
 
 // ==== File Contents ==================================================================================================
 

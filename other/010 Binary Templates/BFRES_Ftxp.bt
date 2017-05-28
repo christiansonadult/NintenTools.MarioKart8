@@ -1,6 +1,6 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Ftxp
+typedef struct // TexPatternAnim
 {
 	char signature[4]; // FTXP
 	NameOffset nameOffset;
@@ -32,7 +32,7 @@ typedef struct // Ftxp
 		Dict userDataDict(DT_USER_DATA);
 	}
 	FSeek(pos); // Seek back to header end.
-} Ftxp <bgcolor=0xCDFFCD, read=FtxpRead>;
+} TexPatternAnim <bgcolor=0xCDFFCD, read=TexPatternAnimRead>;
 
 typedef struct // FtxpMaterial
 {
@@ -89,9 +89,9 @@ typedef struct // FtxpAnimation
 
 // ==== Template Methods ===============================================================================================
 
-string FtxpRead(Ftxp &ftxp)
+string TexPatternAnimRead(TexPatternAnim &texPatternAnim)
 {
-	return ftxp.nameOffset.name;
+	return texPatternAnim.nameOffset.name;
 }
 
 string FtxpMaterialRead(FtxpMaterial &ftxpMaterial)

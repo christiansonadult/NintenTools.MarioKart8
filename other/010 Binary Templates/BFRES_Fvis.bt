@@ -1,6 +1,6 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Fvis
+typedef struct // VisibilityAnim
 {
 	char signature[4]; // FVIS
 	NameOffset nameOffset;
@@ -28,11 +28,11 @@ typedef struct // Fvis
 		Dict userData(DT_USER_DATA);
 	}
 	FSeek(pos); // Seek back to header end.
-} Fvis <bgcolor=0xEFFFCD, read=FvisRead>;
+} VisibilityAnim <bgcolor=0xEFFFCD, read=VisibilityAnimRead>;
 
 // ==== Template Methods ===============================================================================================
 
-string FvisRead(Fvis &fvis)
+string VisibilityAnimRead(VisibilityAnim &visibilityAnim)
 {
-	return fvis.nameOffset.name;
+	return visibilityAnim.nameOffset.name;
 }

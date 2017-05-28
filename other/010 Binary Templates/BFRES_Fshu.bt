@@ -1,6 +1,6 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Fshu
+typedef struct // ShaderParamAnim
 {
 	char signature[4]; // FSHU
-} Fshu <bgcolor=0xFFD6CD>;
+} ShaderParamAnim <bgcolor=0xFFD6CD>;

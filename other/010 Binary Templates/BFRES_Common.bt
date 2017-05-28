@@ -3,7 +3,7 @@
 typedef struct // ResFile
 {
 	char signature[4]; // FRES
-	uint version <format=hex>;
+	uint version <format=hex, read=VersionRead>;
 	ushort byteOrder <format=hex>;
 	ushort headerSize <format=hex>; // Only up to alignment.
 	uint fileSize;
@@ -144,12 +144,12 @@ typedef struct(DictType type) // Dict
 					case DT_SAMPLER: Sampler sampler <fgcolor=cNone>; break;
 			case DT_TEXTURE: Texture texture <fgcolor=cNone>; break;
 			case DT_SKELETAL_ANIM: SkeletalAnim skeletalAnim <fgcolor=cNone>; break;
-			case DT_SHADER_PARAM_ANIM: Fshu fshu <fgcolor=cNone>; break;
-			case DT_TEX_PATTERN_ANIM: Ftxp ftxp <fgcolor=cNone>; break;
-			case DT_VISIBILITY_ANIM: Fvis fvis <fgcolor=cNone>; break;
-			case DT_SHAPE_ANIM: Fsha fsha <fgcolor=cNone>; break;
-			case DT_SCENE_ANIM: Fscn fscn <fgcolor=cNone>; break;
-			case DT_EXTERNAL_FILE: EmbeddedFile embeddedFile <fgcolor=cNone>; break;
+			case DT_SHADER_PARAM_ANIM: ShaderParamAnim shaderParamAnim <fgcolor=cNone>; break;
+			case DT_TEX_PATTERN_ANIM: TexPatternAnim ftxp <fgcolor=cNone>; break;
+			case DT_VISIBILITY_ANIM: VisibilityAnim visibilityAnim <fgcolor=cNone>; break;
+			case DT_SHAPE_ANIM: ShapeAnim shapeAnim <fgcolor=cNone>; break;
+			case DT_SCENE_ANIM: SceneAnim sceneAnim <fgcolor=cNone>; break;
+			case DT_EXTERNAL_FILE: ExternalFile externalFile <fgcolor=cNone>; break;
 			case DT_USER_DATA: UserData userData <fgcolor=0x009900>; break;
 		}
 	}
@@ -231,4 +231,15 @@ string UserDataRead(UserData &userData)
 {
 	// TODO: Show the values.
 	return userData.nameOffset.name;
+}
+
+string VersionRead(uint version)
+{
+	string s;
+	SPrintf(s, "%Xh (%u.%u.%u.%u)", version,
+		version >> 24,
+		version >> 16 & 0xFF,
+		version >> 8 & 0xFF,
+		version & 0xFF);
+	return s;
 }

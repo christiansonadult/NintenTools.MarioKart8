@@ -312,8 +312,11 @@ typedef struct // Material
 	FSeek(renderStateOffset.target);
 	RenderState renderState;
 	// Read texture references.
-	FSeek(textureRefArrayOffset.target);
-	TextureRef textureRefs[textureRefCount] <optimize=false>;
+	if (textureRefCount)
+	{
+		FSeek(textureRefArrayOffset.target);
+		TextureRef textureRefs[textureRefCount] <optimize=false>;
+	}
 	// Read samplers (ignore array).
 	if (samplerDictOffset.value)
 	{
