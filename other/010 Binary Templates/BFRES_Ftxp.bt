@@ -24,12 +24,12 @@ typedef struct // Ftxp
 	FtxpMaterial materials[materialCount] <optimize=false>;
 	// Read the texture dict, pointing to FTEX instances.
 	FSeek(textureDictOffset.target);
-	Dict textures(DT_NONE); // Do not read them again.
-	// Read the user data.
+	Dict textureDict(DT_NONE);
+	// Read user data.
 	if (userDataDictOffset.value)
 	{
 		FSeek(userDataDictOffset.target);
-		Dict userData(DT_USER_DATA);
+		Dict userDataDict(DT_USER_DATA);
 	}
 	FSeek(pos); // Seek back to header end.
 } Ftxp <bgcolor=0xCDFFCD, read=FtxpRead>;

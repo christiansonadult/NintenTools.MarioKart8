@@ -3,27 +3,25 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 0.5.1
-//   Purpose: Parse NintendoWare for Cafe (NW4F) model format files.
+//   Version: 0.6.0
+//   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files.
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
+// 	0.6.0	2017-05-28	Meaningful names for most structures and fields, countless layout fixes.
 // 	0.5.1	2017-05-26	Better handling of optional structures and very compact BFRES headers.
 // 	0.5.0	2017-05-23	Parse FSKA and FVIS (partly) section. Separated template into multiple files.
 // 	0.4.0	2017-05-23	Parse FTXP section, add stubs for other sections.
 // 	0.3.0	2017-05-22	Parse remaining FMDL sections and the FTEX section.
 // 	0.1.0	2017-05-21	Initial version, read FMDL (FVTX and FMAT) and embedded files.
 //
-// This binary template mostly mirrors the documented formats on the Custom Mario Kart 8 Wiki.
-// A noticeable difference is that "Index Groups" are simply called "Dicts" (Dictionaries) here.
-//
 // For simplicity, all structures are forward declared first, then the definitions imported from files.
 // Since BFRES offsets are relative to themselves, Offset and NameOffset structures simplify seeking to their target.
-// Dict entries can be read by passing the corresponding DictEntryType to the Dict structure upon declaration.
+// Dict entries can be read by passing the corresponding DictType to the Dict structure upon declaration.
 // It is required to seek back to header ends for structures read in an array at a higher level.
 // The color key used for highlighting (groups of) structures is available at:
-// 	https://github.com/Syroot/NintenTools.MarioKart8/blob/master/other/010 Binary Templates/bfres_color_key.png
+// 	https://github.com/Syroot/NintenTools.MarioKart8/blob/master/other/010 Binary Templates/BFRES_ColorKey.png
 //
 // More information available at:
 // 	http://mk8.tockdom.com/wiki/BFRES_(File_Format)
@@ -31,26 +29,33 @@
 
 // ==== Forward Declarations ===========================================================================================
 
-struct Bfres; struct Offset; struct NameOffset; struct Dict; struct DictEntry; struct UserData;
-enum DictEntryType
+struct ResFile; struct Offset; struct NameOffset; struct UserData; struct Dict; struct DictNode;
+enum DictType
 {
-	// First 12 map to root dict indices.
-	DT_FMDL, DT_FTEX, DT_FSKA, DT_FSHU1, DT_FSHU2, DT_FSHU3, DT_FTXP, DT_FVIS1, DT_FVIS2, DT_FSHA, DT_FSCN, DT_EMBED,
-	// Others just direct 010 Editor into instantiating the correct entry types.
 	DT_NONE,
-	DT_FMDL_PARAM, DT_FSKL_BONE, DT_FVTX_ATTRIB, DT_FSHP,
-		DT_FMAT, DT_FMAT_RENDER_INFO_PARAM, DT_FMAT_TEX_ATTRIB_SELECTOR, DT_FMAT_SHADOW_PARAM,
-	DT_USER_DATA
+	DT_MODEL,
+		DT_BONE,
+		DT_VERTEX_ATTRIB,
+		DT_SHAPE,
+		DT_MATERIAL, DT_RENDER_INFO, DT_SAMPLER,
+	DT_TEXTURE,
+	DT_SKELETAL_ANIM,
+	DT_SHADER_PARAM_ANIM,
+	DT_TEX_PATTERN_ANIM,
+	DT_VISIBILITY_ANIM,
+	DT_SHAPE_ANIM,
+	DT_SCENE_ANIM,
+	DT_EXTERNAL_FILE,
+	DT_USER_DATA,
 };
-struct Fmdl; struct FmdlParam;
-	struct Fskl; struct FsklBone;
-	struct Fvtx; struct FvtxAttribute; struct FvtxBuffer;
-	struct Fshp; struct FshpLodModel; struct FshpIndexBuffer; struct FshpVisGroup; struct FshpVisGroupNode;
-    	struct FshpVisGroupRange;
-	struct Fmat; struct FmatRenderInfoParam; struct FmatTexSelector; struct FmatTexAttribSelector;
-		struct FmatMaterialParam; struct FmatMaterialStruct; struct FmatShaderControl; struct FmatShadowParam;
-struct Ftex;
-struct Fska; struct FskaBone; struct FskaBase; struct FskaTrack; struct FskaKey;
+struct Model; struct Buffer;
+	struct Skeleton; struct Bone;
+	struct Vertex; struct VertexAttrib; 
+	struct Shape; struct Mesh; struct SubMesh; struct KeyShape; struct VisibilityNode; struct Bounding;
+	struct Material; struct RenderInfo; struct RenderState; struct Sampler; struct TextureRef; struct ShaderParam;
+		struct ShaderAssign;
+struct Texture;
+struct SkeletalAnim; struct BoneAnim; struct AnimCurve; struct AnimCurveKey; struct BaseValue;
 struct Fshu;
 struct Ftxp; struct FtxpMaterial; struct FtxpTarget; struct FtxpAnimation;
 struct Fvis;
@@ -61,7 +66,6 @@ struct EmbeddedFile;
 // ==== Includes =======================================================================================================
 
 #include "Math.bt"
-
 #include "BFRES_Common.bt"
 #include "BFRES_Fmdl.bt"
 #include "BFRES_Ftex.bt"
@@ -76,4 +80,4 @@ struct EmbeddedFile;
 // ==== File Contents ==================================================================================================
 
 BigEndian();
-Bfres file <open=true>;
+ResFile file <open=true>;

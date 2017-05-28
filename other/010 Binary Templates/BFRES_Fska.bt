@@ -1,130 +1,132 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Fska
+typedef struct // SkeletalAnim
 {
 	char signature[4]; // FSKA
 	NameOffset nameOffset;
-	Offset endOfStringTable;
-	uint unknown0x0C; // Possibly always 0x00001200?
+	NameOffset pathOffset;
+	uint flags <format=binary>;
 	if (file.version >= 0x03040000)
 	{
 		uint frameCount;
-		ushort boneCount;
-		ushort unknown0x16; // Padding?
+		ushort boneAnimCount;
+		ushort userDataCount;
 	}
 	else
 	{
 		ushort frameCount;
-		ushort boneCount;
-		uint unknown0x14; // Padding?
+		ushort boneAnimCount;
+		ushort userDataCount;
+		ushort padding <fgcolor=0x808080, hidden=true>;
 	}
-	uint unknown0x18;
-	Offset unknownOffset;
-	Offset boneArrayOffset;
-	ushort unknown0x24[38] <optimize=true>; // Length unclear
-	local uint pos <hidden=true> = FTell();
-	// Read the bones.
-	FSeek(boneArrayOffset.target);
-	FskaBone bones[boneCount] <optimize=false>;
-	FSeek(pos); // Seek back to header end.
-} Fska <bgcolor=0xFFCDCD, read=FskaRead>;
-
-typedef struct // FskaBone
-{
-	ushort unknown0x00;
-	byte trackFlag;
-	byte unknown0x03; // Padding?
-	NameOffset nameOffset;
-	ushort unknown0x08;
-	byte trackCount;
-	byte unknown0x0B; // Padding?
-	byte stride;
-	byte unknown0x0D; // Padding?
-	short unknown0x0E; // Padding?
-	Offset trackOffset;
-	Offset baseOffset;
-	local uint pos <hidden=true> = FTell();
-	// Read the base settings.
-	FSeek(baseOffset.target);
-	FskaBase base;
-	// Read the tracks.
-	if (trackCount)
+	uint curveCount;
+	uint bakedSize;
+	Offset boneAnimArrayOffset;
+	Offset skeletonOffset; // Points to FSKL
+	Offset bindIndexArrayOffset;
+	Offset userDataDictOffset;
+	// Read bone animations.
+	FSeek(boneAnimArrayOffset.target);
+	BoneAnim boneAnims[boneAnimCount] <optimize=false>;
+	// Read bind indices.
+	FSeek(bindIndexArrayOffset.target);
+	ushort bindIndices[boneAnimCount] <bgcolor=0xD9AEAE, optimize=true>;
+	FAlign(4);
+	// Read user data.
+	if (userDataDictOffset.value)
 	{
-		FSeek(trackOffset.target);
-		FskaTrack tracks[trackCount] <optimize=false>;
+		FSeek(userDataDictOffset.target);
+		Dict userDataDict(DT_USER_DATA);
 	}
-	FSeek(pos); // Seek back to header end.	
-} FskaBone <bgcolor=0xEBBDBD, read=FskaBoneRead>;
+} SkeletalAnim <bgcolor=0xFFCDCD, read=SkeletalAnimRead>;
 
-typedef struct // FskaBase
+typedef struct // BoneAnim
+{
+	uint flags <format=binary>;
+	NameOffset nameOffset;
+	byte beginRotate;
+	byte beginTranslate;
+	byte animCurveCount;
+	byte beginBaseTranslate;
+	float beginCurve;
+	Offset animCurveArrayOffset;
+	Offset baseValueArrayOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read animation curves.
+	if (animCurveCount) // Offset can be valid but count 0.
+	{
+		FSeek(animCurveArrayOffset.target);
+		AnimCurve animCurves[animCurveCount] <optimize=false>;
+	}
+	// Read base values.
+	FSeek(baseValueArrayOffset.target);
+	BaseValue baseValue;
+	FSeek(pos); // Seek back to header end.	
+} BoneAnim <bgcolor=0xEBBDBD, read=BoneAnimRead>;
+
+typedef struct // AnimCurve
+{
+	ushort flags <format=binary>;
+	ushort keyCount;
+	uint targetOffset;
+	float startFrame;
+	float endFrame;
+	float dataScale;
+	float dataOffset;
+	if (file.version >= 0x03040000)
+	{
+		float dataDelta;
+	}
+	Offset frameArrayOffset;
+	Offset keyArrayOffset;
+	local uint pos <hidden=true> = FTell();
+	// Read the frames.
+	FSeek(frameArrayOffset.target);
+	switch (flags & 0x03) // bits 0,1
+	{
+		case 0: float frames[keyCount]; break;
+		case 1: short frames[keyCount]; break;
+		case 2: ubyte frames[keyCount]; break;
+	}
+	FAlign(4);
+	// Read the keys.
+	FSeek(keyArrayOffset.target);
+	AnimCurveKey keys(flags, keyCount)[keyCount] <optimize=true>;
+	FSeek(pos); // Seek back to header end.	
+} AnimCurve <bgcolor=0xD9AEAE>;
+
+typedef struct(ushort flags, ushort keyCount) // AnimCurveKey
+{
+	local uint dataSize <hidden=true>;
+	switch (flags >> 4 & 0x07) // curveType, bits 4-6
+	{
+		case 0: dataSize = 4; break;
+		case 1: dataSize = 2; break;
+		default: dataSize = 1; break;
+	}
+	switch (flags >> 2 & 0x03) // bits 2,3
+	{
+		case 0: float data[dataSize * keyCount] <optimize=true>; break;
+		case 1: short data[dataSize * keyCount] <optimize=true>; break;
+		case 2: ubyte data[dataSize * keyCount] <optimize=true>; break;
+	}
+} AnimCurveKey <bgcolor=0xC8A1A1>;
+
+typedef struct // BaseValue
 {
 	Vector3F scaling;
 	Vector4F rotation;
 	Vector3F position;
-} FskaBase <bgcolor=0xD9AEAE>;
-
-typedef struct // FskaTrack
-{
-	ushort dataType;
-	ushort keyCount;
-	uint animType;
-	uint unknown0x08;
-	float frames;
-	float scale;
-	float init;
-	if (file.version >= 0x03040000)
-	{
-		float unknown0x18;
-	}
-	Offset keyFramesOffset;
-	Offset keysOffset;
-	local uint pos <hidden=true> = FTell();
-	// Read the key frames.
-	FSeek(keyFramesOffset.target);
-	if (dataType == 0x0001 || dataType == 0x0005 || dataType == 0x0009)
-	{
-		ushort keyFrames[keyCount]; // Shift right by 5 to get frame.
-	}
-	else
-	{
-		byte keyFrames[keyCount];
-	}
-	FAlign(4);
-	// Read the keys.
-	FSeek(keysOffset.target);
-	FskaKey keys(dataType)[keyCount] <optimize=false>;
-	FSeek(pos); // Seek back to header end.	
-} FskaTrack <bgcolor=0xC8A1A1>;
-
-typedef struct(ushort dataType) // FskaKey
-{
-	switch (dataType)
-	{
-		case 0x0002:
-		case 0x0008:
-			float data[4] <optimize=true>;
-			break;
-		case 0x0005:
-			short data[4] <optimize=true>;
-			break;
-		case 0x0006:
-			hfloat data[4] <optimize=true>;
-			break;
-		case 0x0009:
-		case 0x000A:
-			byte data[4] <optimize=true>;
-			break;
-	}
-} FskaKey <bgcolor=0xB89595>;
+} BaseValue <bgcolor=0xD9AEAE>;
 
 // ==== Template Methods ===============================================================================================
 
-string FskaRead(Fska &fska)
+string SkeletalAnimRead(SkeletalAnim &skeletalAnim)
 {
-	return fska.nameOffset.name;
+	return skeletalAnim.nameOffset.name;
 }
 
-string FskaBoneRead(FskaBone &fskaBone)
+string BoneAnimRead(BoneAnim &boneAnim)
 {
-	return fskaBone.nameOffset.name;
+	return boneAnim.nameOffset.name;
 }

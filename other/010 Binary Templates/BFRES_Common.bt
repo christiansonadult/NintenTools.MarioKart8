@@ -1,34 +1,105 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Bfres
+typedef struct // ResFile
 {
 	char signature[4]; // FRES
 	uint version <format=hex>;
 	ushort byteOrder <format=hex>;
-	ushort unknown0x0A <format=hex>;
-	uint fileLength;
-	uint fileAlignment <format=hex>;
-	uint fileNameOffset <format=hex>;
-	uint stringTableLength;
-	uint stringTableOffset;
-	Offset dictOffsets[12] <optimize=false>;
-	ushort dictCounts[12];
-	uint unknown0x68 <format=hex>;
-	// Read root dicts.
-	local int i <hidden=true>;
-	for (i = 0; i < 12; i++)
+	ushort headerSize <format=hex>; // Only up to alignment.
+	uint fileSize;
+	uint alignment <format=hex>;
+	NameOffset nameOffset;
+	uint stringPoolSize;
+	uint stringPoolOffset;
+	Offset modelDictOffset;
+	Offset textureDictOffset;
+	Offset skeletalAnimDictOffset;
+	Offset shaderParamAnimDictOffset;
+	Offset colorAnimDictOffset;
+	Offset texSrtAnimDictOffset;
+	Offset texPatternAnimDictOffset;
+	Offset boneVisAnimDictOffset;
+	Offset matVisAnimDictOffset;
+	Offset shapeAnimDictOffset;
+	Offset sceneAnimDictOffset;
+	Offset externalFileDictOffset;
+	ushort modelCount;
+	ushort textureCount;
+	ushort skeletalAnimCount;
+	ushort shaderParamAnimCount;
+	ushort colorAnimCount;
+	ushort texSrtAnimCount;
+	ushort texPatternAnimCount;
+	ushort boneVisAnimCount;
+	ushort matVisAnimCount;
+	ushort shapeAnimCount;
+	ushort sceneAnimCount;
+	ushort externalFileCount;
+	uint userPointer;
+	// Read main dicts.
+	if (modelDictOffset.value)
 	{
-		if (dictOffsets[i].value)
-		{
-			FSeek(dictOffsets[i].target);
-			Dict dict(i) <bgcolor=0xC5FFFF>;
-		}
-		else
-		{
-			byte dict <bgcolor=cNone, hidden=true>; // To get correct dict indices.
-		}
+		FSeek(modelDictOffset.target);
+		Dict modelDict(DT_MODEL) <bgcolor=0xBDEBEB>;
 	}
-} Bfres <bgcolor=0xCDFFFF>;
+	if (textureDictOffset.value)
+	{
+		FSeek(textureDictOffset.target);
+		Dict textureDict(DT_TEXTURE) <bgcolor=0xBDEBEB>;
+	}
+	if (skeletalAnimDictOffset.value)
+	{
+		FSeek(skeletalAnimDictOffset.target);
+		Dict skeletalAnimDict(DT_SKELETAL_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (shaderParamAnimDictOffset.value)
+	{
+		FSeek(shaderParamAnimDictOffset.target);
+		Dict shaderParamAnimDict(DT_SHADER_PARAM_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (colorAnimDictOffset.value)
+	{
+		FSeek(colorAnimDictOffset.target);
+		Dict colorAnimDict(DT_SHADER_PARAM_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (texSrtAnimDictOffset.value)
+	{
+		FSeek(texSrtAnimDictOffset.target);
+		Dict texSrtAnimDict(DT_SHADER_PARAM_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (texPatternAnimDictOffset.value)
+	{
+		FSeek(texPatternAnimDictOffset.target);
+		Dict texPatternAnimDict(DT_TEX_PATTERN_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (boneVisAnimDictOffset.value)
+	{
+		FSeek(boneVisAnimDictOffset.target);
+		Dict boneVisAnimDict(DT_VISIBILITY_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (matVisAnimDictOffset.value)
+	{
+		FSeek(matVisAnimDictOffset.target);
+		Dict matVisAnimDict(DT_VISIBILITY_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (shapeAnimDictOffset.value)
+	{
+		FSeek(shapeAnimDictOffset.target);
+		Dict shapeAnimDict(DT_SHAPE_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (sceneAnimDictOffset.value)
+	{
+		FSeek(sceneAnimDictOffset.target);
+		Dict sceneAnimDict(DT_SCENE_ANIM) <bgcolor=0xBDEBEB>;
+	}
+	if (externalFileDictOffset.value)
+	{
+		FSeek(externalFileDictOffset.target);
+		Dict externalFile(DT_EXTERNAL_FILE) <bgcolor=0xBDEBEB>;
+	}
+} ResFile <bgcolor=0xCDFFFF>;
+
+// ---- Offsets ----
 
 typedef struct // Offset
 {
@@ -49,68 +120,84 @@ typedef struct // NameOffset
 	FSeek(origin + sizeof(uint));
 } NameOffset <read=NameOffsetRead>;
 
-typedef struct(DictEntryType entryType) // Dict
+// ---- Dicts ----
+
+typedef struct(DictType type) // Dict
 {
-	uint length <format=hex>;
-	uint entryCount;
-	DictEntry entries[entryCount + 1] <optimize=false>; // Include root entry.
-	local uint pos <hidden=true> = FTell();			  
+	uint size;
+	uint nodeCount;
+	DictNode nodes[nodeCount + 1] <optimize=false>; // First element is root entry.
+	local uint pos <hidden=true> = FTell();
 	// Read the entries.
 	local int i <hidden=true>;
-	for (i = 0; i < entryCount; i++)
+	for (i = 1; i <= nodeCount; i++)
 	{
-		FSeek(entries[i + 1].dataOffset.target);
-		switch (entryType)
+		FSeek(nodes[i].dataOffset.target);
+		switch (type)
 		{
-			case DT_FMDL: Fmdl fmdl <fgcolor=cNone>; break;
-			case DT_FMDL_PARAM: FmdlParam fmdlParam <fgcolor=cNone>; break;
-			case DT_FSKL_BONE: FsklBone fsklBone <fgcolor=cNone>; break;
-			case DT_FVTX_ATTRIB: FvtxAttribute attribute <fgcolor=cNone>; break;
-			case DT_FSHP: Fshp fshp <fgcolor=cNone>; break;
-			case DT_FMAT: Fmat fmat <fgcolor=cNone>; break;
-			case DT_FMAT_RENDER_INFO_PARAM: FmatRenderInfoParam fmatRenderInfoParam <fgcolor=cNone>; break;
-			case DT_FMAT_TEX_ATTRIB_SELECTOR: FmatTexAttribSelector fmatTexAttribSelector <fgcolor=cNone>; break;
-			case DT_FMAT_SHADOW_PARAM: FmatShadowParam shadowParam <fgcolor=cNone>; break;
-			case DT_FTEX: Ftex ftex <fgcolor=cNone>; break;
-			case DT_FSKA: Fska fska <fgcolor=cNone>; break;
-			case DT_FSHU1: case DT_FSHU2: case DT_FSHU3: Fshu fshu <fgcolor=cNone>; break;
-			case DT_FTXP: Ftxp ftxp <fgcolor=cNone>; break;
-			case DT_FVIS1: case DT_FVIS2: Fvis fvis <fgcolor=cNone>; break;
-			case DT_FSHA: Fsha fsha <fgcolor=cNone>; break;
-			case DT_FSCN: Fscn fscn <fgcolor=cNone>; break;
-			case DT_EMBED: EmbeddedFile embeddedFile <fgcolor=cNone>; break;
-			case DT_USER_DATA: UserData userData <fgcolor=cNone>; break;
+			case DT_MODEL: Model model <fgcolor=cNone>; break;
+				case DT_BONE: Bone bone <fgcolor=cNone>; break;
+				case DT_VERTEX_ATTRIB: VertexAttrib vertexAttrib <fgcolor=cNone>; break;
+				case DT_SHAPE: Shape shape <fgcolor=cNone>; break;
+				case DT_MATERIAL: Material material <fgcolor=cNone>; break;
+					case DT_RENDER_INFO: RenderInfo renderInfo <fgcolor=cNone>; break;
+					case DT_SAMPLER: Sampler sampler <fgcolor=cNone>; break;
+			case DT_TEXTURE: Texture texture <fgcolor=cNone>; break;
+			case DT_SKELETAL_ANIM: SkeletalAnim skeletalAnim <fgcolor=cNone>; break;
+			case DT_SHADER_PARAM_ANIM: Fshu fshu <fgcolor=cNone>; break;
+			case DT_TEX_PATTERN_ANIM: Ftxp ftxp <fgcolor=cNone>; break;
+			case DT_VISIBILITY_ANIM: Fvis fvis <fgcolor=cNone>; break;
+			case DT_SHAPE_ANIM: Fsha fsha <fgcolor=cNone>; break;
+			case DT_SCENE_ANIM: Fscn fscn <fgcolor=cNone>; break;
+			case DT_EXTERNAL_FILE: EmbeddedFile embeddedFile <fgcolor=cNone>; break;
+			case DT_USER_DATA: UserData userData <fgcolor=0x009900>; break;
 		}
 	}
-	FSeek(pos); // Seek back to dict end.
-} Dict <fgcolor=0x000099>;
+	FSeek(pos); // Seek back to prevent struct from ending in front of position.
+} Dict <fgcolor=0x000099, read=DictRead>;
 
-typedef struct // DictEntry
+typedef struct // DictNode
 {
 	uint key <format=hex>;
 	ushort leftIndex;
 	ushort rightIndex;
 	NameOffset nameOffset;
 	Offset dataOffset;
-} DictEntry <read=DictEntryRead>;
+} DictNode <read=DictNodeRead>;
+
+// ---- User Data ----
 
 typedef struct // UserData
 {
 	NameOffset nameOffset;
-	ushort entryCount;
+	ushort count;
 	byte type;
-	byte unknown0x07; // Padding?
-	// TODO: Read values.
+	byte padding <fgcolor=0x808080, hidden=true>;
+	switch (type)
+	{
+		case 0: int value[count]; break;
+		case 1: float value[count]; break;
+		case 2: string value[count]; break;
+		case 3: wstring value[count]; break;
+		case 4: byte value[count]; break;
+	}
 } UserData <fgcolor=0x009900, read=UserDataRead>;
 
 // ==== Template Methods ===============================================================================================
 
-string DictEntryRead(DictEntry &dictEntry)
+string DictRead(Dict &dict)
 {
-	if (dictEntry.dataOffset.value)
+	string s;
+	SPrintf(s, "%d nodes", dict.nodeCount);
+	return s;
+}
+
+string DictNodeRead(DictNode &dictNode)
+{
+	if (dictNode.dataOffset.value)
 	{
 		string s;
-		SPrintf(s, "<\"%s\">", dictEntry.nameOffset.name);
+		SPrintf(s, "<\"%s\">", dictNode.nameOffset.name);
 		return s;
 	}
 	else
@@ -122,7 +209,7 @@ string DictEntryRead(DictEntry &dictEntry)
 string NameOffsetRead(NameOffset &nameOffset)
 {
 	string s;
-		SPrintf(s, "%d -> %Xh = %s", nameOffset.value, nameOffset.target, nameOffset.name);
+	SPrintf(s, "%d -> %Xh = %s", nameOffset.value, nameOffset.target, nameOffset.name);
 	return s;
 }
 
@@ -142,5 +229,6 @@ string OffsetRead(Offset &offset)
 
 string UserDataRead(UserData &userData)
 {
+	// TODO: Show the values.
 	return userData.nameOffset.name;
 }

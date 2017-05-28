@@ -1,59 +1,63 @@
 // ==== Structures =====================================================================================================
 
-typedef struct // Ftex
+typedef struct // Texture
 {
 	char signature[4]; // FTEX
-	uint surfaceDim; // GX2SurfaceDim
+	uint gx2SurfacDim;
 	uint width;
 	uint height;
 	uint depth;
-	uint mipmapCount;
-	uint surfaceFormat; // GX2SurfaceFormat
-	uint aaMode; // GX2AAMode
-	uint surfaceUse; // GX2SurfaceUse
-	uint dataLength;
-	Offset possibleDataOffset;
-	uint mipmapDataLength;
-	Offset possibleMipmapDataOffset;
-	uint tileMode; // GX2TileMode
+	uint mipCount;
+	uint gx2SurfaceFormat;
+	uint gx2AAMode;
+	uint gx2SurfaceUse; // or GX2RResourceFlags
+	uint imageSize;
+	uint imagePointer; // Set at runtime
+	uint mipSize;
+	uint mipPointer; // Set at runtime
+	uint gx2TileMode;
 	uint swizzle <format=binary>;
 	uint alignment <format=hex>; // 512 * bpp
 	uint pitch;
-	uint unknown0x44[14];
-	uint mipmapCount2;
-	uint unknown0x80; // Always 0
-	uint unknown0x84; // Always 1
-	uint unknown0x88;
-	uint unknown0x8C[7];
+	uint mipOffsets[13];
+	uint viewMipFirst;
+	uint viewMipCount;
+	uint viewSliceFirst;
+	uint viewSliceCount;
+	uint gx2CompSel;
+	uint gx2TextureRegs[5];
+	uint handle; // Set at runtime
+	byte arrayLength; // TODO: Should be uint.
+	FAlign(4);
 	NameOffset nameOffset;
-	Offset endOfStringTable;
-	Offset dataOffset;
-	Offset mipmapDataOffset;
+	NameOffset pathOffset;
+	Offset imageDataOffset;
+	Offset mipDataOffset;
 	Offset userDataDictOffset;
 	ushort userDataCount;
-	ushort unknown0xBE; // Padding?
+	ushort padding <fgcolor=0x808080, hidden=true>;
 	local uint pos <hidden=true> = FTell();
-	// Read the texture data.
-	FSeek(dataOffset.target);
-	byte data[dataLength] <bgcolor=0xEBDCBD>;
-	// Read the mipmap data.
-	if (mipmapDataLength)
+	// Read texture data.
+	FSeek(imageDataOffset.target);
+	byte imageData[imageSize] <bgcolor=0xEBDCBD>;
+	// Read mip data.
+	if (mipDataOffset.value)
 	{
-		FSeek(mipmapDataOffset.target);
-		byte mipmapData[mipmapDataLength] <bgcolor=0xD9CBAE>;
+		FSeek(mipDataOffset.target);
+		byte mipData[mipSize] <bgcolor=0xD9CBAE>;
 	}
-	// Read the user data.
+	// Read user data.
 	if (userDataDictOffset.value)
 	{
 		FSeek(userDataDictOffset.target);
 		Dict userData(DT_USER_DATA);
 	}
 	FSeek(pos); // Seek back to header end.
-} Ftex <bgcolor=0xEFCDFF, read=FtexRead>;
+} Texture <bgcolor=0xEFCDFF, read=TextureRead>;
 
 // ==== Template Methods ===============================================================================================
 
-string FtexRead(Ftex &ftex)
+string TextureRead(Texture &texture)
 {
-	return ftex.nameOffset.name;
+	return texture.nameOffset.name;
 }
