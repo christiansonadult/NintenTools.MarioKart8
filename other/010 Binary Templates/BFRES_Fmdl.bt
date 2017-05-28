@@ -344,8 +344,11 @@ typedef struct // Material
 		ShaderAssign shaderAssign;
 	}
 	// Read user data.
-	FSeek(userDataDictOffset.target);
-	Dict userData(DT_USER_DATA);
+	if (userDataDictOffset.value)
+	{
+		FSeek(userDataDictOffset.target);
+		Dict userData(DT_USER_DATA);
+	}
 	FSeek(pos); // Seek back to header end.
 } Material <bgcolor=0xEFCDFF, read=MaterialRead>;
 
