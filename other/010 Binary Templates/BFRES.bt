@@ -3,7 +3,7 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 0.6.0
+//   Version: 0.7.0
 //   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files (minimum version 3.0.0.0).
 //  Category: Wii U
 // File Mask: *.bfres
