@@ -145,7 +145,8 @@ typedef struct(DictType type) // Dict
 			case DT_TEXTURE: Texture texture <fgcolor=cNone>; break;
 			case DT_SKELETAL_ANIM: SkeletalAnim skeletalAnim <fgcolor=cNone>; break;
 			case DT_SHADER_PARAM_ANIM: ShaderParamAnim shaderParamAnim <fgcolor=cNone>; break;
-			case DT_TEX_PATTERN_ANIM: TexPatternAnim ftxp <fgcolor=cNone>; break;
+			case DT_TEX_PATTERN_ANIM: TexPatternAnim texPatternAnim <fgcolor=cNone>; break;
+				case DT_TEXTURE_REF: TextureRef textureRef <fgcolor=cNone>; break;
 			case DT_VISIBILITY_ANIM: VisibilityAnim visibilityAnim <fgcolor=cNone>; break;
 			case DT_SHAPE_ANIM: ShapeAnim shapeAnim <fgcolor=cNone>; break;
 			case DT_SCENE_ANIM: SceneAnim sceneAnim <fgcolor=cNone>; break;

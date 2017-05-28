@@ -48,7 +48,7 @@ typedef struct // BoneAnim
 	byte beginTranslate;
 	byte animCurveCount;
 	byte beginBaseTranslate;
-	float beginCurve;
+	int beginCurve;
 	Offset animCurveArrayOffset;
 	Offset baseValueArrayOffset;
 	local uint pos <hidden=true> = FTell();
@@ -72,7 +72,7 @@ typedef struct // AnimCurve
 	float startFrame;
 	float endFrame;
 	float dataScale;
-	float dataOffset;
+	int dataOffset;
 	if (file.version >= 0x03040000)
 	{
 		float dataDelta;
