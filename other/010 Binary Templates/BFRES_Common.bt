@@ -104,20 +104,26 @@ typedef struct // ResFile
 typedef struct // Offset
 {
 	local uint origin <format=hex> = FTell();
-	uint value <format=hex>;
-	local uint target <format=hex> = origin + value;
+	int value;
+	if (value)
+	{
+		local uint target <format=hex> = origin + value;
+	}
 } Offset <read=OffsetRead>;
 
 typedef struct // NameOffset
 {
 	local uint origin <format=hex> = FTell();
-	uint value <format=hex>;
-	local uint target <format=hex> = origin + value;
-	FSeek(target - sizeof(uint));
-	uint nameLength;
-	string name;
-	FAlign(4);
-	FSeek(origin + sizeof(uint));
+	int value;
+	if (value)
+	{
+		local uint target <format=hex> = origin + value;
+		FSeek(target - sizeof(uint));
+		uint nameLength;
+		string name;
+		FAlign(4);
+		FSeek(origin + sizeof(uint));
+	}
 } NameOffset <read=NameOffsetRead>;
 
 // ---- Dicts ----
@@ -132,6 +138,7 @@ typedef struct(DictType type) // Dict
 	local int i <hidden=true>;
 	for (i = 1; i <= nodeCount; i++)
 	{
+		if (!nodes[i].dataOffset.value) continue;
 		FSeek(nodes[i].dataOffset.target);
 		switch (type)
 		{
@@ -154,6 +161,10 @@ typedef struct(DictType type) // Dict
 				case DT_LIGHT_ANIM: LightAnim lightAnim <fgcolor=cNone>; break;
 				case DT_FOG_ANIM: FogAnim fogAnim <fgcolor=cNone>; break;
 			case DT_EXTERNAL_FILE: ExternalFile externalFile <fgcolor=cNone>; break;
+				case DT_SHADING_MODEL: ShadingModel shadingModel <fgcolor=cNone>; break;
+					case DT_SHADER_OPTION: ShaderOption shaderOption <fgcolor=cNone>; break;
+					case DT_ATTRIB_VAR: AttribVar attribVar <fgcolor=cNone>; break;
+					case DT_UNIFORM_BLOCK_VAR: UniformBlockVar uniformBlockVar <fgcolor=cNone>; break;
 			case DT_USER_DATA: UserData userData <fgcolor=0x009900>; break;
 		}
 	}
@@ -263,7 +274,7 @@ string DictRead(Dict &dict)
 
 string DictNodeRead(DictNode &dictNode)
 {
-	if (dictNode.dataOffset.value)
+	if (dictNode.nameOffset.value)
 	{
 		string s;
 		SPrintf(s, "<\"%s\">", dictNode.nameOffset.name);
@@ -278,7 +289,14 @@ string DictNodeRead(DictNode &dictNode)
 string NameOffsetRead(NameOffset &nameOffset)
 {
 	string s;
-	SPrintf(s, "%d -> %Xh = %s", nameOffset.value, nameOffset.target, nameOffset.name);
+	if (nameOffset.value)
+	{
+		SPrintf(s, "%d -> %Xh = \"%s\"", nameOffset.value, nameOffset.target, nameOffset.name);
+	}
+	else
+	{
+		SPrintf(s, "%d -> N/A", nameOffset.value);
+	}
 	return s;
 }
 

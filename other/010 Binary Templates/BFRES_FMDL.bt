@@ -139,7 +139,7 @@ typedef struct // Vertex
 	Dict vertexAttribDict(DT_VERTEX_ATTRIB);
 	// Read the buffers.
 	FSeek(vertexBufferArrayOffset.target);
-	Buffer buffers[vertexBufferCount] <optimize=true>;
+	Buffer buffers[vertexBufferCount] <optimize=false>;
 	FSeek(pos); // Seek back to header end.
 } Vertex <bgcolor=0xA1B5C8>;
 

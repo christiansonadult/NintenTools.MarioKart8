@@ -5,5 +5,11 @@ typedef struct // ExternalFile
 	Offset dataOffset;
 	uint length;
 	FSeek(dataOffset.target);
-	byte data[length];
+	// Try reading a known format.
+	local string signature <hidden=true> = ReadString(FTell(), 4);
+	switch (signature)
+	{
+		//case "FSHA": ShaderArchive shadingArchive; break;
+		default: byte data[length]; break;
+	}
 } ExternalFile <bgcolor=0xE9E9E9>;

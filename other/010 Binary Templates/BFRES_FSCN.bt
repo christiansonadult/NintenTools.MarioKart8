@@ -37,7 +37,9 @@ typedef struct // SceneAnim
 		FSeek(userDataDictOffset.target);
 		Dict userDataDict(DT_USER_DATA);
 	}
-} SceneAnim <bgcolor=0xE9E9E9, read=SceneAnimRead>;
+} SceneAnim <bgcolor=0xCDFFEF, read=SceneAnimRead>;
+
+// ---- FCAM ----
 
 typedef struct // CameraAnim
 {
@@ -81,6 +83,8 @@ typedef struct // CameraAnimResult
 	Vector3F rotation;
 	float twist;
 } CameraAnimResult <bgcolor=0xAED9CB>;
+
+// ---- FLIT ----
 
 typedef struct // LightAnim
 {
@@ -126,6 +130,8 @@ typedef struct // LightAnimResult
 	Vector2F angleAttenuation;
 	Vector3F colors[2];
 } LightAnimResult <bgcolor=0x95B8AD>;
+
+// ---- FFOG ----
 
 typedef struct // FogAnim
 {
