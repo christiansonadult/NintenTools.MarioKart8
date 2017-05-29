@@ -1,0 +1,6 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // ShapeAnim
+{
+	char signature[4]; // FSHA
+} ShapeAnim <bgcolor=0xE9E9E9>;

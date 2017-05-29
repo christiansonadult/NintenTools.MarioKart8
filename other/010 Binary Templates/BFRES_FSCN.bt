@@ -1,0 +1,6 @@
+// ==== Structures =====================================================================================================
+
+typedef struct // SceneAnim
+{
+	char signature[4]; // FSCN
+} SceneAnim <bgcolor=0xE9E9E9>;
