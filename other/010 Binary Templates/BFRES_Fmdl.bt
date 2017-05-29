@@ -300,7 +300,7 @@ typedef struct // Material
 	local uint pos <hidden=true> = FTell();
 	// Read volatile flags.
 	FSeek(volatileFlagOffset.target);
-	byte volatileFlags[shaderParamCount / sizeof(byte)] <format=binary>; // Possibly a bitset.
+	byte volatileFlags[Ceil(shaderParamCount / sizeof(byte))] <format=binary>; // Possibly a bitset.
 	FAlign(4);
 	// Read render infos.
 	if (renderInfoDictOffset.value)

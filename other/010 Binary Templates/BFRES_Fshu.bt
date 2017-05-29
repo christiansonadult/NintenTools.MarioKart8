@@ -54,8 +54,11 @@ typedef struct // ShaderParamMatAnim
 		AnimCurve animCurves[curveCount] <optimize=false>;
 	}
 	// Read constants.
-	FSeek(constantArrayOffset.target);
-	AnimConstant constants[constantCount] <optimize=true>;
+	if (constantCount) // Offset can be valid but count 0.
+	{
+		FSeek(constantArrayOffset.target);
+		AnimConstant constants[constantCount] <optimize=true>;
+	}
 	FSeek(pos); // Seek back to header end.
 } ShaderParamMatAnim <bgcolor=0xEBC7BF, read=ShaderParamMatAnimRead>;
 

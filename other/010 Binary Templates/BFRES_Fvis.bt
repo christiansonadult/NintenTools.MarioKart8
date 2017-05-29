@@ -4,30 +4,42 @@ typedef struct // VisibilityAnim
 {
 	char signature[4]; // FVIS
 	NameOffset nameOffset;
-	Offset endOfStringTable;
+	NameOffset pathOffset;
 	ushort flags <format=binary>;
 	ushort userDataCount;
-	uint frameCount;
-	ushort materialOrBoneTargetCount;
-	ushort unknown0x16;
-	uint unknown0x18;
-	uint unknown0x1C;
-	Offset unknownArrayOffset;
-	Offset stringOffsetArrayOffset;
-	Offset animationDataArrayOffset;
-	Offset unknownStructOffset;
+	int frameCount;
+	ushort animCount;
+	ushort curveCount;
+	uint bakedSize;
+	Offset modelOffset; // Points to FMDL
+	Offset bindIndexArrayOffset;
+	Offset nameArrayOffset;
+	Offset curveArrayOffset;
+	Offset baseValueArrayOffset;
 	Offset userDataDictOffset;
-	local uint pos <hidden=true> = FTell();
-	// TODO: Read unknown array.
-	// TODO: Read string offset array.
-	// TODO: Read animation data array.
-	// TODO: Read unknown struct.
+	// Read bind indices.
+	FSeek(bindIndexArrayOffset.target);
+	ushort bindIndices[animCount] <optimize=true>;
+	FAlign(4);
+	// Read names.
+	FSeek(bindIndexArrayOffset.target);
+	NameOffset names[animCount] <optimize=true>;
+	// Read animation curves.
+	if (curveCount) // Offset can be valid but count 0.
+	{
+		FSeek(curveArrayOffset.target);
+		AnimCurve animCurves[curveCount] <optimize=false>;
+	}
+	// Read base values (bits controlling visibility).
+	FSeek(baseValueArrayOffset.target);
+	byte baseValues[Ceil(animCount / sizeof(byte))] <format=binary, optimize=true>;
+	FAlign(4);
+	// Read user data.
 	if (userDataDictOffset.value)
 	{
 		FSeek(userDataDictOffset.target);
 		Dict userData(DT_USER_DATA);
 	}
-	FSeek(pos); // Seek back to header end.
 } VisibilityAnim <bgcolor=0xEFFFCD, read=VisibilityAnimRead>;
 
 // ==== Template Methods ===============================================================================================
