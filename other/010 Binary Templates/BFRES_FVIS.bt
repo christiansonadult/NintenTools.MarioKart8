@@ -38,7 +38,7 @@ typedef struct // VisibilityAnim
 	if (userDataDictOffset.value)
 	{
 		FSeek(userDataDictOffset.target);
-		Dict userData(DT_USER_DATA);
+		Dict userDataDict(DT_USER_DATA);
 	}
 } VisibilityAnim <bgcolor=0xEFFFCD, read=VisibilityAnimRead>;
 

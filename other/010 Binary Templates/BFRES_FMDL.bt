@@ -31,10 +31,11 @@ typedef struct // Model
 	// Read materials.
 	FSeek(materialDictOffset.target);
 	Dict materials(DT_MATERIAL);
-	// Read the parameters.
+	// Read user data.
 	if (userDataDictOffset.value)
 	{
-		ReadDict(DT_FMAT_PARAM, "params", userDataDictOffset);
+		FSeek(userDataDictOffset.target);
+		Dict userDataDict(DT_USER_DATA);
 	}
 } Model <bgcolor=0xCDE6FF, read=ModelRead>;
 

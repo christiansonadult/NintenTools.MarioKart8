@@ -50,7 +50,7 @@ typedef struct // Texture
 	if (userDataDictOffset.value)
 	{
 		FSeek(userDataDictOffset.target);
-		Dict userData(DT_USER_DATA);
+		Dict userDataDict(DT_USER_DATA);
 	}
 	FSeek(pos); // Seek back to header end.
 } Texture <bgcolor=0xEFCDFF, read=TextureRead>;
