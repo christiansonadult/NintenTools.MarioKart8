@@ -25,7 +25,7 @@ typedef struct // VisibilityAnim
 	FSeek(bindIndexArrayOffset.target);
 	NameOffset names[animCount] <optimize=true>;
 	// Read animation curves.
-	if (curveCount) // Offset can be valid but count 0.
+	if (curveCount)
 	{
 		FSeek(curveArrayOffset.target);
 		AnimCurve animCurves[curveCount] <optimize=false>;

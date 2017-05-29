@@ -3,14 +3,14 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 0.9.1
+//   Version: 1.0.0
 //   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files (minimum version 3.0.0.0).
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History:
-// 	0.9.1	2017-05-29	Complete FVIS and FSHA support.
-// 	0.8.0	2017-05-29	Complete FTSHU support.
+// 	1.0.0	2017-05-29	Complete FVIS, FSHA and FSCN support.
+// 	0.8.0	2017-05-29	Complete FSHU support.
 // 	0.7.0	2017-05-28	Complete FTXP support.
 // 	0.6.0	2017-05-28	Meaningful names for most structures and fields, countless layout fixes.
 // 	0.5.1	2017-05-26	Better handling of optional structures and very compact BFRES headers.
@@ -52,8 +52,8 @@ enum DictType
 	DT_TEX_PATTERN_ANIM,
 	DT_VISIBILITY_ANIM,
 	DT_SHAPE_ANIM,
-	DT_SCENE_ANIM,
-	DT_EXTERNAL_FILE,
+	DT_SCENE_ANIM, DT_CAMERA_ANIM, DT_LIGHT_ANIM, DT_FOG_ANIM,
+	DT_EXTERNAL_FILE
 };
 struct TextureRef;
 struct AnimCurve; struct AnimCurveKey; struct BaseValue;
@@ -72,7 +72,8 @@ struct ShaderParamAnim; struct ShaderParamMatAnim; struct ParamAnimInfo; struct 
 struct TexPatternAnim; struct TexPatternMatAnim; struct PatAnimInfo;
 struct VisibilityAnim;
 struct ShapeAnim; struct VertexShapeAnim; struct KeyShapeAnimInfo;
-struct SceneAnim;
+struct SceneAnim; struct CameraAnim; struct CameraAnimResult; struct LightAnim; struct LightAnimResult; struct FogAnim;
+	struct FogAnimResult;
 struct ExternalFile;
 
 // ==== Includes =======================================================================================================

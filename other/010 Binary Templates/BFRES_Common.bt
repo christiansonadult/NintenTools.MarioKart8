@@ -150,6 +150,9 @@ typedef struct(DictType type) // Dict
 			case DT_VISIBILITY_ANIM: VisibilityAnim visibilityAnim <fgcolor=cNone>; break;
 			case DT_SHAPE_ANIM: ShapeAnim shapeAnim <fgcolor=cNone>; break;
 			case DT_SCENE_ANIM: SceneAnim sceneAnim <fgcolor=cNone>; break;
+				case DT_CAMERA_ANIM: CameraAnim cameraAnim <fgcolor=cNone>; break;
+				case DT_LIGHT_ANIM: LightAnim lightAnim <fgcolor=cNone>; break;
+				case DT_FOG_ANIM: FogAnim fogAnim <fgcolor=cNone>; break;
 			case DT_EXTERNAL_FILE: ExternalFile externalFile <fgcolor=cNone>; break;
 			case DT_USER_DATA: UserData userData <fgcolor=0x009900>; break;
 		}
