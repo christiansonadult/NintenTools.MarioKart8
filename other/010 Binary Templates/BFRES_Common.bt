@@ -10,7 +10,7 @@ typedef struct // ResFile
 	uint alignment <format=hex>;
 	NameOffset nameOffset;
 	uint stringPoolSize;
-	uint stringPoolOffset;
+	Offset stringPoolOffset;
 	Offset modelDictOffset;
 	Offset textureDictOffset;
 	Offset skeletalAnimDictOffset;
@@ -198,7 +198,11 @@ typedef struct // AnimCurve
 	float startFrame;
 	float endFrame;
 	float dataScale;
-	int dataOffset;
+	union
+	{
+		int value;
+		float value;
+	} dataOffset;
 	if (file.version >= 0x03040000)
 	{
 		float dataDelta;
@@ -217,7 +221,7 @@ typedef struct // AnimCurve
 	FAlign(4);
 	// Read the keys.
 	FSeek(keyArrayOffset.target);
-	AnimCurveKey keys(flags, keyCount)[keyCount] <optimize=true>;
+	AnimCurveKey keys(flags, keyCount);
 	FSeek(pos); // Seek back to header end.	
 } AnimCurve <bgcolor=0xD9AEAE>;
 
@@ -251,16 +255,17 @@ typedef struct // UserData
 {
 	NameOffset nameOffset;
 	ushort count;
-	byte type;
-	byte padding <fgcolor=0x808080, hidden=true>;
+	ubyte type;
+	ubyte padding <fgcolor=0x808080, hidden=true>;
 	switch (type)
 	{
 		case 0: int value[count]; break;
 		case 1: float value[count]; break;
-		case 2: string value[count]; break;
-		case 3: wstring value[count]; break;
-		case 4: byte value[count]; break;
+		case 2: Offset value[count]; break; // Points to strings
+		case 3: Offset value[count]; break; // Points to UTF8 strings
+		case 4: ubyte value[count]; break;
 	}
+	// TODO: Read textual user data.
 } UserData <fgcolor=0x009900, read=UserDataRead>;
 
 // ==== Template Methods ===============================================================================================

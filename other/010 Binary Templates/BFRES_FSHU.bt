@@ -79,7 +79,7 @@ typedef struct // AnimConstant
 	union
 	{
 		float value;
-		uint value;
+		int value;
 	} value;
 } AnimConstant <bgcolor=0xC8A9A3>;
 
