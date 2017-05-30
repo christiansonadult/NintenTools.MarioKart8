@@ -221,12 +221,6 @@ typedef struct // AnimCurve
 	FAlign(4);
 	// Read the keys.
 	FSeek(keyArrayOffset.target);
-	AnimCurveKey keys(flags, keyCount);
-	FSeek(pos); // Seek back to header end.	
-} AnimCurve <bgcolor=0xD9AEAE>;
-
-typedef struct(ushort flags, ushort keyCount) // AnimCurveKey
-{
 	local uint dataSize <hidden=true>;
 	switch (flags >> 4 & 0x07) // curveType, bits 4-6
 	{
@@ -236,11 +230,13 @@ typedef struct(ushort flags, ushort keyCount) // AnimCurveKey
 	}
 	switch (flags >> 2 & 0x03) // bits 2,3
 	{
-		case 0: float data[dataSize * keyCount] <optimize=true>; break;
-		case 1: short data[dataSize * keyCount] <optimize=true>; break;
-		case 2: ubyte data[dataSize * keyCount] <optimize=true>; break;
+		case 0: float data[dataSize * keyCount] <bgcolor=0xC8A1A1, optimize=false>; break;
+		case 1: short data[dataSize * keyCount] <bgcolor=0xC8A1A1, optimize=false>; break;
+		case 2: ubyte data[dataSize * keyCount] <bgcolor=0xC8A1A1, optimize=false>; break;
 	}
-} AnimCurveKey <bgcolor=0xC8A1A1>;
+	FAlign(4);
+	FSeek(pos); // Seek back to header end.	
+} AnimCurve <bgcolor=0xD9AEAE>;
 
 typedef struct // BaseValue
 {
