@@ -238,13 +238,6 @@ typedef struct // AnimCurve
 	FSeek(pos); // Seek back to header end.	
 } AnimCurve <bgcolor=0xD9AEAE>;
 
-typedef struct // BaseValue
-{
-	Vector3F scaling;
-	Vector4F rotation;
-	Vector3F position;
-} BaseValue <bgcolor=0xD9AEAE>;
-
 // ---- User Data ----
 
 typedef struct // UserData

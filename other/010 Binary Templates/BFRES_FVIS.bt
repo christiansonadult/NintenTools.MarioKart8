@@ -22,7 +22,7 @@ typedef struct // VisibilityAnim
 	ushort bindIndices[animCount] <optimize=true>;
 	FAlign(4);
 	// Read names.
-	FSeek(bindIndexArrayOffset.target);
+	FSeek(nameArrayOffset.target);
 	NameOffset names[animCount] <optimize=true>;
 	// Read animation curves.
 	if (curveCount)

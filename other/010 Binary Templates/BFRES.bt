@@ -3,12 +3,14 @@
 //
 //      File: BFRES.bt
 //   Authors: Syroot
-//   Version: 1.1.1
+//   Version: 1.1.3
 //   Purpose: Parse NintendoWare for Cafe (NW4F) graphics archive files (minimum version 3.0.0.0).
 //  Category: Wii U
 // File Mask: *.bfres
 //  ID Bytes: 46 52 45 53 //FRES
 //   History: 
+// 	1.1.3	2017-05-31	Fix reading the name array in FVIS animations from the wrong offset.
+// 	1.1.2	2017-05-30	Fix FSKA base transformation values, which not necessarily store 3 transformation vectors.
 // 	1.1.1	2017-05-30	Fix AnimCurve key arrays and several byte / ubyte mixups.
 // 	1.1.0	2017-05-29	Add experimental BFSHA support for external files.
 // 	1.0.0	2017-05-29	Complete FSHU, FVIS, FSHA and FSCN support.
@@ -59,7 +61,7 @@ enum DictType
 		DT_SHADER_OPTION, DT_ATTRIB_VAR, DT_SAMPLER_VAR, DT_UNIFORM_BLOCK_VAR
 };
 struct TextureRef;
-struct AnimCurve; struct BaseValue;
+struct AnimCurve;
 struct UserData;
 
 // ---- Section Specific ----

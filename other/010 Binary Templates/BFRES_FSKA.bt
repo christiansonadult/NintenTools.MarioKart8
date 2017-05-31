@@ -44,23 +44,26 @@ typedef struct // BoneAnim
 {
 	uint flags <format=binary>;
 	NameOffset nameOffset;
-	byte beginRotate;
-	byte beginTranslate;
-	byte animCurveCount;
-	byte beginBaseTranslate;
-	int beginCurve;
+	ubyte beginRotate;
+	ubyte beginTranslate;
+	ubyte animCurveCount;
+	ubyte beginBaseTranslate;
+	byte beginCurve; // Int32 normally.
+	byte padding[3] <fgcolor=0x808080, hidden=true>;
 	Offset animCurveArrayOffset;
 	Offset baseValueArrayOffset;
 	local uint pos <hidden=true> = FTell();
 	// Read animation curves.
-	if (animCurveCount) // Offset can be valid but count 0.
+	if (animCurveCount)
 	{
 		FSeek(animCurveArrayOffset.target);
 		AnimCurve animCurves[animCurveCount] <optimize=false>;
 	}
-	// Read base values.
+	// Read base transformation values.
 	FSeek(baseValueArrayOffset.target);
-	BaseValue baseValue;
+	if (flags & 0x08) Vector3F baseScale;
+	if (flags & 0x10) Vector4F baseRotation;
+	if (flags & 0x20) Vector3F baseTranslation;
 	FSeek(pos); // Seek back to header end.	
 } BoneAnim <bgcolor=0xEBBDBD, read=BoneAnimRead>;
 
