@@ -14,7 +14,7 @@ Right now, the following file formats and files are supported:
 | Obj Definition Database | objflow.byaml    | Yes    | Yes  | Strongly typed via `Courses.Objs.ObjDefinitionDb`                    |
 | Course Definitions      | \*_muunt\*.byaml | Yes    | Yes  | Strongly typed via `Courses.CourseDefinition`                        |
 | Other BYAML Files       | \*.byaml         | Yes    | Yes  | Use [NintenTools.Byaml](https://github.com/Syroot/NintenTools.Byaml) |
-| Visual Models           | *.bfres          | Partly | No   | Use [NintenTools.Bfres](https://github.com/Syroot/NintenTools.Bfres), parse files with [binary templates](https://github.com/Syroot/NintenTools.MarioKart8/blob/master/other/010%20Binary%20Templates)  |
+| Visual Models           | *.bfres          | Partly | No   | Use [NintenTools.Bfres](https://github.com/Syroot/NintenTools.Bfres) |
 | KCL Collision Models    | course.kcl       | Yes    | Yes  | Parse files with [binary template](https://github.com/Syroot/NintenTools.MarioKart8/blob/master/other/010%20Binary%20Templates/MK8_KCL.bt)                            |
 | Yaz0 Compressed Data    | \*.szs / others  | Yes    | No   | Use [NintenTools.Yaz0](https://github.com/Syroot/NintenTools.Yazo)   |
 
